@@ -18,7 +18,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'template' => FALSE,
     ),
     'bceln_audio_form' => array(
-      'content_model' => 'islandora:sp_large_image_cmodel',
+      'content_model' => 'islandora:sp-audioCModel',
       'form_name' => 'BC ELN Audio Form',
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
