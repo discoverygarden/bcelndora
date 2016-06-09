@@ -56,7 +56,7 @@
                 <children>
                     <element name="title">
                         <properties>
-                            <type>textfield</type>
+                            <type>textarea</type>
                             <access>TRUE</access>
                             <collapsed>FALSE</collapsed>
                             <collapsible>FALSE</collapsible>
@@ -91,7 +91,7 @@
                     </element>
                     <element name="subTitle">
                         <properties>
-                            <type>textfield</type>
+                            <type>textarea</type>
                             <access>TRUE</access>
                             <collapsed>FALSE</collapsed>
                             <collapsible>FALSE</collapsible>

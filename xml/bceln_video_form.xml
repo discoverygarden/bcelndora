@@ -533,7 +533,7 @@
               <access>TRUE</access>
               <collapsed>FALSE</collapsed>
               <collapsible>FALSE</collapsible>
-              <description>The date that the resource was published, released, issued, performed, etc. 
+              <description>The date that the resource was published, released, issued, performed, etc.
 
 Enter date in the format YYYY-MM-DD.
               </description>
@@ -888,7 +888,7 @@ Enter date in the format YYYY-MM-DD.
             </properties>
             <children/>
           </element>
-          <element name="note">
+          <element name="quality">
             <properties>
               <type>textfield</type>
               <access>TRUE</access>
@@ -904,15 +904,15 @@ Enter date in the format YYYY-MM-DD.
               <tree>TRUE</tree>
               <actions>
                 <create>
-                  <path/>
+                  <path>self::node()</path>
                   <context>parent</context>
                   <schema/>
                   <type>element</type>
                   <prefix>NULL</prefix>
-                  <value>note</value>
+                  <value>quality</value>
                 </create>
                 <read>
-                  <path>mods:note</path>
+                  <path>mods:quality</path>
                   <context>parent</context>
                 </read>
                 <update>
@@ -1499,7 +1499,7 @@ Enter date in the format YYYY-MM-DD.
           <tree>TRUE</tree>
           <actions>
             <create>
-              <path/>
+              <path>self::node()</path>
               <context>parent</context>
               <schema/>
               <type>xml</type>
