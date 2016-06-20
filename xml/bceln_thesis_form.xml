@@ -1239,56 +1239,57 @@
         </properties>
         <children/>
       </element>
-      <element name="subject">
+      <element name="subjects">
         <properties>
-          <type>fieldset</type>
+          <type>tabs</type>
           <access>TRUE</access>
           <collapsed>FALSE</collapsed>
           <collapsible>FALSE</collapsible>
-          <description>Use LCSH for Subject entries where possible.</description>
+          <description>Multiple subjects allowed. Group related subject elements (topic, geographic, temporal) on each panel.</description>
           <disabled>FALSE</disabled>
           <executes_submit_callback>FALSE</executes_submit_callback>
           <multiple>FALSE</multiple>
           <required>FALSE</required>
           <resizable>FALSE</resizable>
-          <title>Subject</title>
+          <title>Subjects</title>
           <tree>TRUE</tree>
-          <actions>
-            <create>
-              <path>self::node()</path>
-              <context>document</context>
-              <schema/>
-              <type>element</type>
-              <prefix>NULL</prefix>
-              <value>subject</value>
-            </create>
-            <read>
-              <path>/mods:mods/mods:subject</path>
-              <context>document</context>
-            </read>
-            <update>NULL</update>
-            <delete>NULL</delete>
-          </actions>
         </properties>
         <children>
-          <element name="topic">
+          <element name="subject">
             <properties>
-              <type>tags</type>
+              <type>tabpanel</type>
               <access>TRUE</access>
               <collapsed>FALSE</collapsed>
               <collapsible>FALSE</collapsible>
+              <description>Use LCSH for Subject entries where possible.</description>
               <disabled>FALSE</disabled>
               <executes_submit_callback>FALSE</executes_submit_callback>
               <multiple>FALSE</multiple>
               <required>FALSE</required>
               <resizable>FALSE</resizable>
-              <title>Topic</title>
+              <title>Subject</title>
               <tree>TRUE</tree>
+              <actions>
+                <create>
+                  <path>self::node()</path>
+                  <context>document</context>
+                  <schema/>
+                  <type>element</type>
+                  <prefix>NULL</prefix>
+                  <value>subject</value>
+                </create>
+                <read>
+                  <path>/mods:mods/mods:subject</path>
+                  <context>document</context>
+                </read>
+                <update>NULL</update>
+                <delete>NULL</delete>
+              </actions>
             </properties>
             <children>
-              <element name="0">
+              <element name="topic">
                 <properties>
-                  <type>tag</type>
+                  <type>textfield</type>
                   <access>TRUE</access>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
@@ -1297,6 +1298,7 @@
                   <multiple>FALSE</multiple>
                   <required>FALSE</required>
                   <resizable>FALSE</resizable>
+                  <title>Topic</title>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
@@ -1323,26 +1325,9 @@
                 </properties>
                 <children/>
               </element>
-            </children>
-          </element>
-          <element name="geographic">
-            <properties>
-              <type>tags</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>Geographic</title>
-              <tree>TRUE</tree>
-            </properties>
-            <children>
-              <element name="0">
+              <element name="geographic">
                 <properties>
-                  <type>tag</type>
+                  <type>textfield</type>
                   <access>TRUE</access>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
@@ -1351,6 +1336,7 @@
                   <multiple>FALSE</multiple>
                   <required>FALSE</required>
                   <resizable>FALSE</resizable>
+                  <title>Geographic</title>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
@@ -1377,26 +1363,9 @@
                 </properties>
                 <children/>
               </element>
-            </children>
-          </element>
-          <element name="temporal">
-            <properties>
-              <type>tags</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>Temporal</title>
-              <tree>TRUE</tree>
-            </properties>
-            <children>
-              <element name="0">
+              <element name="temporal">
                 <properties>
-                  <type>tag</type>
+                  <type>textfield</type>
                   <access>TRUE</access>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
@@ -1405,6 +1374,7 @@
                   <multiple>FALSE</multiple>
                   <required>FALSE</required>
                   <resizable>FALSE</resizable>
+                  <title>Temporal</title>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
