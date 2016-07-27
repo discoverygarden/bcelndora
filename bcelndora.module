@@ -174,3 +174,10 @@ function bcelndora_form_xml_form_builder_ingest_form_alter(&$form, &$form_state,
     }
   }
 }
+
+/**
+ * Implements hook_form_islandora_solr_simple_search_form_alter().
+ */
+function bcelndora_form_islandora_solr_simple_search_form_alter(&$form, &$form_state, $form_id) {
+  $form['simple']['islandora_simple_search_query']['#title_display'] = 'invisible';
+}
