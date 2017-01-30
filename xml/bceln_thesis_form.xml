@@ -207,7 +207,10 @@
                       <path>self::node()</path>
                       <context>self</context>
                     </update>
-                    <delete>NULL</delete>
+                    <delete>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </delete>
                   </actions>
                 </properties>
                 <children/>
@@ -242,7 +245,10 @@
                       <path>self::node()</path>
                       <context>self</context>
                     </update>
-                    <delete>NULL</delete>
+                    <delete>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </delete>
                   </actions>
                 </properties>
                 <children/>
@@ -330,13 +336,52 @@
                 </properties>
                 <children/>
               </element>
+              <element name="displayForm">
+                <properties>
+                  <type>textfield</type>
+                  <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <description>The person's identifier for the purpose of connecting to their Scholar Profile. Format: Firstname Lastname (identifier).</description>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
+                  <required>FALSE</required>
+                  <resizable>FALSE</resizable>
+                  <title>Qualified Name</title>
+                  <tree>TRUE</tree>
+                  <actions>
+                    <create>
+                      <path>self::node()</path>
+                      <context>parent</context>
+                      <schema/>
+                      <type>element</type>
+                      <prefix>NULL</prefix>
+                      <value>displayForm</value>
+                    </create>
+                    <read>
+                      <path>mods:displayForm</path>
+                      <context>parent</context>
+                    </read>
+                    <update>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </update>
+                    <delete>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </delete>
+                  </actions>
+                </properties>
+                <children/>
+              </element>
               <element name="nameIdentifier">
                 <properties>
                   <type>textfield</type>
                   <access>TRUE</access>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
-                  <description>The named person's identifier within the repository. Will be used to link theses to Scholar Profiles. Prefer ORCID if applicable.</description>
+                  <description>The named person's identifier within the repository. Prefer ORCID if applicable.</description>
                   <disabled>FALSE</disabled>
                   <executes_submit_callback>FALSE</executes_submit_callback>
                   <multiple>FALSE</multiple>
@@ -494,7 +539,10 @@
                       <path>self::node()</path>
                       <context>self</context>
                     </update>
-                    <delete>NULL</delete>
+                    <delete>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </delete>
                   </actions>
                 </properties>
                 <children/>
@@ -530,7 +578,10 @@
                       <path>self::node()</path>
                       <context>self</context>
                     </update>
-                    <delete>NULL</delete>
+                    <delete>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </delete>
                   </actions>
                 </properties>
                 <children/>
@@ -604,6 +655,45 @@
                     </create>
                     <read>
                       <path>mods:role/mods:roleTerm</path>
+                      <context>parent</context>
+                    </read>
+                    <update>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </update>
+                    <delete>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </delete>
+                  </actions>
+                </properties>
+                <children/>
+              </element>
+              <element name="displayFormOther">
+                <properties>
+                  <type>textfield</type>
+                  <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <description>The person's identifier for the purpose of connecting to their Scholar Profile. Format: Firstname Lastname (identifier).</description>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
+                  <required>FALSE</required>
+                  <resizable>FALSE</resizable>
+                  <title>Qualified Name</title>
+                  <tree>TRUE</tree>
+                  <actions>
+                    <create>
+                      <path>self::node()</path>
+                      <context>parent</context>
+                      <schema/>
+                      <type>element</type>
+                      <prefix>NULL</prefix>
+                      <value>displayForm</value>
+                    </create>
+                    <read>
+                      <path>mods:displayForm</path>
                       <context>parent</context>
                     </read>
                     <update>
@@ -792,85 +882,6 @@
           </element>
         </children>
       </element>
-      <element name="u1_identifier_tab">
-        <properties>
-          <type>tabs</type>
-          <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
-          <required>FALSE</required>
-          <resizable>FALSE</resizable>
-          <title>Faculty Identifiers</title>
-          <tree>TRUE</tree>
-        </properties>
-        <children>
-          <element name="u1_identifier_tabpanel">
-            <properties>
-              <type>tabpanel</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <description>A faculty person's identifier, for inclusion in the Thesis tab of their scholar profile.</description>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <tree>TRUE</tree>
-              <actions>
-                <create>NULL</create>
-                <read>
-                  <path>/mods:mods/mods:identifier[@type='u1']</path>
-                  <context>document</context>
-                </read>
-                <update>NULL</update>
-                <delete>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </delete>
-              </actions>
-            </properties>
-            <children>
-              <element name="u1_identifier">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <autocomplete_path>islandora_autocomplete/researcherCModel/mads.identifier</autocomplete_path>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <description>This is the faculty member's username. If more than one faculty member is required, select Add button and add another identifier.</description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>/mods:mods</path>
-                      <context>document</context>
-                      <schema/>
-                      <type>xml</type>
-                      <prefix>NULL</prefix>
-                      <value>&lt;identifier type="u1"&gt;%value%&lt;/identifier&gt;</value>
-                    </create>
-                    <read>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                    </read>
-                    <update>NULL</update>
-                    <delete>NULL</delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-            </children>
-          </element>
-        </children>
-      </element>
       <element name="u2_identifier_tab">
         <properties>
           <type>tabs</type>
@@ -974,6 +985,7 @@
           </options>
           <required>FALSE</required>
           <resizable>FALSE</resizable>
+          <title>Type of resource</title>
           <tree>TRUE</tree>
           <actions>
             <create>
@@ -1590,11 +1602,17 @@
           </element>
         </children>
       </element>
-      <element name="identifier">
+      <element name="identifierISBN">
         <properties>
           <type>textfield</type>
           <access>TRUE</access>
+          <collapsed>FALSE</collapsed>
+          <collapsible>FALSE</collapsible>
+          <disabled>FALSE</disabled>
+          <executes_submit_callback>FALSE</executes_submit_callback>
+          <multiple>FALSE</multiple>
           <required>FALSE</required>
+          <resizable>FALSE</resizable>
           <title>ISBN</title>
           <tree>TRUE</tree>
           <actions>
@@ -1608,6 +1626,42 @@
             </create>
             <read>
               <path>/mods:mods/mods:identifier[@type='isbn']</path>
+              <context>document</context>
+            </read>
+            <update>
+              <path>self::node()</path>
+              <context>self</context>
+            </update>
+            <delete>NULL</delete>
+          </actions>
+        </properties>
+        <children/>
+      </element>
+      <element name="identifierDOI">
+        <properties>
+          <type>textfield</type>
+          <access>TRUE</access>
+          <collapsed>FALSE</collapsed>
+          <collapsible>FALSE</collapsible>
+          <description>If the object has a DOI, enter it here.</description>
+          <disabled>FALSE</disabled>
+          <executes_submit_callback>FALSE</executes_submit_callback>
+          <multiple>FALSE</multiple>
+          <required>FALSE</required>
+          <resizable>FALSE</resizable>
+          <title>DOI</title>
+          <tree>TRUE</tree>
+          <actions>
+            <create>
+              <path>/mods:mods</path>
+              <context>document</context>
+              <schema/>
+              <type>xml</type>
+              <prefix>NULL</prefix>
+              <value>&lt;identifier type="doi"&gt;%value%&lt;/identifier&gt;</value>
+            </create>
+            <read>
+              <path>/mods:mods/mods:identifier[@type='doi']</path>
               <context>document</context>
             </read>
             <update>
@@ -2067,7 +2121,7 @@
           <access>TRUE</access>
           <collapsed>FALSE</collapsed>
           <collapsible>FALSE</collapsible>
-          <description>I have read and agree to the repository submission agreement. (Link here - to follow.)</description>
+          <description>I have read and agree to the repository submission agreement.</description>
           <disabled>FALSE</disabled>
           <executes_submit_callback>FALSE</executes_submit_callback>
           <multiple>FALSE</multiple>
