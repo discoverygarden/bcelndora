@@ -1500,7 +1500,9 @@
               <access>TRUE</access>
               <collapsed>FALSE</collapsed>
               <collapsible>FALSE</collapsible>
-              <description>Use LCSH for Subject entries where possible.</description>
+              <description>Use LCSH for Subject entries where possible.
+
+Group related topic, geographic, and temporal subjects below. For unrelated subjects, click "add" and put them in the next tab.</description>
               <disabled>FALSE</disabled>
               <executes_submit_callback>FALSE</executes_submit_callback>
               <multiple>FALSE</multiple>
@@ -2199,7 +2201,7 @@
           <access>TRUE</access>
           <collapsed>FALSE</collapsed>
           <collapsible>FALSE</collapsible>
-          <description>I have read and agree to the repository submission agreement.</description>
+          <description>I have read and agree to the repository &lt;a href="/submission-agreement" target="_blank"&gt;submission agreement&lt;/a&gt;.</description>
           <disabled>FALSE</disabled>
           <executes_submit_callback>FALSE</executes_submit_callback>
           <multiple>FALSE</multiple>
