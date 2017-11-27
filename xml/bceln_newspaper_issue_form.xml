@@ -188,7 +188,13 @@
         <properties>
           <type>tabs</type>
           <access>TRUE</access>
+          <collapsed>FALSE</collapsed>
+          <collapsible>FALSE</collapsible>
+          <disabled>FALSE</disabled>
+          <executes_submit_callback>FALSE</executes_submit_callback>
+          <multiple>FALSE</multiple>
           <required>FALSE</required>
+          <resizable>FALSE</resizable>
           <title>People</title>
           <tree>TRUE</tree>
         </properties>
@@ -197,7 +203,13 @@
             <properties>
               <type>tabpanel</type>
               <access>TRUE</access>
+              <collapsed>FALSE</collapsed>
+              <collapsible>FALSE</collapsible>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
               <required>FALSE</required>
+              <resizable>FALSE</resizable>
               <tree>TRUE</tree>
               <actions>
                 <create>
@@ -228,7 +240,13 @@
                   <type>textfield</type>
                   <access>TRUE</access>
                   <autocomplete_path>islandora_autocomplete/researcherCModel/mads.given/</autocomplete_path>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
+                  <resizable>FALSE</resizable>
                   <title>Given Name</title>
                   <tree>TRUE</tree>
                   <actions>
@@ -241,8 +259,8 @@
                       <value>&lt;namePart type="given"&gt;%value%&lt;/namePart&gt;</value>
                     </create>
                     <read>
-                      <path>//mods:mods[1]/mods:name/mods:namePart[@type='given']</path>
-                      <context>document</context>
+                      <path>mods:namePart[@type='given']</path>
+                      <context>parent</context>
                     </read>
                     <update>
                       <path>self::node()</path>
@@ -261,7 +279,13 @@
                   <type>textfield</type>
                   <access>TRUE</access>
                   <autocomplete_path>islandora_autocomplete/researcherCModel/mads.family</autocomplete_path>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
+                  <resizable>FALSE</resizable>
                   <title>Family Name</title>
                   <tree>TRUE</tree>
                   <actions>
@@ -274,8 +298,8 @@
                       <value>&lt;namePart type="family"&gt;%value%&lt;/namePart&gt;</value>
                     </create>
                     <read>
-                      <path>//mods:mods[1]/mods:name/mods:namePart[@type='family']</path>
-                      <context>document</context>
+                      <path>mods:namePart[@type='family']</path>
+                      <context>parent</context>
                     </read>
                     <update>
                       <path>self::node()</path>
@@ -293,7 +317,13 @@
                 <properties>
                   <type>tags</type>
                   <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
+                  <resizable>FALSE</resizable>
                   <title>Roles</title>
                   <tree>TRUE</tree>
                 </properties>
@@ -302,8 +332,14 @@
                     <properties>
                       <type>tag</type>
                       <access>TRUE</access>
+                      <collapsed>FALSE</collapsed>
+                      <collapsible>FALSE</collapsible>
                       <description>marcrelator</description>
+                      <disabled>FALSE</disabled>
+                      <executes_submit_callback>FALSE</executes_submit_callback>
+                      <multiple>FALSE</multiple>
                       <required>FALSE</required>
+                      <resizable>FALSE</resizable>
                       <title>Role</title>
                       <tree>TRUE</tree>
                       <actions>
@@ -337,8 +373,14 @@
                 <properties>
                   <type>textarea</type>
                   <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
                   <description>This field holds information about the date the person served as the editor ... for example.</description>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
+                  <resizable>FALSE</resizable>
                   <title>Extra detail</title>
                   <tree>TRUE</tree>
                   <actions>
