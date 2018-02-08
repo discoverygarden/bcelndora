@@ -373,7 +373,7 @@
         <properties>
           <type>fieldset</type>
           <access>TRUE</access>
-          <required>FALSE</required>
+          <required>TRUE</required>
           <title>Origin Information</title>
           <tree>TRUE</tree>
           <actions>
