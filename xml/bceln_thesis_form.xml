@@ -2114,7 +2114,7 @@ Group related topic, geographic, and temporal subjects below. For unrelated subj
           <actions>
             <create>
               <path>self::node()</path>
-              <context>parent</context>
+              <context>document</context>
               <schema/>
               <type>xml</type>
               <prefix>NULL</prefix>
@@ -2122,7 +2122,7 @@ Group related topic, geographic, and temporal subjects below. For unrelated subj
             </create>
             <read>
               <path>mods:accessCondition[@type="use and reproduction"][not(@displayLabel)]</path>
-              <context>parent</context>
+              <context>document</context>
             </read>
             <update>
               <path>self::node()</path>
