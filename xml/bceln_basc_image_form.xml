@@ -399,7 +399,7 @@
               <type>textfield</type>
               <access>TRUE</access>
               <description>Enter date in the format YYYY-MM-DD.</description>
-              <required>FALSE</required>
+              <required>TRUE</required>
               <title>Date Issued</title>
               <tree>TRUE</tree>
               <actions>
