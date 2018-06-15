@@ -803,7 +803,7 @@
                   <value>&lt;name type='corporate'&gt;&lt;namePart&gt;%value%&lt;/namePart&gt;&lt;role&gt;&lt;roleTerm authority="marcrelator" type="text"&gt;author&lt;/roleTerm&gt;&lt;/role&gt;&lt;/name&gt;</value>
                 </create>
                 <read>
-                  <path>mods:name[@type='corporate']/mods:namePart</path>
+                  <path>mods:name[@type='corporate' and mods:role/mods:roleTerm = 'author']/mods:namePart</path>
                   <context>parent</context>
                 </read>
                 <update>
@@ -990,7 +990,7 @@
                   <value>&lt;name type='corporate'&gt;&lt;role&gt;&lt;roleTerm authority="marcrelator" type="text"&gt;funder&lt;/roleTerm&gt;&lt;/role&gt;&lt;/name&gt;</value>
                 </create>
                 <read>
-                  <path>mods:name[@type = 'personal' and mods:role/mods:roleTerm = 'author']</path>
+                  <path>mods:name[@type = 'corporate' and mods:role/mods:roleTerm = 'funder']</path>
                   <context>parent</context>
                 </read>
                 <update>
@@ -1024,10 +1024,10 @@
                       <schema/>
                       <type>xml</type>
                       <prefix>NULL</prefix>
-                      <value>&lt;name&gt;%value%&lt;/name&gt;</value>
+                      <value>&lt;namePart&gt;%value%&lt;/namePart&gt;</value>
                     </create>
                     <read>
-                      <path>mods:name</path>
+                      <path>mods:namePart</path>
                       <context>parent</context>
                     </read>
                     <update>
