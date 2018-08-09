@@ -63,6 +63,15 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'self_transform' => 'islandora_cleanup_mods_extended.xsl',
       'template' => FALSE,
     ),
+    'bceln_book_form' => array(
+      'content_model' => 'islandora:bookCModel',
+      'form_name' => 'BC ELN Book Form',
+      'dsid' => 'MODS',
+      'title_field' => array('titleInfo', 'title'),
+      'transform' => 'mods_to_dc.xsl',
+      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'template' => FALSE,
+    ),
     'bceln_video_form' => array(
       'content_model' => 'islandora:sp_videoCModel',
       'form_name' => 'BC ELN Video Form',
@@ -113,6 +122,9 @@ function bcelndora_islandora_xml_form_builder_forms() {
     ),
     'BC ELN Audio Form' => array(
       'form_file' => "$module_path/xml/bceln_audio_form.xml",
+    ),
+    'BC ELN Book Form' => array(
+      'form_file' => "$module_path/xml/bceln_book_form.xml",
     ),
     'BC ELN Basic Image Form' => array(
       'form_file' => "$module_path/xml/bceln_basc_image_form.xml",
