@@ -415,9 +415,9 @@
                   <path>self::node()</path>
                   <context>parent</context>
                   <schema/>
-                  <type>xml</type>
+                  <type>element</type>
                   <prefix>NULL</prefix>
-                  <value>&lt;dateIssued keyDate="yes" encoding="w3cdtf"&gt;%value%&lt;/value&gt;</value>
+                  <value>dateIssued</value>
                 </create>
                 <read>
                   <path>mods:dateIssued</path>
