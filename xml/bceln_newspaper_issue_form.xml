@@ -711,181 +711,98 @@
             </properties>
             <children/>
           </element>
-          <element name="dateIssued">
+          <element name="dateSet">
             <properties>
-              <type>textfield</type>
+              <type>fieldset</type>
               <access>TRUE</access>
-              <required>TRUE</required>
-              <title>Date Issued</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>element</type>
-                  <prefix>NULL</prefix>
-                  <value>dateIssued</value>
-                </create>
-                <read>
-                  <path>mods:dateIssued[not(@point)]</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </delete>
-              </actions>
-            </properties>
-            <children/>
-          </element>
-          <element name="dateIssued_start">
-            <properties>
-              <type>textfield</type>
-              <access>TRUE</access>
+              <collapsed>FALSE</collapsed>
+              <collapsible>FALSE</collapsible>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
               <required>FALSE</required>
-              <title>Publication Start Date</title>
+              <resizable>FALSE</resizable>
               <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>xml</type>
-                  <prefix>NULL</prefix>
-                  <value>&lt;dateIssued point="start"&gt;%value%&lt;/dateIssued&gt;</value>
-                </create>
-                <read>
-                  <path>mods:dateIssued[@point='start']</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </delete>
-              </actions>
             </properties>
-            <children/>
-          </element>
-          <element name="dateIssued_end">
-            <properties>
-              <type>textfield</type>
-              <access>TRUE</access>
-              <required>FALSE</required>
-              <title>Publication End Date</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>xml</type>
-                  <prefix>NULL</prefix>
-                  <value>&lt;dateIssued point="end"&gt;%value%&lt;/dateIssued&gt;</value>
-                </create>
-                <read>
-                  <path>mods:dateIssued[@point='end']</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </delete>
-              </actions>
-            </properties>
-            <children/>
-          </element>
-          <element name="issuance">
-            <properties>
-              <type>hidden</type>
-              <access>TRUE</access>
-              <default_value>serial</default_value>
-              <required>FALSE</required>
-              <title>Issuance</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>element</type>
-                  <prefix>NULL</prefix>
-                  <value>issuance</value>
-                </create>
-                <read>
-                  <path>mods:issuance</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>NULL</delete>
-              </actions>
-            </properties>
-            <children/>
-          </element>
-          <element name="frequency">
-            <properties>
-              <type>select</type>
-              <access>TRUE</access>
-              <description>This is a controlled value. Select the value that best matches.</description>
-              <options>
-                <index key="">Select a frequency</index>
-                <index key="Completely irregular">Completely irregular</index>
-                <Triennial>Triennial - every 3 years</Triennial>
-                <Biennial>Biennial - every 2 years</Biennial>
-                <Annual>Annual</Annual>
-                <Semiannual>Semiannual - 2 times a year</Semiannual>
-                <index key="Three times a year">Three times a year</index>
-                <Quarterly>Quarterly</Quarterly>
-                <Bimonthly>Bimonthly - every 2 months</Bimonthly>
-                <Monthly>Monthly</Monthly>
-                <Semimonthly>Semimonthly - 2 times a monthly</Semimonthly>
-                <index key="Three times a month">Three times a month</index>
-                <Biweekly>Biweekly - every 2 weeks</Biweekly>
-                <Weekly>Weekly</Weekly>
-                <index key="Three times a week">Three times a week</index>
-                <Semiweekly>Semiweekly - 2 times a week</Semiweekly>
-                <Daily>Daily</Daily>
-                <index key="Continuously updated ">Continuously updated </index>
-              </options>
-              <required>FALSE</required>
-              <title>Frequency</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>xml</type>
-                  <prefix>NULL</prefix>
-                  <value>&lt;frequency authority="marcfrequency"&gt;%value%&lt;/frequency&gt;</value>
-                </create>
-                <read>
-                  <path>mods:frequency[@authority='marcfrequency']</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>NULL</delete>
-              </actions>
-            </properties>
-            <children/>
+            <children>
+              <element name="dateIssued">
+                <properties>
+                  <type>textfield</type>
+                  <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <description>The date the object was created/issued/published. Use the format YYYY-MM-DD.</description>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
+                  <required>TRUE</required>
+                  <resizable>FALSE</resizable>
+                  <title>Date Issued</title>
+                  <tree>TRUE</tree>
+                  <actions>
+                    <create>
+                      <path>self::node()</path>
+                      <context>parent</context>
+                      <schema/>
+                      <type>element</type>
+                      <prefix>NULL</prefix>
+                      <value>dateIssued</value>
+                    </create>
+                    <read>
+                      <path>mods:dateIssued</path>
+                      <context>parent</context>
+                    </read>
+                    <update>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </update>
+                    <delete>NULL</delete>
+                  </actions>
+                </properties>
+                <children/>
+              </element>
+              <element name="qualifier">
+                <properties>
+                  <type>select</type>
+                  <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
+                  <options>
+                    <index key="">None</index>
+                    <questionable>Questionable</questionable>
+                    <inferred>Inferred</inferred>
+                    <approximate>Approximate</approximate>
+                  </options>
+                  <required>FALSE</required>
+                  <resizable>FALSE</resizable>
+                  <title>Qualifier</title>
+                  <tree>TRUE</tree>
+                  <actions>
+                    <create>
+                      <path>self::node()/mods:dateIssued</path>
+                      <context>parent</context>
+                      <schema/>
+                      <type>attribute</type>
+                      <prefix>NULL</prefix>
+                      <value>qualifier</value>
+                    </create>
+                    <read>
+                      <path>mods:dateIssued/@qualifier</path>
+                      <context>parent</context>
+                    </read>
+                    <update>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </update>
+                    <delete>NULL</delete>
+                  </actions>
+                </properties>
+                <children/>
+              </element>
+            </children>
           </element>
         </children>
       </element>
