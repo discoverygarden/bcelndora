@@ -2463,7 +2463,7 @@
               <value>&lt;note displayLabel="Project Name"&gt;%value%&lt;/note&gt;</value>
             </create>
             <read>
-              <path>note[@displayLabel="Project Name"]</path>
+              <path>mods:note[@displayLabel="Project Name"]</path>
               <context>parent</context>
             </read>
             <update>
@@ -2502,8 +2502,8 @@
               <value>&lt;note displayLabel="Project ID"&gt;%value%&lt;/note&gt;</value>
             </create>
             <read>
-              <path>note[@displayLabel="Project ID"]</path>
-              <context>document</context>
+              <path>mods:note[@displayLabel="Project ID"]</path>
+              <context>parent</context>
             </read>
             <update>
               <path>self::node()</path>
