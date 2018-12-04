@@ -1877,7 +1877,7 @@ Group related topic, geographic, and temporal subjects below. For unrelated subj
           </actions>
         </properties>
         <children>
-          <element name="etd">
+          <element name="degree">
             <properties>
               <type>fieldset</type>
               <access>TRUE</access>
@@ -1888,6 +1888,7 @@ Group related topic, geographic, and temporal subjects below. For unrelated subj
               <multiple>FALSE</multiple>
               <required>FALSE</required>
               <resizable>FALSE</resizable>
+              <title>Degree</title>
               <tree>TRUE</tree>
               <actions>
                 <create>
@@ -1896,10 +1897,10 @@ Group related topic, geographic, and temporal subjects below. For unrelated subj
                   <schema/>
                   <type>element</type>
                   <prefix>etd</prefix>
-                  <value>etd:etd</value>
+                  <value>etd:degree</value>
                 </create>
                 <read>
-                  <path>etd:etd</path>
+                  <path>etd:degree</path>
                   <context>parent</context>
                 </read>
                 <update>
@@ -1910,9 +1911,9 @@ Group related topic, geographic, and temporal subjects below. For unrelated subj
               </actions>
             </properties>
             <children>
-              <element name="degree">
+              <element name="name">
                 <properties>
-                  <type>fieldset</type>
+                  <type>textfield</type>
                   <access>TRUE</access>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
@@ -1921,7 +1922,7 @@ Group related topic, geographic, and temporal subjects below. For unrelated subj
                   <multiple>FALSE</multiple>
                   <required>FALSE</required>
                   <resizable>FALSE</resizable>
-                  <title>Degree</title>
+                  <title>Name</title>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
@@ -1930,10 +1931,10 @@ Group related topic, geographic, and temporal subjects below. For unrelated subj
                       <schema/>
                       <type>element</type>
                       <prefix>etd</prefix>
-                      <value>etd:degree</value>
+                      <value>etd:name</value>
                     </create>
                     <read>
-                      <path>etd:degree</path>
+                      <path>etd:name</path>
                       <context>parent</context>
                     </read>
                     <update>
@@ -1943,154 +1944,118 @@ Group related topic, geographic, and temporal subjects below. For unrelated subj
                     <delete>NULL</delete>
                   </actions>
                 </properties>
-                <children>
-                  <element name="name">
-                    <properties>
-                      <type>textfield</type>
-                      <access>TRUE</access>
-                      <collapsed>FALSE</collapsed>
-                      <collapsible>FALSE</collapsible>
-                      <disabled>FALSE</disabled>
-                      <executes_submit_callback>FALSE</executes_submit_callback>
-                      <multiple>FALSE</multiple>
-                      <required>FALSE</required>
-                      <resizable>FALSE</resizable>
-                      <title>Name</title>
-                      <tree>TRUE</tree>
-                      <actions>
-                        <create>
-                          <path>self::node()</path>
-                          <context>parent</context>
-                          <schema/>
-                          <type>element</type>
-                          <prefix>etd</prefix>
-                          <value>etd:name</value>
-                        </create>
-                        <read>
-                          <path>etd:name</path>
-                          <context>parent</context>
-                        </read>
-                        <update>
-                          <path>self::node()</path>
-                          <context>self</context>
-                        </update>
-                        <delete>NULL</delete>
-                      </actions>
-                    </properties>
-                    <children/>
-                  </element>
-                  <element name="level">
-                    <properties>
-                      <type>select</type>
-                      <access>TRUE</access>
-                      <collapsed>FALSE</collapsed>
-                      <collapsible>FALSE</collapsible>
-                      <disabled>FALSE</disabled>
-                      <executes_submit_callback>FALSE</executes_submit_callback>
-                      <multiple>FALSE</multiple>
-                      <options>
-                        <undergraduate>Undergraduate</undergraduate>
-                        <masters>Masters</masters>
-                        <doctoral>Doctoral</doctoral>
-                      </options>
-                      <required>FALSE</required>
-                      <resizable>FALSE</resizable>
-                      <title>Level</title>
-                      <tree>TRUE</tree>
-                      <actions>
-                        <create>
-                          <path>self::node()</path>
-                          <context>parent</context>
-                          <schema/>
-                          <type>element</type>
-                          <prefix>etd</prefix>
-                          <value>etd:level</value>
-                        </create>
-                        <read>
-                          <path>etd:level</path>
-                          <context>parent</context>
-                        </read>
-                        <update>
-                          <path>self::node()</path>
-                          <context>self</context>
-                        </update>
-                        <delete>NULL</delete>
-                      </actions>
-                    </properties>
-                    <children/>
-                  </element>
-                  <element name="discipline">
-                    <properties>
-                      <type>textfield</type>
-                      <access>TRUE</access>
-                      <collapsed>FALSE</collapsed>
-                      <collapsible>FALSE</collapsible>
-                      <disabled>FALSE</disabled>
-                      <executes_submit_callback>FALSE</executes_submit_callback>
-                      <multiple>FALSE</multiple>
-                      <required>FALSE</required>
-                      <resizable>FALSE</resizable>
-                      <title>Discipline</title>
-                      <tree>TRUE</tree>
-                      <actions>
-                        <create>
-                          <path>self::node()</path>
-                          <context>parent</context>
-                          <schema/>
-                          <type>element</type>
-                          <prefix>etd</prefix>
-                          <value>etd:discipline</value>
-                        </create>
-                        <read>
-                          <path>etd:discipline</path>
-                          <context>parent</context>
-                        </read>
-                        <update>
-                          <path>self::node()</path>
-                          <context>self</context>
-                        </update>
-                        <delete>NULL</delete>
-                      </actions>
-                    </properties>
-                    <children/>
-                  </element>
-                  <element name="grantor">
-                    <properties>
-                      <type>textfield</type>
-                      <access>TRUE</access>
-                      <collapsed>FALSE</collapsed>
-                      <collapsible>FALSE</collapsible>
-                      <description>Copy the institution name from the "Degree granter" field earlier in the form. Required for ETD-MS schema.</description>
-                      <disabled>FALSE</disabled>
-                      <executes_submit_callback>FALSE</executes_submit_callback>
-                      <multiple>FALSE</multiple>
-                      <required>FALSE</required>
-                      <resizable>FALSE</resizable>
-                      <title>Degree grantor</title>
-                      <tree>TRUE</tree>
-                      <actions>
-                        <create>
-                          <path>self::node()</path>
-                          <context>parent</context>
-                          <schema/>
-                          <type>element</type>
-                          <prefix>etd</prefix>
-                          <value>etd:grantor</value>
-                        </create>
-                        <read>
-                          <path>etd:grantor</path>
-                          <context>parent</context>
-                        </read>
-                        <update>
-                          <path>self::node()</path>
-                          <context>self</context>
-                        </update>
-                        <delete>NULL</delete>
-                      </actions>
-                    </properties>
-                    <children/>
-                  </element>
-                </children>
+                <children/>
+              </element>
+              <element name="level">
+                <properties>
+                  <type>select</type>
+                  <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
+                  <options>
+                    <undergraduate>Undergraduate</undergraduate>
+                    <masters>Masters</masters>
+                    <doctoral>Doctoral</doctoral>
+                  </options>
+                  <required>FALSE</required>
+                  <resizable>FALSE</resizable>
+                  <title>Level</title>
+                  <tree>TRUE</tree>
+                  <actions>
+                    <create>
+                      <path>self::node()</path>
+                      <context>parent</context>
+                      <schema/>
+                      <type>element</type>
+                      <prefix>etd</prefix>
+                      <value>etd:level</value>
+                    </create>
+                    <read>
+                      <path>etd:level</path>
+                      <context>parent</context>
+                    </read>
+                    <update>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </update>
+                    <delete>NULL</delete>
+                  </actions>
+                </properties>
+                <children/>
+              </element>
+              <element name="discipline">
+                <properties>
+                  <type>textfield</type>
+                  <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
+                  <required>FALSE</required>
+                  <resizable>FALSE</resizable>
+                  <title>Discipline</title>
+                  <tree>TRUE</tree>
+                  <actions>
+                    <create>
+                      <path>self::node()</path>
+                      <context>parent</context>
+                      <schema/>
+                      <type>element</type>
+                      <prefix>etd</prefix>
+                      <value>etd:discipline</value>
+                    </create>
+                    <read>
+                      <path>etd:discipline</path>
+                      <context>parent</context>
+                    </read>
+                    <update>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </update>
+                    <delete>NULL</delete>
+                  </actions>
+                </properties>
+                <children/>
+              </element>
+              <element name="grantor">
+                <properties>
+                  <type>textfield</type>
+                  <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <description>Copy the institution name from the "Degree granter" field earlier in the form. Required for ETD-MS schema.</description>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
+                  <required>FALSE</required>
+                  <resizable>FALSE</resizable>
+                  <title>Degree grantor</title>
+                  <tree>TRUE</tree>
+                  <actions>
+                    <create>
+                      <path>self::node()</path>
+                      <context>parent</context>
+                      <schema/>
+                      <type>element</type>
+                      <prefix>etd</prefix>
+                      <value>etd:grantor</value>
+                    </create>
+                    <read>
+                      <path>etd:grantor</path>
+                      <context>parent</context>
+                    </read>
+                    <update>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </update>
+                    <delete>NULL</delete>
+                  </actions>
+                </properties>
+                <children/>
               </element>
             </children>
           </element>
