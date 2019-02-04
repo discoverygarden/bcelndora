@@ -1144,9 +1144,9 @@
         </properties>
         <children/>
       </element>
-      <element name="genreTabs">
+      <element name="genreSet">
         <properties>
-          <type>tabs</type>
+          <type>fieldset</type>
           <access>TRUE</access>
           <collapsed>FALSE</collapsed>
           <collapsible>FALSE</collapsible>
@@ -1155,30 +1155,22 @@
           <multiple>FALSE</multiple>
           <required>FALSE</required>
           <resizable>FALSE</resizable>
-          <title>Genres</title>
           <tree>TRUE</tree>
-          <actions>
-            <create>NULL</create>
-            <read>
-              <path>/mods:mods</path>
-              <context>document</context>
-            </read>
-            <update>NULL</update>
-            <delete>NULL</delete>
-          </actions>
         </properties>
         <children>
-          <element name="0">
+          <element name="genre">
             <properties>
-              <type>tabpanel</type>
+              <type>textfield</type>
               <access>TRUE</access>
               <collapsed>FALSE</collapsed>
               <collapsible>FALSE</collapsible>
+              <description>A term that best describes the genre of the object. Terms should be taken from one of two vocabularies: &lt;a href="https://www.loc.gov/standards/valuelist/marcgt.html" target="_blank"&gt;MARC Genre Terms&lt;/a&gt;, or the &lt;a href="http://www.getty.edu/research/tools/vocabularies/aat/" target="_blank"&gt;Art and Architecture Thesaurus&lt;/a&gt;.</description>
               <disabled>FALSE</disabled>
               <executes_submit_callback>FALSE</executes_submit_callback>
               <multiple>FALSE</multiple>
-              <required>FALSE</required>
+              <required>TRUE</required>
               <resizable>FALSE</resizable>
+              <title>Genre</title>
               <tree>TRUE</tree>
               <actions>
                 <create>
@@ -1193,67 +1185,62 @@
                   <path>mods:genre</path>
                   <context>parent</context>
                 </read>
-                <update>NULL</update>
+                <update>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </update>
                 <delete>
                   <path>self::node()</path>
                   <context>self</context>
                 </delete>
               </actions>
             </properties>
-            <children>
-              <element name="authority">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <description>The controlled vocabulary from which the genre term was taken. See http://www.loc.gov/standards/sourcelist/genre-form.html for an authority list of sources.</description>
-                  <required>FALSE</required>
-                  <title>Authority</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>attribute</type>
-                      <prefix>NULL</prefix>
-                      <value>authority</value>
-                    </create>
-                    <read>
-                      <path>@authority</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>NULL</delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-              <element name="genre">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <required>FALSE</required>
-                  <title>Genre</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>NULL</create>
-                    <read>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                    </update>
-                    <delete>NULL</delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-            </children>
+            <children/>
+          </element>
+          <element name="genreAuthority">
+            <properties>
+              <type>select</type>
+              <access>TRUE</access>
+              <collapsed>FALSE</collapsed>
+              <collapsible>FALSE</collapsible>
+              <default_value>marcgt</default_value>
+              <description>The authoritative source of your genre term. Local terms should be used very sparingly.</description>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
+              <options>
+                <marcgt>MARC genre terms</marcgt>
+                <aat>Art and Architecture Thesaurus</aat>
+                <local>Local term</local>
+              </options>
+              <required>TRUE</required>
+              <resizable>FALSE</resizable>
+              <title>Genre vocabulary</title>
+              <tree>TRUE</tree>
+              <actions>
+                <create>
+                  <path>self::node()/mods:genre</path>
+                  <context>parent</context>
+                  <schema/>
+                  <type>attribute</type>
+                  <prefix>NULL</prefix>
+                  <value>authority</value>
+                </create>
+                <read>
+                  <path>mods:genre/@authority</path>
+                  <context>parent</context>
+                </read>
+                <update>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </update>
+                <delete>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </delete>
+              </actions>
+            </properties>
+            <children/>
           </element>
         </children>
       </element>
@@ -1443,7 +1430,7 @@
                     <properties>
                       <type>fieldset</type>
                       <access>TRUE</access>
-                      <collapsed>TRUE</collapsed>
+                      <collapsed>FALSE</collapsed>
                       <collapsible>TRUE</collapsible>
                       <description>The date the object was issued.  Prefer for formally published materials.  For reformatted material, use the date of the source, not the digital version.  Enter date in the format YYYY-MM-DD. </description>
                       <disabled>FALSE</disabled>

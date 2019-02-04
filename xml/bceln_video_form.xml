@@ -301,200 +301,105 @@
         </properties>
         <children/>
       </element>
-      <element name="genre">
+      <element name="genreSet">
         <properties>
-          <type>select</type>
+          <type>fieldset</type>
           <access>TRUE</access>
           <collapsed>FALSE</collapsed>
           <collapsible>FALSE</collapsible>
           <disabled>FALSE</disabled>
           <executes_submit_callback>FALSE</executes_submit_callback>
           <multiple>FALSE</multiple>
-          <options>
-            <index key="">Select a Genre</index>
-            <Actuality>Actuality</Actuality>
-            <Adaptation>Adaptation</Adaptation>
-            <Adventure>Adventure</Adventure>
-            <Adventure_Nonfiction>Adventure
-                                                  (Nonfiction)
-            </Adventure_Nonfiction>
-            <Ancient_world>Ancient world</Ancient_world>
-            <Animal>Animal</Animal>
-            <Art>Art</Art>
-            <Aviation>Aviation</Aviation>
-            <Biographical>Biographical</Biographical>
-            <Biographical_Nonfiction>Biographical
-                                                  (Nonfiction)
-            </Biographical_Nonfiction>
-            <Buddy>Buddy</Buddy>
-            <Caper>Caper</Caper>
-            <Chase>Chase</Chase>
-            <Childrens>Children's</Childrens>
-            <College>College</College>
-            <Comedy>Comedy</Comedy>
-            <Crime>Crime</Crime>
-            <Dance>Dance</Dance>
-            <Dark_comedy>Dark comedy</Dark_comedy>
-            <Disability>Disability</Disability>
-            <Disaster>Disaster</Disaster>
-            <Documentary>Documentary</Documentary>
-            <Domestic_comedy>Domestic comedy</Domestic_comedy>
-            <Educational>Educational</Educational>
-            <Erotic>Erotic</Erotic>
-            <Espionage>Espionage</Espionage>
-            <Ethnic>Ethnic</Ethnic>
-            <Ethnic_Nonfiction>Ethnic
-                                                  (Nonfiction)
-            </Ethnic_Nonfiction>
-            <Ethnographic>Ethnographic</Ethnographic>
-            <Experimental>Experimental</Experimental>
-            <Absolute>Absolute</Absolute>
-            <Abstract_live_action>Abstract live
-                                                  action
-            </Abstract_live_action>
-            <Activist>Activist</Activist>
-            <Autobiographical>Autobiographical</Autobiographical>
-            <City_symphony>City symphony</City_symphony>
-            <Cubist>Cubist</Cubist>
-            <Dada>Dada</Dada>
-            <Diary>Diary</Diary>
-            <Feminist>Feminist</Feminist>
-            <Gay_lesbian>Gay/lesbian</Gay_lesbian>
-            <Intermittent_animation>Intermittent
-                                                  animation
-            </Intermittent_animation>
-            <Landscape>Landscape</Landscape>
-            <Loop>Loop</Loop>
-            <Lyrical>Lyrical</Lyrical>
-            <Participatory>Participatory</Participatory>
-            <Portrait>Portrait</Portrait>
-            <Reflexive>Reflexive</Reflexive>
-            <Street>Street</Street>
-            <Structural>Structural</Structural>
-            <Surrealist>Surrealist</Surrealist>
-            <Text>Text</Text>
-            <Trance>Trance</Trance>
-            <Exploitation>Exploitation</Exploitation>
-            <Fallen_woman>Fallen woman</Fallen_woman>
-            <Family>Family</Family>
-            <Fantasy>Fantasy</Fantasy>
-            <Film_noir>Film noir</Film_noir>
-            <Game>Game</Game>
-            <Gangster>Gangster</Gangster>
-            <Historical>Historical</Historical>
-            <Home_shopping>Home shopping</Home_shopping>
-            <Horror>Horror</Horror>
-            <Industrial>Industrial</Industrial>
-            <Instructional>Instructional</Instructional>
-            <Interview>Interview</Interview>
-            <Journalism>Journalism</Journalism>
-            <Jungle>Jungle</Jungle>
-            <Juvenile_delinquency>Juvenile
-                                                  delinquency
-            </Juvenile_delinquency>
-            <Lecture>Lecture</Lecture>
-            <Legal>Legal</Legal>
-            <Magazine>Magazine</Magazine>
-            <Martial_arts>Martial arts</Martial_arts>
-            <Maternal_melodrama>Maternal
-                                                  melodrama
-            </Maternal_melodrama>
-            <Medical>Medical</Medical>
-            <Medical_Nonfiction>Medical
-                                                  (Nonfiction)
-            </Medical_Nonfiction>
-            <Melodrama>Melodrama</Melodrama>
-            <Military>Military</Military>
-            <Music>Music</Music>
-            <Music_video>Music video</Music_video>
-            <Musical>Musical</Musical>
-            <Mystery>Mystery</Mystery>
-            <Nature>Nature</Nature>
-            <News>News</News>
-            <Newsreel>Newsreel</Newsreel>
-            <Opera>Opera</Opera>
-            <Operetta>Operetta</Operetta>
-            <Parody>Parody</Parody>
-            <Police>Police</Police>
-            <Political>Political</Political>
-            <Pornography>Pornography</Pornography>
-            <Prehistoric>Prehistoric</Prehistoric>
-            <Prison>Prison</Prison>
-            <Propaganda>Propaganda</Propaganda>
-            <Public_access>Public access</Public_access>
-            <Public_affairs>Public affairs</Public_affairs>
-            <index key="Reality-based">Reality-based</index>
-            <Religion>Religion</Religion>
-            <Religious>Religious</Religious>
-            <Road>Road</Road>
-            <Romance>Romance</Romance>
-            <Science_fiction>Science fiction</Science_fiction>
-            <Screwball_comedy>Screwball
-                                                  comedy
-            </Screwball_comedy>
-            <Show_business>Show business</Show_business>
-            <Singing_cowboy>Singing cowboy</Singing_cowboy>
-            <Situation_comedy>Situation
-                                                  comedy
-            </Situation_comedy>
-            <Slapstick_comedy>Slapstick
-                                                  comedy
-            </Slapstick_comedy>
-            <Slasher>Slasher</Slasher>
-            <Soap_opera>Soap opera</Soap_opera>
-            <Social_guidance>Social guidance</Social_guidance>
-            <Social_problem>Social problem</Social_problem>
-            <Sophisticated_comedy>Sophisticated
-                                                  comedy
-            </Sophisticated_comedy>
-            <Speculation>Speculation</Speculation>
-            <Sponsored>Sponsored</Sponsored>
-            <Sports_NonFiction>Sports
-                                                  (Nonfiction)
-            </Sports_NonFiction>
-            <Sports>Sports</Sports>
-            <Survival>Survival</Survival>
-            <Talk>Talk</Talk>
-            <Thriller>Thriller</Thriller>
-            <Training>Training</Training>
-            <Travelogue>Travelogue</Travelogue>
-            <Trick>Trick</Trick>
-            <Trigger>Trigger</Trigger>
-            <Variety>Variety</Variety>
-            <War>War</War>
-            <Western>Western</Western>
-            <Women>Women</Women>
-            <Youth>Youth</Youth>
-            <Yukon>Yukon</Yukon>
-          </options>
           <required>FALSE</required>
           <resizable>FALSE</resizable>
-          <title>Genre</title>
           <tree>TRUE</tree>
-          <user_data>
-            <index key=""/>
-          </user_data>
-          <actions>
-            <create>
-              <path>self::node()</path>
-              <context>parent</context>
-              <schema/>
-              <type>element</type>
-              <prefix>NULL</prefix>
-              <value>genre</value>
-            </create>
-            <read>
-              <path>mods:genre</path>
-              <context>parent</context>
-            </read>
-            <update>
-              <path>self::node()</path>
-              <context>self</context>
-            </update>
-            <delete>NULL</delete>
-          </actions>
         </properties>
-        <children/>
+        <children>
+          <element name="genre">
+            <properties>
+              <type>textfield</type>
+              <access>TRUE</access>
+              <collapsed>FALSE</collapsed>
+              <collapsible>FALSE</collapsible>
+              <description>A term that best describes the genre of the object. Terms should be taken from one of two vocabularies: &lt;a href="https://www.loc.gov/standards/valuelist/marcgt.html" target="_blank"&gt;MARC Genre Terms&lt;/a&gt;, or the &lt;a href="http://www.getty.edu/research/tools/vocabularies/aat/" target="_blank"&gt;Art and Architecture Thesaurus&lt;/a&gt;.</description>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
+              <required>TRUE</required>
+              <resizable>FALSE</resizable>
+              <title>Genre</title>
+              <tree>TRUE</tree>
+              <actions>
+                <create>
+                  <path>self::node()</path>
+                  <context>parent</context>
+                  <schema/>
+                  <type>element</type>
+                  <prefix>NULL</prefix>
+                  <value>genre</value>
+                </create>
+                <read>
+                  <path>mods:genre</path>
+                  <context>parent</context>
+                </read>
+                <update>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </update>
+                <delete>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </delete>
+              </actions>
+            </properties>
+            <children/>
+          </element>
+          <element name="genreAuthority">
+            <properties>
+              <type>select</type>
+              <access>TRUE</access>
+              <collapsed>FALSE</collapsed>
+              <collapsible>FALSE</collapsible>
+              <default_value>aat</default_value>
+              <description>The authoritative source of your genre term. Local terms should be used very sparingly.</description>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
+              <options>
+                <marcgt>MARC genre terms</marcgt>
+                <aat>Art and Architecture Thesaurus</aat>
+                <local>Local term</local>
+              </options>
+              <required>TRUE</required>
+              <resizable>FALSE</resizable>
+              <title>Genre vocabulary</title>
+              <tree>TRUE</tree>
+              <actions>
+                <create>
+                  <path>self::node()/mods:genre</path>
+                  <context>parent</context>
+                  <schema/>
+                  <type>attribute</type>
+                  <prefix>NULL</prefix>
+                  <value>authority</value>
+                </create>
+                <read>
+                  <path>mods:genre/@authority</path>
+                  <context>parent</context>
+                </read>
+                <update>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </update>
+                <delete>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </delete>
+              </actions>
+            </properties>
+            <children/>
+          </element>
+        </children>
       </element>
       <element name="originInfo">
         <properties>

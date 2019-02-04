@@ -335,6 +335,106 @@ For corporate authors, use the full corporate name.</description>
         </properties>
         <children/>
       </element>
+      <element name="genreSet">
+        <properties>
+          <type>fieldset</type>
+          <access>TRUE</access>
+          <collapsed>FALSE</collapsed>
+          <collapsible>FALSE</collapsible>
+          <disabled>FALSE</disabled>
+          <executes_submit_callback>FALSE</executes_submit_callback>
+          <multiple>FALSE</multiple>
+          <required>FALSE</required>
+          <resizable>FALSE</resizable>
+          <tree>TRUE</tree>
+        </properties>
+        <children>
+          <element name="genre">
+            <properties>
+              <type>textfield</type>
+              <access>TRUE</access>
+              <collapsed>FALSE</collapsed>
+              <collapsible>FALSE</collapsible>
+              <description>A term that best describes the genre of the object. Terms should be taken from one of two vocabularies: &lt;a href="https://www.loc.gov/standards/valuelist/marcgt.html" target="_blank"&gt;MARC Genre Terms&lt;/a&gt;, or the &lt;a href="http://www.getty.edu/research/tools/vocabularies/aat/" target="_blank"&gt;Art and Architecture Thesaurus&lt;/a&gt;.</description>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
+              <required>TRUE</required>
+              <resizable>FALSE</resizable>
+              <title>Genre</title>
+              <tree>TRUE</tree>
+              <actions>
+                <create>
+                  <path>self::node()</path>
+                  <context>parent</context>
+                  <schema/>
+                  <type>element</type>
+                  <prefix>NULL</prefix>
+                  <value>genre</value>
+                </create>
+                <read>
+                  <path>mods:genre</path>
+                  <context>parent</context>
+                </read>
+                <update>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </update>
+                <delete>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </delete>
+              </actions>
+            </properties>
+            <children/>
+          </element>
+          <element name="genreAuthority">
+            <properties>
+              <type>select</type>
+              <access>TRUE</access>
+              <collapsed>FALSE</collapsed>
+              <collapsible>FALSE</collapsible>
+              <default_value>marcgt</default_value>
+              <description>The authoritative source of your genre term. Local terms should be used very sparingly.</description>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
+              <options>
+                <marcgt>MARC genre terms</marcgt>
+                <aat>Art and Architecture Thesaurus</aat>
+                <local>Local term</local>
+              </options>
+              <required>TRUE</required>
+              <resizable>FALSE</resizable>
+              <title>Genre vocabulary</title>
+              <tree>TRUE</tree>
+              <actions>
+                <create>
+                  <path>self::node()/mods:genre</path>
+                  <context>parent</context>
+                  <schema/>
+                  <type>attribute</type>
+                  <prefix>NULL</prefix>
+                  <value>authority</value>
+                </create>
+                <read>
+                  <path>mods:genre/@authority</path>
+                  <context>parent</context>
+                </read>
+                <update>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </update>
+                <delete>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </delete>
+              </actions>
+            </properties>
+            <children/>
+          </element>
+        </children>
+      </element>
       <element name="tableOfContents">
         <properties>
           <type>textarea</type>
@@ -354,110 +454,6 @@ For corporate authors, use the full corporate name.</description>
             </create>
             <read>
               <path>mods:tableOfContents</path>
-              <context>parent</context>
-            </read>
-            <update>
-              <path>self::node()</path>
-              <context>self</context>
-            </update>
-            <delete>NULL</delete>
-          </actions>
-        </properties>
-        <children/>
-      </element>
-      <element name="genre">
-        <properties>
-          <type>select</type>
-          <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <description>Vocabulary from http://special-cataloguing.com/node/1398 </description>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
-          <options>
-            <index key=""/>
-            <anthems>anthems</anthems>
-            <ballets>ballets</ballets>
-            <bluegrass>bluegrass</bluegrass>
-            <blues>blues</blues>
-            <index key="canons and roundsct">canons and roundsct</index>
-            <contatas>contatas</contatas>
-            <canzonas>canzonas</canzonas>
-            <carols>carols</carols>
-            <chaconnes>chaconnes</chaconnes>
-            <index key="chance compositions">chance compositions</index>
-            <index key="chansons polyphonic">chansons polyphonic</index>
-            <index key="Christian chant">Christian chant</index>
-            <index key="chant religions other than Christian">chant religions other than Christian</index>
-            <index key="choral preludes">choral preludes</index>
-            <chorales>chorales</chorales>
-            <index key="concerti grossi">concerti grossi</index>
-            <concertos>concertos</concertos>
-            <index key="country music">country music</index>
-            <index key="dance forms">dance forms</index>
-            <index key="divertiments etc.">divertiments etc.</index>
-            <fantasias>fantasias</fantasias>
-            <index key="folk music">folk music</index>
-            <fugues>fugues</fugues>
-            <index key="gospel music">gospel music</index>
-            <hymns>hymns</hymns>
-            <jazz>jazz</jazz>
-            <madrigals>madrigals</madrigals>
-            <marches>marches</marches>
-            <masses>masses</masses>
-            <mazurkas>mazurkas</mazurkas>
-            <minuets>minuets</minuets>
-            <motets>motets</motets>
-            <index key="moving picture music">moving picture music</index>
-            <index key="multiple forms">multiple forms</index>
-            <index key="musical reviews and comedies">musical reviews and comedies</index>
-            <nocturnes>nocturnes</nocturnes>
-            <index key="not applicable">not applicable</index>
-            <operas>operas</operas>
-            <oratorios>oratorios</oratorios>
-            <overtures>overtures</overtures>
-            <index key="part-songs">part-songs</index>
-            <passacaglias>passacaglias</passacaglias>
-            <index key="passion music">passion music</index>
-            <pavans>pavans</pavans>
-            <polonaise>polonaise</polonaise>
-            <index key="popular music">popular music</index>
-            <preludes>preludes</preludes>
-            <index key="program music">program music</index>
-            <ragtime>ragtime</ragtime>
-            <requiems>requiems</requiems>
-            <ricercars>ricercars</ricercars>
-            <rock>rock</rock>
-            <rondos>rondos</rondos>
-            <sonatas>sonatas</sonatas>
-            <index key="songs (art songs, not pop songs)">songs (art songs, not pop songs)</index>
-            <index key="studies and exercises">studies and exercises</index>
-            <suites>suites</suites>
-            <index key="symphonic poems">symphonic poems</index>
-            <symphonies>symphonies</symphonies>
-            <taccatas>taccatas</taccatas>
-            <index key="trio-sonatis">trio-sonatis</index>
-            <index key="uknown (subject heading reflects instrument only)">uknown (subject heading reflects instrument only)</index>
-            <variations>variations</variations>
-            <waltzes>waltzes</waltzes>
-            <index key="other forms">other forms</index>
-          </options>
-          <required>FALSE</required>
-          <resizable>FALSE</resizable>
-          <title>Genre</title>
-          <tree>TRUE</tree>
-          <actions>
-            <create>
-              <path>self::node()</path>
-              <context>parent</context>
-              <schema/>
-              <type>element</type>
-              <prefix>NULL</prefix>
-              <value>genre</value>
-            </create>
-            <read>
-              <path>mods:genre</path>
               <context>parent</context>
             </read>
             <update>
