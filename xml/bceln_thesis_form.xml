@@ -1360,7 +1360,7 @@
               <value>physicalDescription</value>
             </create>
             <read>
-              <path>/mods:mods/mods:physicalDescription</path>
+              <path>/mods:mods/mods:physicalDescription(not[@authority])</path>
               <context>document</context>
             </read>
             <update>NULL</update>
