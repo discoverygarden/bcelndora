@@ -971,6 +971,43 @@
           </actions>
         </properties>
         <children>
+          <element name="form">
+            <properties>
+              <type>textfield</type>
+              <access>TRUE</access>
+              <collapsed>FALSE</collapsed>
+              <collapsible>FALSE</collapsible>
+              <default_value>print</default_value>
+              <description>MARC Form of Item: http://www.loc.gov/standards/valuelist/marcform.html</description>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
+              <required>FALSE</required>
+              <resizable>FALSE</resizable>
+              <title>Form</title>
+              <tree>TRUE</tree>
+              <actions>
+                <create>
+                  <path>self::node()</path>
+                  <context>parent</context>
+                  <schema/>
+                  <type>xml</type>
+                  <prefix>NULL</prefix>
+                  <value>&lt;form authority="marcform"&gt;%value%&lt;/form&gt;</value>
+                </create>
+                <read>
+                  <path>mods:form</path>
+                  <context>parent</context>
+                </read>
+                <update>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </update>
+                <delete>NULL</delete>
+              </actions>
+            </properties>
+            <children/>
+          </element>
           <element name="extent">
             <properties>
               <type>textfield</type>
@@ -1195,43 +1232,6 @@
                       <path>self::node()</path>
                       <context>self</context>
                     </delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-              <element name="form">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <default_value>print</default_value>
-                  <description>MARC Form of Item: http://www.loc.gov/standards/valuelist/marcform.html</description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>Form</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>xml</type>
-                      <prefix>NULL</prefix>
-                      <value>&lt;form authority="marcform"&gt;%value%&lt;/form&gt;</value>
-                    </create>
-                    <read>
-                      <path>mods:form</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>NULL</delete>
                   </actions>
                 </properties>
                 <children/>
