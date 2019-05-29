@@ -932,24 +932,8 @@
           <multiple>FALSE</multiple>
           <required>FALSE</required>
           <resizable>FALSE</resizable>
-          <title>Subject</title>
+          <title>Subjects</title>
           <tree>TRUE</tree>
-          <actions>
-            <create>
-              <path>self::node()</path>
-              <context>parent</context>
-              <schema/>
-              <type>element</type>
-              <prefix>NULL</prefix>
-              <value>subject</value>
-            </create>
-            <read>
-              <path>mods:subject</path>
-              <context>parent</context>
-            </read>
-            <update>NULL</update>
-            <delete>NULL</delete>
-          </actions>
         </properties>
         <children>
           <element name="topic">
@@ -984,12 +968,12 @@
                       <path>self::node()</path>
                       <context>parent</context>
                       <schema/>
-                      <type>element</type>
+                      <type>xml</type>
                       <prefix>NULL</prefix>
-                      <value>topic</value>
+                      <value>&lt;subject&gt;&lt;topic&gt;%value%&lt;/topic&gt;&lt;/subject&gt;</value>
                     </create>
                     <read>
-                      <path>mods:topic</path>
+                      <path>mods:subject/mods:topic</path>
                       <context>parent</context>
                     </read>
                     <update>
@@ -1019,19 +1003,25 @@
                 <properties>
                   <type>tag</type>
                   <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
+                  <resizable>FALSE</resizable>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
                       <path>self::node()</path>
                       <context>parent</context>
                       <schema/>
-                      <type>element</type>
+                      <type>xml</type>
                       <prefix>NULL</prefix>
-                      <value>geographic</value>
+                      <value>&lt;subject&gt;&lt;geographic&gt;%value%&lt;/geographic&gt;&lt;/subject&gt;</value>
                     </create>
                     <read>
-                      <path>mods:geographic</path>
+                      <path>mods:subject/mods:geographic</path>
                       <context>parent</context>
                     </read>
                     <update>
@@ -1061,19 +1051,25 @@
                 <properties>
                   <type>tag</type>
                   <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
+                  <resizable>FALSE</resizable>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
                       <path>self::node()</path>
                       <context>parent</context>
                       <schema/>
-                      <type>element</type>
+                      <type>xml</type>
                       <prefix>NULL</prefix>
-                      <value>temporal</value>
+                      <value>&lt;subject&gt;&lt;temporal&gt;%value%&lt;/temporal&gt;&lt;/subject&gt;</value>
                     </create>
                     <read>
-                      <path>mods:temporal</path>
+                      <path>mods:subject/mods:temporal</path>
                       <context>parent</context>
                     </read>
                     <update>
@@ -1096,21 +1092,25 @@
               <access>TRUE</access>
               <collapsed>TRUE</collapsed>
               <collapsible>TRUE</collapsible>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
               <required>FALSE</required>
+              <resizable>FALSE</resizable>
               <title>Geographic Information</title>
               <tree>TRUE</tree>
               <actions>
                 <create>
                   <path>self::node()</path>
-                  <context>parent</context>
+                  <context>document</context>
                   <schema/>
-                  <type>element</type>
+                  <type>xml</type>
                   <prefix>NULL</prefix>
-                  <value>hierarchicalGeographic</value>
+                  <value>&lt;subject&gt;&lt;hierarchicalGeographic&gt;%value%&lt;/hierarchicalGeographic&gt;&lt;/subject&gt;</value>
                 </create>
                 <read>
-                  <path>mods:hierarchicalGeographic</path>
-                  <context>parent</context>
+                  <path>mods:subject/mods:hierarchicalGeographic</path>
+                  <context>document</context>
                 </read>
                 <update>
                   <path>self::node()</path>
@@ -1124,7 +1124,12 @@
                 <properties>
                   <type>select</type>
                   <access>TRUE</access>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
                   <default_value>North America</default_value>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
                   <options>
                     <index key="Select Continent"/>
                     <Africa>Africa</Africa>
@@ -1134,6 +1139,7 @@
                     <index key="South America">South America</index>
                   </options>
                   <required>FALSE</required>
+                  <resizable>FALSE</resizable>
                   <title>Continent</title>
                   <tree>TRUE</tree>
                   <actions>
@@ -1360,21 +1366,28 @@
             <properties>
               <type>fieldset</type>
               <access>TRUE</access>
+              <collapsed>FALSE</collapsed>
+              <collapsible>FALSE</collapsible>
+              <description>Contains a statement of coordinates covered by the resource.</description>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
               <required>FALSE</required>
+              <resizable>FALSE</resizable>
               <title>Cartographics</title>
               <tree>TRUE</tree>
               <actions>
                 <create>
                   <path>self::node()</path>
-                  <context>parent</context>
+                  <context>document</context>
                   <schema/>
-                  <type>element</type>
+                  <type>xml</type>
                   <prefix>NULL</prefix>
-                  <value>cartographics</value>
+                  <value>&lt;subject&gt;&lt;cartographics&gt;&lt;coordinates&gt;%value%&lt;/coordinates&gt;&lt;/cartographics&gt;&lt;/subject&gt;</value>
                 </create>
                 <read>
-                  <path>mods:cartographics</path>
-                  <context>parent</context>
+                  <path>mods:subject/mods:cartographics/mods:coordinates</path>
+                  <context>document</context>
                 </read>
                 <update>
                   <path>self::node()</path>
@@ -1383,46 +1396,7 @@
                 <delete>NULL</delete>
               </actions>
             </properties>
-            <children>
-              <element name="coordinates">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <description>Contains a statement of coordinates
-                                                  covered by the resource.
-                  </description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>Coordinates</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>element</type>
-                      <prefix>NULL</prefix>
-                      <value>coordinates</value>
-                    </create>
-                    <read>
-                      <path>mods:coordinates</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>NULL</delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-            </children>
+            <children/>
           </element>
         </children>
       </element>
