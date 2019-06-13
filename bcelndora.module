@@ -15,7 +15,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_pdf_form' => array(
@@ -24,7 +24,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_audio_form' => array(
@@ -33,7 +33,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_basic_image_form' => array(
@@ -42,7 +42,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_citation_form' => array(
@@ -51,7 +51,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_compound_form' => array(
@@ -60,7 +60,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_collection_form' => array(
@@ -69,7 +69,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_newspaper_issue_form' => array(
@@ -78,7 +78,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_thesis_form' => array(
@@ -87,7 +87,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_book_form' => array(
@@ -96,7 +96,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_video_form' => array(
@@ -105,7 +105,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_serials_form_root_serial' => array(
@@ -114,7 +114,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfoTab', 'titleInfoPanel', 'titleInfo'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_serials_form_stub' => array(
@@ -123,7 +123,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfoTab', 'titleInfoPanel', 'titleInfo'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_serials_form_intermediate' => array(
@@ -132,7 +132,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfoTab', 'titleInfoPanel', 'titleInfo'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
   );
