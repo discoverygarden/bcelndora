@@ -353,7 +353,7 @@
                   <access>TRUE</access>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
-                  <description>The type of identifier, e.g. ORCID.</description>
+                  <description>The type of identifier, e.g. orcid (keep it lowercase).</description>
                   <disabled>FALSE</disabled>
                   <executes_submit_callback>FALSE</executes_submit_callback>
                   <multiple>FALSE</multiple>
