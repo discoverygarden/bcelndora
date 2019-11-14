@@ -312,6 +312,8 @@
                   <resizable>FALSE</resizable>
                   <title>Role</title>
                   <tree>TRUE</tree>
+                  <description>Select a role from this vocabulary - 
+                    http://id.loc.gov/vocabulary/relators.html</description>
                 </properties>
                 <children>
                   <element name="role">
@@ -321,10 +323,6 @@
                       <autocomplete_path>taxonomy/autocomplete/field_role_relators</autocomplete_path>
                       <collapsed>FALSE</collapsed>
                       <collapsible>FALSE</collapsible>
-                      <description>Select a role from this vocabulary -
-                                        http://id.loc.gov/vocabulary/relators.html - e.g. Artist,
-                                        Creator, Designer, Engraver, Illustrator, Photographer,
-                                        Printmaker, etc.</description>
                       <disabled>FALSE</disabled>
                       <executes_submit_callback>FALSE</executes_submit_callback>
                       <multiple>FALSE</multiple>

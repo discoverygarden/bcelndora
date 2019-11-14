@@ -326,6 +326,8 @@
                   <resizable>FALSE</resizable>
                   <title>Roles</title>
                   <tree>TRUE</tree>
+                  <description>Select a role from this vocabulary - 
+                    http://id.loc.gov/vocabulary/relators.html</description>
                 </properties>
                 <children>
                   <element name="0">

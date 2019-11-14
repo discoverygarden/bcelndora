@@ -234,16 +234,12 @@
                 </properties>
                 <children/>
               </element>
-              <element name="role">
+              <element name="0">
                 <properties>
-                  <type>textfield</type>
+                  <type>tags</type>
                   <access>TRUE</access>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
-                  <description>Select a role from this vocabulary -
-                                        http://id.loc.gov/vocabulary/relators.html - e.g. Artist,
-                                        Creator, Designer, Engraver, Illustrator, Photographer,
-                                        Printmaker, etc.</description>
                   <disabled>FALSE</disabled>
                   <executes_submit_callback>FALSE</executes_submit_callback>
                   <multiple>FALSE</multiple>
@@ -251,31 +247,51 @@
                   <resizable>FALSE</resizable>
                   <title>Role</title>
                   <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>xml</type>
-                      <prefix>NULL</prefix>
-                      <value>&lt;role&gt;&lt;roleTerm authority="marcrelator"
-                                                type="text"&gt;%value%&lt;/roleTerm&gt;&lt;/role&gt;</value>
-                    </create>
-                    <read>
-                      <path>mods:role/mods:roleTerm</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </delete>
-                  </actions>
+                  <description>Select a role from this vocabulary - 
+                    http://id.loc.gov/vocabulary/relators.html</description>
                 </properties>
-                <children/>
+                <children>
+                  <element name="role">
+                    <properties>
+                      <type>tag</type>
+                      <access>TRUE</access>
+                      <autocomplete_path>taxonomy/autocomplete/field_role_relators</autocomplete_path>
+                      <collapsed>FALSE</collapsed>
+                      <collapsible>FALSE</collapsible>
+                      <disabled>FALSE</disabled>
+                      <executes_submit_callback>FALSE</executes_submit_callback>
+                      <multiple>FALSE</multiple>
+                      <required>FALSE</required>
+                      <resizable>FALSE</resizable>
+                      <title>Role</title>
+                      <tree>TRUE</tree>
+                      <actions>
+                        <create>
+                          <path>self::node()</path>
+                          <context>parent</context>
+                          <schema/>
+                          <type>xml</type>
+                          <prefix>NULL</prefix>
+                          <value>&lt;role&gt;&lt;roleTerm authority="marcrelator"
+                                                type="text"&gt;%value%&lt;/roleTerm&gt;&lt;/role&gt;</value>
+                        </create>
+                        <read>
+                          <path>mods:role/mods:roleTerm</path>
+                          <context>parent</context>
+                        </read>
+                        <update>
+                          <path>self::node()</path>
+                          <context>self</context>
+                        </update>
+                        <delete>
+                          <path>self::node()</path>
+                          <context>self</context>
+                        </delete>
+                      </actions>
+                    </properties>
+                    <children/>
+                  </element>
+                </children>
               </element>
             </children>
           </element>
