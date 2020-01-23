@@ -569,10 +569,10 @@
               <schema/>
               <type>xml</type>
               <prefix>NULL</prefix>
-              <value>&lt;accessCondition type='useAndReproduction'&gt;%value%&lt;/accessCondition&gt;</value>
+              <value>&lt;accessCondition type='use and reproduction'&gt;%value%&lt;/accessCondition&gt;</value>
             </create>
             <read>
-              <path>mods:accessCondition[@type='useAndReproduction']</path>
+              <path>mods:accessCondition[@type='use and reproduction']</path>
               <context>parent</context>
             </read>
             <update>
