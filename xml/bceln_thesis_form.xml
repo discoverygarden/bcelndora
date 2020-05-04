@@ -2144,7 +2144,7 @@ Group related topic, geographic, and temporal subjects below. For unrelated subj
             <index key="http://rightsstatements.org/vocab/UND/1.0/">COPYRIGHT UNDETERMINED</index>
             <index key="http://rightsstatements.org/vocab/CNE/1.0/">COPYRIGHT NOT EVALUATED</index>
           </options>
-          <required>TRUE</required>
+          <required>FALSE</required>
           <resizable>FALSE</resizable>
           <title>Rights Statement</title>
           <tree>TRUE</tree>
