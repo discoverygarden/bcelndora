@@ -548,42 +548,6 @@
         </properties>
         <children/>
       </element>
-      <element name="copyright_information">
-        <properties>
-          <type>textarea</type>
-          <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <description>Copyright information related to the publication; could be related to who owns the copyright to the abstract, etc.</description>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
-          <required>FALSE</required>
-          <resizable>FALSE</resizable>
-          <title>Copyright Information</title>
-          <tree>TRUE</tree>
-          <actions>
-            <create>
-              <path>self::node()</path>
-              <context>parent</context>
-              <schema/>
-              <type>xml</type>
-              <prefix>NULL</prefix>
-              <value>&lt;accessCondition type='use and reproduction'&gt;%value%&lt;/accessCondition&gt;</value>
-            </create>
-            <read>
-              <path>mods:accessCondition[@type='use and reproduction']</path>
-              <context>parent</context>
-            </read>
-            <update>
-              <path>self::node()</path>
-              <context>self</context>
-            </update>
-            <delete>NULL</delete>
-          </actions>
-        </properties>
-        <children/>
-      </element>
       <element name="peerReviewed">
         <properties>
           <type>select</type>
