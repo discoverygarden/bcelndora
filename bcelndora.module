@@ -181,3 +181,27 @@ function bcelndora_form_xml_form_builder_ingest_form_alter(&$form, &$form_state,
 function bcelndora_form_islandora_solr_simple_search_form_alter(&$form, &$form_state, $form_id) {
   $form['simple']['islandora_simple_search_query']['#title_display'] = 'invisible';
 }
+
+/**
+ * Implementa hook_islandora_datastream_filename_alter().
+ */
+function bcelndora_islandora_datastream_filename_alter(&$filename, AbstractDatastream $datastream) {
+  // XXX: The MIME-type/mapping facilities do not really allow for multiple
+  // MIME-types to be mapped to a single extension... so remap here, to account.
+  // Essentially copypasta of https://github.com/Islandora/islandora/blob/5e88176861ce4c29e77b31f0c6e0ee4ce5cc3750/includes/datastream.inc#L54-L65
+  if ($datastream->mimetype === 'application/x-zip') {
+    module_load_include('inc', 'islandora', 'includes/mimetype.utils');
+    // Browsers will not append all extensions.
+    $extension = '.' . islandora_get_extension_for_mimetype($datastream->mimetype);
+    // Prevent adding on a duplicate extension.
+    $label = $datastream->label;
+    $extension_length = strlen($extension);
+    $duplicate_extension_position = strlen($label) > $extension_length ?
+      strripos($label, $extension, -$extension_length) :
+      FALSE;
+    $filename = $label;
+    if ($duplicate_extension_position === FALSE) {
+      $filename .= $extension;
+    }
+  }
+}
