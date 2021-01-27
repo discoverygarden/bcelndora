@@ -1044,6 +1044,7 @@
               <collapsible>FALSE</collapsible>
               <disabled>FALSE</disabled>
               <executes_submit_callback>FALSE</executes_submit_callback>
+              <maxlength>1028</maxlength>
               <multiple>FALSE</multiple>
               <required>FALSE</required>
               <resizable>FALSE</resizable>
