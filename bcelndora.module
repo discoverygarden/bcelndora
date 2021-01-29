@@ -15,7 +15,16 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
+      'template' => FALSE,
+    ),
+    'bceln_pdf_form' => array(
+      'content_model' => 'islandora:sp_pdf',
+      'form_name' => 'BC ELN PDF Form',
+      'dsid' => 'MODS',
+      'title_field' => array('titleInfo', 'title'),
+      'transform' => 'mods_to_dc.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_audio_form' => array(
@@ -24,7 +33,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_basic_image_form' => array(
@@ -33,7 +42,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_citation_form' => array(
@@ -42,7 +51,25 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
+      'template' => FALSE,
+    ),
+    'bceln_compound_form' => array(
+      'content_model' => 'islandora:compoundCModel',
+      'form_name' => 'BC ELN Compound Object Form',
+      'dsid' => 'MODS',
+      'title_field' => array('titleInfo', 'title'),
+      'transform' => 'mods_to_dc.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
+      'template' => FALSE,
+    ),
+    'bceln_collection_form' => array(
+      'content_model' => 'islandora:collectionCModel',
+      'form_name' => 'BC ELN Collection Form',
+      'dsid' => 'MODS',
+      'title_field' => array('titleInfo', 'title'),
+      'transform' => 'mods_to_dc.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_newspaper_issue_form' => array(
@@ -51,7 +78,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_thesis_form' => array(
@@ -60,7 +87,16 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
+      'template' => FALSE,
+    ),
+    'bceln_book_form' => array(
+      'content_model' => 'islandora:bookCModel',
+      'form_name' => 'BC ELN Book Form',
+      'dsid' => 'MODS',
+      'title_field' => array('titleInfo', 'title'),
+      'transform' => 'mods_to_dc.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_video_form' => array(
@@ -69,7 +105,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_serials_form_root_serial' => array(
@@ -78,7 +114,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfoTab', 'titleInfoPanel', 'titleInfo'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_serials_form_stub' => array(
@@ -87,7 +123,7 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfoTab', 'titleInfoPanel', 'titleInfo'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
     'bceln_serials_form_intermediate' => array(
@@ -96,83 +132,10 @@ function bcelndora_islandora_xml_form_builder_form_associations() {
       'dsid' => 'MODS',
       'title_field' => array('titleInfoTab', 'titleInfoPanel', 'titleInfo'),
       'transform' => 'mods_to_dc.xsl',
-      'self_transform' => 'islandora_cleanup_mods_extended.xsl',
+      'self_transform' => 'islandora_cleanup_mods_strip_nameless.xsl',
       'template' => FALSE,
     ),
   );
-}
-
-/**
- * Implements hook_islandora_xml_form_builder_forms().
- */
-function bcelndora_islandora_xml_form_builder_forms() {
-  $module_path = drupal_get_path('module', 'bcelndora');
-  return array(
-    'BC ELN Artwork Form' => array(
-      'form_file' => "$module_path/xml/bceln_artwork_form.xml",
-    ),
-    'BC ELN Audio Form' => array(
-      'form_file' => "$module_path/xml/bceln_audio_form.xml",
-    ),
-    'BC ELN Basic Image Form' => array(
-      'form_file' => "$module_path/xml/bceln_basc_image_form.xml",
-    ),
-    'BC ELN Citation Form' => array(
-      'form_file' => "$module_path/xml/bceln_citation_form.xml",
-    ),
-    'BC ELN Newspaper Issue Form' => array(
-      'form_file' => "$module_path/xml/bceln_newspaper_issue_form.xml",
-    ),
-    'BC ELN Thesis Form' => array(
-      'form_file' => "$module_path/xml/bceln_thesis_form.xml",
-    ),
-    'BC ELN Video Form' => array(
-      'form_file' => "$module_path/xml/bceln_video_form.xml",
-    ),
-    'BC ELN Serials Form' => array(
-      'form_file' => "$module_path/xml/bceln_serials_form.xml",
-    ),
-  );
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- *
- * Adds autocomplete for the custom bceln citation and thesis forms.
- */
-function bcelndora_form_xml_form_builder_datastream_form_alter(&$form, &$form_state, $form_id) {
-  if (module_exists('islandora_scholar') && module_exists('islandora_entities')) {
-    module_load_include('inc', 'islandora_entities', 'includes/utilities');
-    if (isset($form_state['association']['id'])) {
-      $id = $form_state['association']['id'];
-      if (strcmp($id, 'bceln_citation_form') == 0) {
-        islandora_entities_add_autocompletes_to_citation_form($form);
-      }
-      elseif (strcmp($id, 'bceln_thesis_form') == 0) {
-        islandora_entities_add_autocompletes_to_thesis_form($form);
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- *
- * Adds autocomplete for the custom bceln citation and thesis forms.
- */
-function bcelndora_form_xml_form_builder_ingest_form_alter(&$form, &$form_state, $form_id) {
-  if (module_exists('islandora_scholar') && module_exists('islandora_entities')) {
-    module_load_include('inc', 'islandora_entities', 'includes/utilities');
-    if (isset($form_state['islandora']['step_storage']['xml_form_builder_metadata_step']['association']['id'])) {
-      $id = $form_state['islandora']['step_storage']['xml_form_builder_metadata_step']['association']['id'];
-      if (strcmp($id, 'bceln_citation_form') == 0) {
-        islandora_entities_add_autocompletes_to_citation_form($form);
-      }
-      elseif (strcmp($id, 'bceln_thesis_form') == 0) {
-        islandora_entities_add_autocompletes_to_thesis_form($form);
-      }
-    }
-  }
 }
 
 /**
@@ -202,6 +165,71 @@ function bcelndora_islandora_datastream_filename_alter(&$filename, AbstractDatas
     $filename = $label;
     if ($duplicate_extension_position === FALSE) {
       $filename .= $extension;
+    }
+  }
+}
+
+/**
+ * Implements hook_islandora_xml_form_builder_forms().
+ */
+function bcelndora_islandora_xml_form_builder_forms() {
+  $module_path = drupal_get_path('module', 'bcelndora');
+  return array(
+    'BC ELN Artwork Form' => array(
+      'form_file' => "$module_path/xml/bceln_artwork_form.xml",
+    ),
+    'BC ELN Audio Form' => array(
+      'form_file' => "$module_path/xml/bceln_audio_form.xml",
+    ),
+    'BC ELN Book Form' => array(
+      'form_file' => "$module_path/xml/bceln_book_form.xml",
+    ),
+    'BC ELN Basic Image Form' => array(
+      'form_file' => "$module_path/xml/bceln_basc_image_form.xml",
+    ),
+    'BC ELN Citation Form' => array(
+      'form_file' => "$module_path/xml/bceln_citation_form.xml",
+    ),
+    'BC ELN Compound Object Form' => array(
+      'form_file' => "$module_path/xml/bceln_compound_form.xml",
+    ),
+    'BC ELN Collection Form' => array(
+      'form_file' => "$module_path/xml/bceln_collection_form.xml",
+    ),
+    'BC ELN PDF Form' => array(
+      'form_file' => "$module_path/xml/bceln_pdf_form.xml",
+    ),
+    'BC ELN Newspaper Issue Form' => array(
+      'form_file' => "$module_path/xml/bceln_newspaper_issue_form.xml",
+    ),
+    'BC ELN Thesis Form' => array(
+      'form_file' => "$module_path/xml/bceln_thesis_form.xml",
+    ),
+    'BC ELN Video Form' => array(
+      'form_file' => "$module_path/xml/bceln_video_form.xml",
+    ),
+    'BC ELN Serials Form' => array(
+      'form_file' => "$module_path/xml/bceln_serials_form.xml",
+    ),
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Adds autocomplete for the custom bceln citation and thesis forms.
+ */
+function bcelndora_form_xml_form_builder_ingest_form_alter(&$form, &$form_state, $form_id) {
+  if (module_exists('islandora_scholar') && module_exists('islandora_entities')) {
+    module_load_include('inc', 'islandora_entities', 'includes/utilities');
+    if (isset($form_state['islandora']['step_storage']['xml_form_builder_metadata_step']['association']['id'])) {
+      $id = $form_state['islandora']['step_storage']['xml_form_builder_metadata_step']['association']['id'];
+      if (strcmp($id, 'bceln_citation_form') == 0) {
+        islandora_entities_add_autocompletes_to_citation_form($form);
+      }
+      elseif (strcmp($id, 'bceln_thesis_form') == 0) {
+        islandora_entities_add_autocompletes_to_thesis_form($form);
+      }
     }
   }
 }
