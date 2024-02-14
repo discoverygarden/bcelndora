@@ -2,7 +2,7 @@
 <definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3">
   <properties>
     <root_name>mods</root_name>
-    <schema_uri>http://www.loc.gov/standards/mods/v3/mods-3-4.xsd</schema_uri>
+    <schema_uri/>
     <namespaces default="http://www.loc.gov/mods/v3">
       <namespace prefix="mods">http://www.loc.gov/mods/v3</namespace>
       <namespace prefix="xsi">http://www.w3.org/2001/XMLSchema-instance</namespace>
@@ -36,13 +36,7 @@
         <properties>
           <type>markup</type>
           <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
           <required>FALSE</required>
-          <resizable>FALSE</resizable>
           <tree>TRUE</tree>
           <actions>
             <create>
@@ -66,14 +60,7 @@
             <properties>
               <type>textfield</type>
               <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <description>Title of image.</description>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
               <required>TRUE</required>
-              <resizable>FALSE</resizable>
               <title>Title</title>
               <tree>TRUE</tree>
               <actions>
@@ -102,8 +89,15 @@
             <properties>
               <type>textfield</type>
               <access>TRUE</access>
+              <collapsed>FALSE</collapsed>
+              <collapsible>FALSE</collapsible>
+              <description>A word, phrase, character, or group of characters that contains the remainder of the title information after the title proper.</description>
+              <disabled>FALSE</disabled>
+              <executes_submit_callback>FALSE</executes_submit_callback>
+              <multiple>FALSE</multiple>
               <required>FALSE</required>
-              <title>Sub Title</title>
+              <resizable>FALSE</resizable>
+              <title>Subtitle</title>
               <tree>TRUE</tree>
               <actions>
                 <create>
@@ -135,6 +129,7 @@
           <access>TRUE</access>
           <collapsed>FALSE</collapsed>
           <collapsible>FALSE</collapsible>
+          <description>Click the "add" button to add more names.</description>
           <disabled>FALSE</disabled>
           <executes_submit_callback>FALSE</executes_submit_callback>
           <multiple>FALSE</multiple>
@@ -148,13 +143,7 @@
             <properties>
               <type>tabpanel</type>
               <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
               <required>FALSE</required>
-              <resizable>FALSE</resizable>
               <tree>TRUE</tree>
               <actions>
                 <create>
@@ -169,10 +158,7 @@
                   <path>mods:name</path>
                   <context>parent</context>
                 </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
+                <update>NULL</update>
                 <delete>
                   <path>self::node()</path>
                   <context>self</context>
@@ -184,18 +170,12 @@
                 <properties>
                   <type>select</type>
                   <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
                   <default_value>personal</default_value>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
                   <options>
                     <corporate>corporate</corporate>
                     <personal>personal</personal>
                   </options>
                   <required>FALSE</required>
-                  <resizable>FALSE</resizable>
                   <title>Type</title>
                   <tree>TRUE</tree>
                   <actions>
@@ -215,103 +195,24 @@
                       <path>self::node()</path>
                       <context>self</context>
                     </update>
-                    <delete>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </delete>
+                    <delete>NULL</delete>
                   </actions>
                 </properties>
                 <children/>
               </element>
-              <element name="familyName">
+              <element name="namePart">
                 <properties>
                   <type>textfield</type>
                   <access>TRUE</access>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
+                  <description>For personal authors: format Familyname, Givenname. For corporate authors, use the full corporate name.</description>
                   <disabled>FALSE</disabled>
                   <executes_submit_callback>FALSE</executes_submit_callback>
                   <multiple>FALSE</multiple>
                   <required>FALSE</required>
                   <resizable>FALSE</resizable>
-                  <title>Family Name</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>xml</type>
-                      <prefix>NULL</prefix>
-                      <value>&lt;namePart type="family"&gt;%value%&lt;/namePart&gt;</value>
-                    </create>
-                    <read>
-                      <path>mods:namePart[@type="family"]</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-              <element name="givenName">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>Given Name</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>xml</type>
-                      <prefix>NULL</prefix>
-                      <value>&lt;namePart type="given"&gt;%value%&lt;/namePart&gt;</value>
-                    </create>
-                    <read>
-                      <path>mods:namePart[@type="given"]</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-              <element name="corporateName">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <description>Use this field and not the other Name fields if using a Corporate instead of a Personal name.</description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>Corporate Name</title>
+                  <title>Name</title>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
@@ -323,7 +224,7 @@
                       <value>&lt;namePart&gt;%value%&lt;/namePart&gt;</value>
                     </create>
                     <read>
-                      <path>mods:namePart[not(@type)]</path>
+                      <path>mods:namePart</path>
                       <context>parent</context>
                     </read>
                     <update>
@@ -397,84 +298,6 @@
                   </element>
                 </children>
               </element>
-              <element name="date">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <description>Dates associated with this name.</description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>Dates</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>xml</type>
-                      <prefix>NULL</prefix>
-                      <value>&lt;namePart type="date"&gt;%value%&lt;/namePart&gt;</value>
-                    </create>
-                    <read>
-                      <path>mods:namePart[@type='date']</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-              <element name="culture">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <description>The named person's culture.</description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>Culture</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>xml</type>
-                      <prefix>NULL</prefix>
-                      <value>&lt;namePart type="culture"&gt;%value%&lt;/namePart&gt;</value>
-                    </create>
-                    <read>
-                      <path>mods:namePart[@type='culture']</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
             </children>
           </element>
         </children>
@@ -485,7 +308,7 @@
           <access>TRUE</access>
           <collapsed>FALSE</collapsed>
           <collapsible>FALSE</collapsible>
-          <default_value>still image</default_value>
+          <default_value>NULL</default_value>
           <disabled>FALSE</disabled>
           <executes_submit_callback>FALSE</executes_submit_callback>
           <multiple>FALSE</multiple>
@@ -493,14 +316,10 @@
             <text>text</text>
             <cartographic>cartographic</cartographic>
             <index key="notated music">notated music</index>
-            <index key="sound recording">sound recording</index>
-            <index key="sound recording-musical">sound recording-musical</index>
-            <index key="sound recording-nonmusical">sound recording-nonmusical</index>
-            <index key="moving image">moving image</index>
             <index key="three dimensional object">three dimensional object</index>
-            <index key="software, multimedia">software, multimedia</index>
             <index key="mixed material">mixed material</index>
             <index key="still image">still image</index>
+            <index key="NULL">not applicable</index>
           </options>
           <required>FALSE</required>
           <resizable>FALSE</resizable>
@@ -552,7 +371,7 @@
               <disabled>FALSE</disabled>
               <executes_submit_callback>FALSE</executes_submit_callback>
               <multiple>FALSE</multiple>
-              <required>TRUE</required>
+              <required>FALSE</required>
               <resizable>FALSE</resizable>
               <title>Genre</title>
               <tree>TRUE</tree>
@@ -587,7 +406,7 @@
               <access>TRUE</access>
               <collapsed>FALSE</collapsed>
               <collapsible>FALSE</collapsible>
-              <default_value>aat</default_value>
+              <default_value>NULL</default_value>
               <description>The authoritative source of your genre term. Local terms should be used very sparingly.</description>
               <disabled>FALSE</disabled>
               <executes_submit_callback>FALSE</executes_submit_callback>
@@ -596,8 +415,9 @@
                 <marcgt>MARC genre terms</marcgt>
                 <aat>Art and Architecture Thesaurus</aat>
                 <local>Local term</local>
+                <NULL>Not applicable</NULL>
               </options>
-              <required>TRUE</required>
+              <required>FALSE</required>
               <resizable>FALSE</resizable>
               <title>Genre vocabulary</title>
               <tree>TRUE</tree>
@@ -632,13 +452,7 @@
         <properties>
           <type>fieldset</type>
           <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
-          <required>FALSE</required>
-          <resizable>FALSE</resizable>
+          <required>TRUE</required>
           <title>Origin Information</title>
           <tree>TRUE</tree>
           <actions>
@@ -683,7 +497,7 @@
                   <disabled>FALSE</disabled>
                   <executes_submit_callback>FALSE</executes_submit_callback>
                   <multiple>FALSE</multiple>
-                  <required>TRUE</required>
+                  <required>FALSE</required>
                   <resizable>FALSE</resizable>
                   <title>Date Issued</title>
                   <tree>TRUE</tree>
@@ -791,13 +605,7 @@
             <properties>
               <type>textfield</type>
               <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
               <required>FALSE</required>
-              <resizable>FALSE</resizable>
               <title>Country</title>
               <tree>TRUE</tree>
               <actions>
@@ -827,13 +635,7 @@
             <properties>
               <type>textfield</type>
               <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
               <required>FALSE</required>
-              <resizable>FALSE</resizable>
               <title>Place</title>
               <tree>TRUE</tree>
               <actions>
@@ -859,185 +661,6 @@
             </properties>
             <children/>
           </element>
-          <element name="stateEdition">
-            <properties>
-              <type>fieldset</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <description>The identifying number and/or name assigned to the state or edition of a work that exists in more than one form and the placement of that work in the context of prior or later issuances of multiples
-                                of the same work.
-
-                                For published volumes, such as books, portfolios, series, or sets, the edition is usually expressed as a number in relation to other editions printed. In other cases, a scholar may have identified a series of editions, which have then been numbered sequentially. An state or edition may also be identified by a name or phrase.</description>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>State/Edition</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>element</type>
-                  <prefix>NULL</prefix>
-                  <value>edition</value>
-                </create>
-                <read>
-                  <path>mods:edition</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>NULL</delete>
-              </actions>
-            </properties>
-            <children>
-              <element name="Edition">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>State/Edition</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>NULL</create>
-                    <read>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                    </update>
-                    <delete>NULL</delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-              <element name="stateEditionType">
-                <properties>
-                  <type>select</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <options>
-                    <state>state</state>
-                    <edition>edition</edition>
-                    <impression>impression</impression>
-                  </options>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>Type</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>attribute</type>
-                      <prefix>NULL</prefix>
-                      <value>type</value>
-                    </create>
-                    <read>
-                      <path>@type</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>NULL</delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-              <element name="stateEditionCount">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <description>Number of known states , known editions, or number of impressions in an edition.</description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>Count</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>attribute</type>
-                      <prefix>NULL</prefix>
-                      <value>count</value>
-                    </create>
-                    <read>
-                      <path>@count</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>NULL</delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-              <element name="stateEditionNum">
-                <properties>
-                  <type>textfield</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>Number</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>attribute</type>
-                      <prefix>NULL</prefix>
-                      <value>num</value>
-                    </create>
-                    <read>
-                      <path>@num</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>NULL</delete>
-                  </actions>
-                </properties>
-                <children/>
-              </element>
-            </children>
-          </element>
         </children>
       </element>
       <element name="language">
@@ -1047,7 +670,7 @@
           <autocomplete_path>taxonomy/autocomplete/field_languages</autocomplete_path>
           <collapsed>FALSE</collapsed>
           <collapsible>FALSE</collapsible>
-          <description>Select a language from iso639-2b vocabulary: &lt;a
+          <description>Select an iso639-2b language (text, not code) from &lt;a
                         href="http://www.loc.gov/standards/iso639-2/php/code_list.php"
                         target="_blank"&gt;http://www.loc.gov/standards/iso639-2/php/code_list.php&lt;/a&gt;</description>
           <disabled>FALSE</disabled>
@@ -1075,7 +698,10 @@
               <path>self::node()</path>
               <context>self</context>
             </update>
-            <delete>NULL</delete>
+            <delete>
+              <path>self::node()</path>
+              <context>self</context>
+            </delete>
           </actions>
         </properties>
         <children/>
@@ -1084,13 +710,7 @@
         <properties>
           <type>textarea</type>
           <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
           <required>FALSE</required>
-          <resizable>FALSE</resizable>
           <title>Description</title>
           <tree>TRUE</tree>
           <actions>
@@ -1121,6 +741,7 @@
           <access>TRUE</access>
           <collapsed>FALSE</collapsed>
           <collapsible>FALSE</collapsible>
+          <description>A unique standard number or code that distinctively identifies the resource.</description>
           <disabled>FALSE</disabled>
           <executes_submit_callback>FALSE</executes_submit_callback>
           <multiple>FALSE</multiple>
@@ -1154,13 +775,7 @@
         <properties>
           <type>fieldset</type>
           <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
           <required>FALSE</required>
-          <resizable>FALSE</resizable>
           <title>Physical Description</title>
           <tree>TRUE</tree>
           <actions>
@@ -1176,7 +791,10 @@
               <path>mods:physicalDescription</path>
               <context>parent</context>
             </read>
-            <update>NULL</update>
+            <update>
+              <path>self::node()</path>
+              <context>self</context>
+            </update>
             <delete>NULL</delete>
           </actions>
         </properties>
@@ -1195,16 +813,12 @@
               <executes_submit_callback>FALSE</executes_submit_callback>
               <multiple>FALSE</multiple>
               <options>
-                <videorecording>videorecording</videorecording>
                 <unspecified>unspecified</unspecified>
-                <text>text</text>
                 <index key="tactile material">tactile material</index>
-                <index key="sound recording">sound recording</index>
                 <index key="remote-sensing image">remote-sensing image</index>
                 <index key="projected graphic">projected graphic</index>
                 <index key="notated music">notated music</index>
                 <index key="nonprojected graphic">nonprojected graphic</index>
-                <index key="motion picture">motion picture</index>
                 <microform>microform</microform>
                 <map>map</map>
                 <kit>kit</kit>
@@ -1222,11 +836,11 @@
                   <schema/>
                   <type>xml</type>
                   <prefix>NULL</prefix>
-                  <value>&lt;form type="basicform"
+                  <value>&lt;form
                                         authority="marcform"&gt;%value%&lt;/form&gt;</value>
                 </create>
                 <read>
-                  <path>mods:form[@type="basicform"]</path>
+                  <path>mods:form</path>
                   <context>parent</context>
                 </read>
                 <update>
@@ -1244,132 +858,25 @@
               <access>TRUE</access>
               <collapsed>FALSE</collapsed>
               <collapsible>FALSE</collapsible>
-              <description>Enter the object's measurements (length x width for 2D objects, length x width x height for 3D objects, etc.)</description>
+              <description>A statement of the number and specific material of the units of the resource that express physical extent (e.g. dimensions, number of panels, etc.)</description>
               <disabled>FALSE</disabled>
               <executes_submit_callback>FALSE</executes_submit_callback>
               <multiple>FALSE</multiple>
               <required>FALSE</required>
               <resizable>FALSE</resizable>
-              <title>Measurements</title>
+              <title>Extent</title>
               <tree>TRUE</tree>
               <actions>
                 <create>
                   <path>self::node()</path>
                   <context>parent</context>
                   <schema/>
-                  <type>xml</type>
+                  <type>element</type>
                   <prefix>NULL</prefix>
-                  <value>&lt;extent type="measurements"&gt;%value%&lt;/extent&gt;</value>
+                  <value>extent</value>
                 </create>
                 <read>
-                  <path>mods:extent[@type="measurements"]</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>NULL</delete>
-              </actions>
-            </properties>
-            <children/>
-          </element>
-          <element name="material">
-            <properties>
-              <type>textfield</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <description>The substance of which the work or image is composed.</description>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>Material/medium</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>xml</type>
-                  <prefix>NULL</prefix>
-                  <value>&lt;form type="material"&gt;%value%&lt;/form&gt;</value>
-                </create>
-                <read>
-                  <path>mods:form[@type="material"]</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>NULL</delete>
-              </actions>
-            </properties>
-            <children/>
-          </element>
-          <element name="technique">
-            <properties>
-              <type>textfield</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>Technique</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>xml</type>
-                  <prefix>NULL</prefix>
-                  <value>&lt;form type="technique"&gt;%value%&lt;/form&gt;</value>
-                </create>
-                <read>
-                  <path>mods:form[@type="technique"]</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>NULL</delete>
-              </actions>
-            </properties>
-            <children/>
-          </element>
-          <element name="note">
-            <properties>
-              <type>textfield</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <description>The physical condition of the object.</description>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>Condition</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>xml</type>
-                  <prefix>NULL</prefix>
-                  <value>&lt;note type="condition"&gt;%value%&lt;/note&gt;</value>
-                </create>
-                <read>
-                  <path>mods:note[@type="condition"]</path>
+                  <path>mods:extent</path>
                   <context>parent</context>
                 </read>
                 <update>
@@ -1387,13 +894,7 @@
         <properties>
           <type>textarea</type>
           <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
           <required>FALSE</required>
-          <resizable>FALSE</resizable>
           <title>Note</title>
           <tree>TRUE</tree>
           <actions>
@@ -1418,140 +919,36 @@
         </properties>
         <children/>
       </element>
-      <element name="inscription">
-        <properties>
-          <type>textarea</type>
-          <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <description>All marks or written words added to the object at the time of production or in its subsequent history, including signatures, dates, dedications, texts, and colophons, as well as marks, such as the stamps of silversmiths, publishers, or printers. </description>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
-          <required>FALSE</required>
-          <resizable>FALSE</resizable>
-          <title>Inscription</title>
-          <tree>TRUE</tree>
-          <actions>
-            <create>
-              <path>self::node()</path>
-              <context>document</context>
-              <schema/>
-              <type>xml</type>
-              <prefix>NULL</prefix>
-              <value>&lt;note type="inscription"&gt;%value%&lt;/note&gt;</value>
-            </create>
-            <read>
-              <path>mods:note[@type="inscription"]</path>
-              <context>document</context>
-            </read>
-            <update>
-              <path>self::node()</path>
-              <context>self</context>
-            </update>
-            <delete>NULL</delete>
-          </actions>
-        </properties>
-        <children/>
-      </element>
       <element name="subject">
         <properties>
           <type>fieldset</type>
           <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <description>Use LCSH for Subject entries where possible.</description>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
           <required>FALSE</required>
-          <resizable>FALSE</resizable>
           <title>Subject</title>
           <tree>TRUE</tree>
+          <actions>
+            <create>
+              <path>self::node()</path>
+              <context>parent</context>
+              <schema/>
+              <type>element</type>
+              <prefix>NULL</prefix>
+              <value>subject</value>
+            </create>
+            <read>
+              <path>mods:subject</path>
+              <context>parent</context>
+            </read>
+            <update>NULL</update>
+            <delete>NULL</delete>
+          </actions>
         </properties>
         <children>
-          <element name="culturalContext">
-            <properties>
-              <type>textfield</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <description>The name of the culture, people, or adjectival form of a country name from the work originates, or the cultural context with which it has been associated.</description>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>Cultural Context</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>xml</type>
-                  <prefix>NULL</prefix>
-                  <value>&lt;mods:subject displayLabel="culturalContext"&gt;&lt;mods:topic&gt;%value%&lt;/mods:topic&gt;&lt;/mods:subject&gt;</value>
-                </create>
-                <read>
-                  <path>mods:subject[@displayLabel="culturalContext"]/mods:topic</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>NULL</delete>
-              </actions>
-            </properties>
-            <children/>
-          </element>
-          <element name="stylePeriod">
-            <properties>
-              <type>textfield</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>Style/Period</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>xml</type>
-                  <prefix>NULL</prefix>
-                  <value>&lt;mods:subject displayLabel="stylePeriod"&gt;&lt;mods:topic&gt;%value%&lt;/mods:topic&gt;&lt;/mods:subject&gt;</value>
-                </create>
-                <read>
-                  <path>mods:subject[@displayLabel="stylePeriod"]/mods:topic</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>NULL</delete>
-              </actions>
-            </properties>
-            <children/>
-          </element>
           <element name="topic">
             <properties>
               <type>tags</type>
               <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
               <required>FALSE</required>
-              <resizable>FALSE</resizable>
               <title>Topic</title>
               <tree>TRUE</tree>
             </properties>
@@ -1560,25 +957,19 @@
                 <properties>
                   <type>tag</type>
                   <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
-                  <resizable>FALSE</resizable>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
                       <path>self::node()</path>
                       <context>parent</context>
                       <schema/>
-                      <type>xml</type>
+                      <type>element</type>
                       <prefix>NULL</prefix>
-                      <value>&lt;subject&gt;&lt;topic&gt;%value%&lt;/topic&gt;&lt;/subject&gt;</value>
+                      <value>topic</value>
                     </create>
                     <read>
-                      <path>mods:subject[not(@displayLabel)]/mods:topic</path>
+                      <path>mods:topic</path>
                       <context>parent</context>
                     </read>
                     <update>
@@ -1599,13 +990,7 @@
             <properties>
               <type>tags</type>
               <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
               <required>FALSE</required>
-              <resizable>FALSE</resizable>
               <title>Geographic</title>
               <tree>TRUE</tree>
             </properties>
@@ -1614,25 +999,19 @@
                 <properties>
                   <type>tag</type>
                   <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
-                  <resizable>FALSE</resizable>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
                       <path>self::node()</path>
                       <context>parent</context>
                       <schema/>
-                      <type>xml</type>
+                      <type>element</type>
                       <prefix>NULL</prefix>
-                      <value>&lt;subject&gt;&lt;geographic&gt;%value%&lt;/geographic&gt;&lt;/subject&gt;</value>
+                      <value>geographic</value>
                     </create>
                     <read>
-                      <path>mods:subject[not(@displayLabel)]/mods:geographic</path>
+                      <path>mods:geographic</path>
                       <context>parent</context>
                     </read>
                     <update>
@@ -1653,13 +1032,7 @@
             <properties>
               <type>tags</type>
               <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
               <required>FALSE</required>
-              <resizable>FALSE</resizable>
               <title>Temporal</title>
               <tree>TRUE</tree>
             </properties>
@@ -1668,25 +1041,19 @@
                 <properties>
                   <type>tag</type>
                   <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
-                  <resizable>FALSE</resizable>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
                       <path>self::node()</path>
                       <context>parent</context>
                       <schema/>
-                      <type>xml</type>
+                      <type>element</type>
                       <prefix>NULL</prefix>
-                      <value>&lt;subject&gt;&lt;temporal&gt;%value%&lt;/temporal&gt;&lt;/subject&gt;</value>
+                      <value>temporal</value>
                     </create>
                     <read>
-                      <path>mods:subject[not(@displayLabel)]/mods:temporal</path>
+                      <path>mods:temporal</path>
                       <context>parent</context>
                     </read>
                     <update>
@@ -1707,32 +1074,23 @@
             <properties>
               <type>fieldset</type>
               <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
               <required>FALSE</required>
-              <resizable>FALSE</resizable>
               <title>Geographic Information</title>
               <tree>TRUE</tree>
               <actions>
                 <create>
                   <path>self::node()</path>
-                  <context>document</context>
+                  <context>parent</context>
                   <schema/>
-                  <type>xml</type>
+                  <type>element</type>
                   <prefix>NULL</prefix>
-                  <value>&lt;subject&gt;&lt;hierarchicalGeographic&gt;%value%&lt;/hierarchicalGeographic&gt;&lt;/subject&gt;</value>
+                  <value>hierarchicalGeographic</value>
                 </create>
                 <read>
-                  <path>mods:subject[not(@displayLabel)]/mods:hierarchicalGeographic</path>
+                  <path>mods:hierarchicalGeographic</path>
                   <context>parent</context>
                 </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
+                <update>NULL</update>
                 <delete>NULL</delete>
               </actions>
             </properties>
@@ -1786,15 +1144,9 @@
                 <properties>
                   <type>textfield</type>
                   <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
                   <description>Name of a country, i.e. a political entity
                                         considered a country.</description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
-                  <resizable>FALSE</resizable>
                   <title>Country</title>
                   <tree>TRUE</tree>
                   <actions>
@@ -1823,15 +1175,9 @@
                 <properties>
                   <type>textfield</type>
                   <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
                   <description>Includes first order political divisions called
                                         provinces within a country, e.g. in Canada.</description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
-                  <resizable>FALSE</resizable>
                   <title>Province</title>
                   <tree>TRUE</tree>
                   <actions>
@@ -1860,16 +1206,10 @@
                 <properties>
                   <type>textfield</type>
                   <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
                   <description>Includes regions that have status as a
                                         jurisdiction, usually incorporating more than one first
                                         level jurisdiction.</description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
-                  <resizable>FALSE</resizable>
                   <title>Region</title>
                   <tree>TRUE</tree>
                   <actions>
@@ -1929,15 +1269,9 @@
                 <properties>
                   <type>textfield</type>
                   <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
                   <description>Name of an inhabited place incorporated as a city,
                                         town, etc.</description>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
-                  <resizable>FALSE</resizable>
                   <title>City</title>
                   <tree>TRUE</tree>
                   <actions>
@@ -1999,15 +1333,28 @@
             <properties>
               <type>fieldset</type>
               <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
               <required>FALSE</required>
-              <resizable>FALSE</resizable>
               <title>Cartographics</title>
               <tree>TRUE</tree>
+              <actions>
+                <create>
+                  <path>self::node()</path>
+                  <context>parent</context>
+                  <schema/>
+                  <type>element</type>
+                  <prefix>NULL</prefix>
+                  <value>cartographics</value>
+                </create>
+                <read>
+                  <path>mods:cartographics</path>
+                  <context>parent</context>
+                </read>
+                <update>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </update>
+                <delete>NULL</delete>
+              </actions>
             </properties>
             <children>
               <element name="coordinates">
@@ -2028,375 +1375,26 @@
                   <actions>
                     <create>
                       <path>self::node()</path>
-                      <context>document</context>
+                      <context>parent</context>
                       <schema/>
-                      <type>xml</type>
+                      <type>element</type>
                       <prefix>NULL</prefix>
-                      <value>&lt;subject&gt;&lt;cartographics&gt;&lt;coordinates&gt;%value%&lt;/coordinates&gt;&lt;/cartographics&gt;&lt;/subject&gt;</value>
+                      <value>coordinates</value>
                     </create>
                     <read>
-                      <path>mods:subject[not(@displayLabel)]/mods:cartographics/mods:coordinates</path>
-                      <context>document</context>
+                      <path>mods:coordinates</path>
+                      <context>parent</context>
                     </read>
                     <update>
                       <path>self::node()</path>
                       <context>self</context>
                     </update>
-                    <delete>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </delete>
+                    <delete>NULL</delete>
                   </actions>
                 </properties>
                 <children/>
               </element>
             </children>
-          </element>
-        </children>
-      </element>
-      <element name="nameSubject">
-        <properties>
-          <type>tabs</type>
-          <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
-          <required>FALSE</required>
-          <resizable>FALSE</resizable>
-          <title>Named subjects</title>
-          <tree>TRUE</tree>
-        </properties>
-        <children>
-          <element name="0">
-            <properties>
-              <type>tabpanel</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>Named subjects</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>element</type>
-                  <prefix>NULL</prefix>
-                  <value>subject</value>
-                </create>
-                <read>
-                  <path>mods:subject[mods:name]</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                </update>
-                <delete>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </delete>
-              </actions>
-            </properties>
-            <children>
-              <element name="Name">
-                <properties>
-                  <type>fieldset</type>
-                  <access>TRUE</access>
-                  <collapsed>FALSE</collapsed>
-                  <collapsible>FALSE</collapsible>
-                  <disabled>FALSE</disabled>
-                  <executes_submit_callback>FALSE</executes_submit_callback>
-                  <multiple>FALSE</multiple>
-                  <required>FALSE</required>
-                  <resizable>FALSE</resizable>
-                  <title>Named subject</title>
-                  <tree>TRUE</tree>
-                  <actions>
-                    <create>
-                      <path>self::node()</path>
-                      <context>parent</context>
-                      <schema/>
-                      <type>element</type>
-                      <prefix>NULL</prefix>
-                      <value>name</value>
-                    </create>
-                    <read>
-                      <path>mods:name[@type]</path>
-                      <context>parent</context>
-                    </read>
-                    <update>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </update>
-                    <delete>
-                      <path>self::node()</path>
-                      <context>self</context>
-                    </delete>
-                  </actions>
-                </properties>
-                <children>
-                  <element name="type">
-                    <properties>
-                      <type>select</type>
-                      <access>TRUE</access>
-                      <collapsed>FALSE</collapsed>
-                      <collapsible>FALSE</collapsible>
-                      <default_value>personal</default_value>
-                      <disabled>FALSE</disabled>
-                      <executes_submit_callback>FALSE</executes_submit_callback>
-                      <multiple>FALSE</multiple>
-                      <options>
-                        <corporate>corporate</corporate>
-                        <personal>personal</personal>
-                      </options>
-                      <required>FALSE</required>
-                      <resizable>FALSE</resizable>
-                      <title>Type</title>
-                      <tree>TRUE</tree>
-                      <actions>
-                        <create>
-                          <path>self::node()</path>
-                          <context>parent</context>
-                          <schema/>
-                          <type>attribute</type>
-                          <prefix>NULL</prefix>
-                          <value>type</value>
-                        </create>
-                        <read>
-                          <path>@type</path>
-                          <context>parent</context>
-                        </read>
-                        <update>
-                          <path>self::node()</path>
-                          <context>self</context>
-                        </update>
-                        <delete>NULL</delete>
-                      </actions>
-                    </properties>
-                    <children/>
-                  </element>
-                  <element name="familyName">
-                    <properties>
-                      <type>textfield</type>
-                      <access>TRUE</access>
-                      <collapsed>FALSE</collapsed>
-                      <collapsible>FALSE</collapsible>
-                      <disabled>FALSE</disabled>
-                      <executes_submit_callback>FALSE</executes_submit_callback>
-                      <multiple>FALSE</multiple>
-                      <required>FALSE</required>
-                      <resizable>FALSE</resizable>
-                      <title>Family name</title>
-                      <tree>TRUE</tree>
-                      <actions>
-                        <create>
-                          <path>self::node()</path>
-                          <context>parent</context>
-                          <schema/>
-                          <type>xml</type>
-                          <prefix>NULL</prefix>
-                          <value>&lt;namePart type="family"&gt;%value%&lt;/namePart&gt;</value>
-                        </create>
-                        <read>
-                          <path>mods:namePart[@type="family"]</path>
-                          <context>parent</context>
-                        </read>
-                        <update>
-                          <path>self::node()</path>
-                          <context>self</context>
-                        </update>
-                        <delete>NULL</delete>
-                      </actions>
-                    </properties>
-                    <children/>
-                  </element>
-                  <element name="givenName">
-                    <properties>
-                      <type>textfield</type>
-                      <access>TRUE</access>
-                      <collapsed>FALSE</collapsed>
-                      <collapsible>FALSE</collapsible>
-                      <disabled>FALSE</disabled>
-                      <executes_submit_callback>FALSE</executes_submit_callback>
-                      <multiple>FALSE</multiple>
-                      <required>FALSE</required>
-                      <resizable>FALSE</resizable>
-                      <title>Given Name</title>
-                      <tree>TRUE</tree>
-                      <actions>
-                        <create>
-                          <path>self::node()</path>
-                          <context>parent</context>
-                          <schema/>
-                          <type>xml</type>
-                          <prefix>NULL</prefix>
-                          <value>&lt;namePart type="given"&gt;%value%&lt;/namePart&gt;</value>
-                        </create>
-                        <read>
-                          <path>mods:namePart[@type="given"]</path>
-                          <context>parent</context>
-                        </read>
-                        <update>
-                          <path>self::node()</path>
-                          <context>self</context>
-                        </update>
-                        <delete>NULL</delete>
-                      </actions>
-                    </properties>
-                    <children/>
-                  </element>
-                  <element name="corporateName">
-                    <properties>
-                      <type>textfield</type>
-                      <access>TRUE</access>
-                      <collapsed>FALSE</collapsed>
-                      <collapsible>FALSE</collapsible>
-                      <description>If a non-personal name, enter the name here.</description>
-                      <disabled>FALSE</disabled>
-                      <executes_submit_callback>FALSE</executes_submit_callback>
-                      <multiple>FALSE</multiple>
-                      <required>FALSE</required>
-                      <resizable>FALSE</resizable>
-                      <title>Corporate name</title>
-                      <tree>TRUE</tree>
-                      <actions>
-                        <create>
-                          <path>self::node()</path>
-                          <context>parent</context>
-                          <schema/>
-                          <type>xml</type>
-                          <prefix>NULL</prefix>
-                          <value>&lt;namePart&gt;%value%&lt;/namePart&gt;</value>
-                        </create>
-                        <read>
-                          <path>mods:namePart[not(@type)]</path>
-                          <context>parent</context>
-                        </read>
-                        <update>
-                          <path>self::node()</path>
-                          <context>self</context>
-                        </update>
-                        <delete>NULL</delete>
-                      </actions>
-                    </properties>
-                    <children/>
-                  </element>
-                </children>
-              </element>
-            </children>
-          </element>
-        </children>
-      </element>
-      <element name="location">
-        <properties>
-          <type>fieldset</type>
-          <access>TRUE</access>
-          <collapsed>FALSE</collapsed>
-          <collapsible>FALSE</collapsible>
-          <disabled>FALSE</disabled>
-          <executes_submit_callback>FALSE</executes_submit_callback>
-          <multiple>FALSE</multiple>
-          <required>FALSE</required>
-          <resizable>FALSE</resizable>
-          <title>Location</title>
-          <tree>TRUE</tree>
-          <actions>
-            <create>
-              <path>self::node()</path>
-              <context>parent</context>
-              <schema/>
-              <type>element</type>
-              <prefix>NULL</prefix>
-              <value>location</value>
-            </create>
-            <read>
-              <path>mods:location</path>
-              <context>parent</context>
-            </read>
-            <update>NULL</update>
-            <delete>NULL</delete>
-          </actions>
-        </properties>
-        <children>
-          <element name="physicalLocation">
-            <properties>
-              <type>textfield</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <description>Specific information used to locate a resource within a collection, such as the name or code of an institution/repository, and perhaps subcollection.</description>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>Physical location</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>element</type>
-                  <prefix>NULL</prefix>
-                  <value>physicalLocation</value>
-                </create>
-                <read>
-                  <path>mods:physicalLocation</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>NULL</delete>
-              </actions>
-            </properties>
-            <children/>
-          </element>
-          <element name="shelfLocator">
-            <properties>
-              <type>textfield</type>
-              <access>TRUE</access>
-              <collapsed>FALSE</collapsed>
-              <collapsible>FALSE</collapsible>
-              <description>If your institution holds a physical copy/original, enter a shelving reference here.</description>
-              <disabled>FALSE</disabled>
-              <executes_submit_callback>FALSE</executes_submit_callback>
-              <multiple>FALSE</multiple>
-              <required>FALSE</required>
-              <resizable>FALSE</resizable>
-              <title>Shelf locator</title>
-              <tree>TRUE</tree>
-              <actions>
-                <create>
-                  <path>self::node()</path>
-                  <context>parent</context>
-                  <schema/>
-                  <type>element</type>
-                  <prefix>NULL</prefix>
-                  <value>shelfLocator</value>
-                </create>
-                <read>
-                  <path>mods:shelfLocator</path>
-                  <context>parent</context>
-                </read>
-                <update>
-                  <path>self::node()</path>
-                  <context>self</context>
-                </update>
-                <delete>NULL</delete>
-              </actions>
-            </properties>
-            <children/>
           </element>
         </children>
       </element>
