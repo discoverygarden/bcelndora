@@ -691,16 +691,16 @@
                   <access>TRUE</access>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
-                  <default_value>author</default_value>
+                  <default_value>Author</default_value>
                   <description>Select a role from this vocabulary - http://id.loc.gov/vocabulary/relators.html</description>
                   <disabled>FALSE</disabled>
                   <executes_submit_callback>FALSE</executes_submit_callback>
                   <multiple>FALSE</multiple>
                   <options>
-                    <author>author</author>
-                    <editor>editor</editor>
-                    <translator>translator</translator>
-                    <funder>funder</funder>
+                    <Author>Author</Author>
+                    <Editor>Editor</Editor>
+                    <Translator>Translator</Translator>
+                    <Funder>Funder</Funder>
                   </options>
                   <required>FALSE</required>
                   <resizable>FALSE</resizable>
@@ -1459,6 +1459,7 @@
               <disabled>FALSE</disabled>
               <executes_submit_callback>FALSE</executes_submit_callback>
               <multiple>FALSE</multiple>
+              <maxlength>1028</maxlength>
               <required>FALSE</required>
               <resizable>FALSE</resizable>
               <title>URI</title>

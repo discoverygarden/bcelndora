@@ -265,8 +265,8 @@
                   <multiple>FALSE</multiple>
                   <options>
                     <index key=""/>
-                    <index key="thesis advisor">Thesis advisor</index>
-                    <author>Author</author>
+                    <index key="Thesis advisor">Thesis advisor</index>
+                    <Author>Author</Author>
                   </options>
                   <required>FALSE</required>
                   <resizable>FALSE</resizable>
@@ -633,11 +633,11 @@
                   <executes_submit_callback>FALSE</executes_submit_callback>
                   <multiple>FALSE</multiple>
                   <options>
-                    <index key="committee member">Committee member</index>
-                    <referee>Referee</referee>
-                    <chair>Chair</chair>
-                    <index key="co-chair">Co-chair</index>
-                    <juror>Juror</juror>
+                    <index key="Committee member">Committee member</index>
+                    <Referee>Referee</Referee>
+                    <Chair>Chair</Chair>
+                    <index key="Co-chair">Co-chair</index>
+                    <Juror>Juror</Juror>
                     <index key=""/>
                   </options>
                   <required>FALSE</required>

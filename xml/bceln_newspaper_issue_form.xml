@@ -991,11 +991,11 @@
                   <type>select</type>
                   <access>TRUE</access>
                   <default_value>succeeding</default_value>
-                  <description>Select succeeding if the related newspaper follows the parent, otherwise select preceeding.</description>
+                  <description>Select succeeding if the related newspaper follows the parent, otherwise select preceding.</description>
                   <options>
                     <index key="">Select a value</index>
                     <succeeding>succeeding</succeeding>
-                    <preceeding>preceeding</preceeding>
+                    <preceding>preceding</preceding>
                   </options>
                   <required>FALSE</required>
                   <title>Type</title>
