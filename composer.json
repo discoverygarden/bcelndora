@@ -1,0 +1,9 @@
+{
+  "name": "discoverygarden/bcelndora",
+  "description": "Customizations for BCELN",
+  "type": "drupal-module",
+  "license": "GPL-3.0-only",
+  "require": {
+    "discoverygarden/dgi_migrate": "^2 || ^3"
+  }
+}

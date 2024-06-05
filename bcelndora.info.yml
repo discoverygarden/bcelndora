@@ -1,0 +1,7 @@
+name: 'BCELN Customizations'
+type: module
+description: 'Customizations for the BCELN Islandora installation.'
+core_version_requirement: ^10
+package: DGI
+dependencies:
+  - drupal:migrate

@@ -1,8 +1,0 @@
-name = BC ELN Customizations
-description = "Customizations and additional components"
-package = Islandora
-dependencies[] = islandora
-dependencies[] = xml_forms
-package = Islandora Customizations
-core = 7.x
-version = 7.x-dev
