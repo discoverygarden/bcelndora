@@ -1,0 +1,36 @@
+
+/**
+ * @file
+ * bcelndora.module
+ */
+
+/**
+ * Implements hook_scss_compiler_import_paths_alter().
+ */
+function bcelndora_scss_compiler_import_paths_alter(array &$additional_import_paths) {
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('dgi_i8_base');
+  $additional_import_paths[] = \Drupal::service('file_system')->realpath($theme_path) . "/scss/";
+}
+
+/**
+ * Implements hook_page_attachments().
+ *
+ * Attach BCELN specific base theme overrides via the module library.
+ */
+function bcelndora_page_attachments(array &$page) {
+  if (\Drupal::theme()->getActiveTheme()->getName() === "dgi_i8_base") {
+    $page['#attached']['library'][] = 'bcelndora/theme_overrides';
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ *
+ * Unset the theme's 'framework' library CSS, as this module provides its own
+ * via this module's 'hook_page_attachments' implementation.
+ */
+function bcelndora_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'dgi_i8_base' && isset($libraries['framework']['css']['theme']['scss/style.scss'])) {
+    unset($libraries['framework']['css']['theme']['scss/style.scss']);
+  }
+}
