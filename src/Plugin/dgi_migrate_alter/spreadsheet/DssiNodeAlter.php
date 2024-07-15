@@ -93,7 +93,7 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
           'plugin' => 'skip_on_empty',
           'method' => 'row',
           'message' => 'Empty ' . $field[2] . '.',
-        ]
+        ],
       ];
     }
 
