@@ -5,7 +5,6 @@ namespace Drupal\bcelndora\Plugin\dgi_migrate_alter\spreadsheet;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\dgi_migrate_alter\Plugin\MigrationAlterBase;
 use Drupal\dgi_migrate_alter\Plugin\MigrationAlterInterface;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 /**
  * Alter for dssi_node migration.
@@ -78,6 +77,12 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
       ['field_origin_information', 'field_issuance', 'issuance', '^'],
       ['field_origin_information', 'field_frequency', 'frequency', '^'],
     ];
+    $expected_child_fields = [
+      'field_event_type', 'field_place', 'field_date_created',
+      'field_date_issued', 'field_date_captured', 'field_date_valid', 'field_date_modified',
+      'field_other_date', 'field_copyright_date', 'field_publisher', 'field_edition',
+      'field_issuance', 'field_frequency',
+    ];
 
     foreach ($tetiary_delimiter_fields_to_add as $field) {
       $parent_field = $field[0];
@@ -85,30 +90,17 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
       $source_key = $field[2];
       $delimiter = $field[3];
 
-      if (env('CONFIG_SPLITS') == 'dev') {
-        // Assert that $process[$parent_field][2]['values'] exists.
-        \assert(
-          isset($process[$parent_field][2]['values']),
-          '$process[' . $parent_field . '][2][\'values\'] does not exist for field: '
-          . json_encode($field, JSON_THROW_ON_ERROR)
-        );
+      // Ensure that the keys in 'values' are a subset of $allowed_child_fields.
+      $values_keys = array_keys($process[$parent_field][2]['values']);
+      $is_subset = !array_diff($values_keys, $expected_child_fields);
+      \assert(
+        $is_subset,
+        'Keys in $process['
+        . $parent_field . '][2][\'values\'] are not a subset of allowed child fields: '
+        . \json_encode($values_keys, JSON_THROW_ON_ERROR)
+      );
 
-        // Check if the field already has a value.
-        if (isset($process[$parent_field][2]['values'][$child_field])) {
-          $existing_value = $process[$parent_field][2]['values'][$child_field];
-
-          // Add an assertion to check the existing value.
-          \assert(
-            !empty($existing_value),
-            'Non-empty value detected for '
-            . $child_field . ' in field: '
-            . json_encode($field, JSON_THROW_ON_ERROR)
-            . ' - Existing value: '
-            . json_encode($existing_value, JSON_THROW_ON_ERROR)
-          );
-        }
-      }
-
+      // Continue with overwrite.
       $process[$parent_field][2]['values'][$child_field] = [
         [
           'plugin' => 'log',
