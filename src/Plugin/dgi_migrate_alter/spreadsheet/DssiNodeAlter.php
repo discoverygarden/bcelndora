@@ -5,6 +5,7 @@ namespace Drupal\bcelndora\Plugin\dgi_migrate_alter\spreadsheet;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\dgi_migrate_alter\Plugin\MigrationAlterBase;
 use Drupal\dgi_migrate_alter\Plugin\MigrationAlterInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 /**
  * Alter for dssi_node migration.
@@ -20,54 +21,57 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
 
   /**
    * {@inheritdoc}
+   * @throws \JsonException
    */
-  public function alter(array &$migration) {
+  public function alter(array &$migration): void
+  {
     $process =& $migration['process'];
 
     $process['field_resource_type'][1]['bundle'] = 'library_of_congress_resource_typ';
 
     // Add Text (plain) delimited fields.
-    $fields_to_add = [
-      ['field_local_contexts', 'local_contexts', ';'],
-      ['field_access_id', 'access_id', ';'],
+    $plain_text_delimited_fields_to_add = [
+      'field_local_contexts' => ['local_contexts', ';'],
+      'field_access_id' => ['access_id', ';'],
     ];
 
-    foreach ($fields_to_add as $field) {
-      $process[$field[0]] = [
+    foreach ($plain_text_delimited_fields_to_add as $field => $field_info) {
+      [$source, $delimiter] = $field_info;
+      $process[$field] = [
         [
           'plugin' => 'skip_on_empty',
-          'source' => $field[1],
+          'source' => $source,
           'method' => 'process',
         ],
         [
           'plugin' => 'dgi_migrate.process.explode',
-          'delimiter' => $field[2],
+          'delimiter' => $delimiter,
         ],
         [
           'plugin' => 'skip_on_empty',
           'method' => 'row',
-          'message' => 'Empty ' . $field[1] . '.',
+          'message' => "No usable values in $field[1].",
         ],
       ];
     }
 
     // Add Text (plain) non-delimited fields.
-    $fields_to_add = [
-      ['field_scale', 'scale'],
+    $plain_text_non_delimited_fields_to_add = [
+      'field_scale' => 'scale',
     ];
 
-    foreach ($fields_to_add as $field) {
-      $process[$field[0]] = [
+    foreach ($plain_text_non_delimited_fields_to_add as $field => $source) {
+      $process[$field] = [
         [
           'plugin' => 'skip_on_empty',
-          'source' => $field[1],
+          'source' => $source,
           'method' => 'process',
         ],
       ];
     }
 
     // Add tertiary delimiters.
-    $fields_to_add = [
+    $tetiary_delimiter_fields_to_add = [
       ['field_origin_information', 'field_place', 'place', '^'],
       ['field_origin_information', 'field_publisher', 'publisher', '^'],
       ['field_origin_information', 'field_edition', 'edition', '^'],
@@ -75,24 +79,53 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
       ['field_origin_information', 'field_frequency', 'frequency', '^'],
     ];
 
-    foreach ($fields_to_add as $field) {
-      $process[$field[0]][2]['values'][$field[1]] = [
+    foreach ($tetiary_delimiter_fields_to_add as $field) {
+      $parent_field = $field[0];
+      $child_field = $field[1];
+      $source_key = $field[2];
+      $delimiter = $field[3];
+
+      if(env('CONFIG_SPLITS') == 'dev') {
+        // Assert that $process[$parent_field][2]['values'] exists
+        \assert(
+          isset($process[$parent_field][2]['values']),
+          '$process[' . $parent_field . '][2][\'values\'] does not exist for field: '
+          . json_encode($field, JSON_THROW_ON_ERROR)
+        );
+
+        // Check if the field already has a value
+        if (isset($process[$parent_field][2]['values'][$child_field])) {
+          $existing_value = $process[$parent_field][2]['values'][$child_field];
+
+          // Add an assertion to check the existing value
+          \assert(
+            !empty($existing_value),
+            'Non-empty value detected for '
+            . $child_field . ' in field: '
+            . json_encode($field, JSON_THROW_ON_ERROR)
+            . ' - Existing value: '
+            . json_encode($existing_value, JSON_THROW_ON_ERROR)
+          );
+        }
+      }
+
+      $process[$parent_field][2]['values'][$child_field] = [
         [
           'plugin' => 'log',
         ],
         [
           'plugin' => 'skip_on_empty',
-          'source' => "parent_value/$field[2]",
+          'source' => "parent_value/$source_key",
           'method' => 'process',
         ],
         [
           'plugin' => 'dgi_migrate.process.explode',
-          'delimiter' => $field[3],
+          'delimiter' => $delimiter,
         ],
         [
           'plugin' => 'skip_on_empty',
           'method' => 'row',
-          'message' => 'Empty ' . $field[2] . '.',
+          'message' => 'Empty ' . $source_key . '.',
         ],
       ];
     }
@@ -118,7 +151,7 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
       $process[$field[0]][] = [
         'plugin' => 'skip_on_empty',
         'method' => 'row',
-        'message' => 'Empty ' . $field[0] . '.',
+        'message' => "No usable values in $field[0].",
       ];
     }
 
