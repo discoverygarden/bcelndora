@@ -21,10 +21,10 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
 
   /**
    * {@inheritdoc}
+   *
    * @throws \JsonException
    */
-  public function alter(array &$migration): void
-  {
+  public function alter(array &$migration): void {
     $process =& $migration['process'];
 
     $process['field_resource_type'][1]['bundle'] = 'library_of_congress_resource_typ';
@@ -85,19 +85,19 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
       $source_key = $field[2];
       $delimiter = $field[3];
 
-      if(env('CONFIG_SPLITS') == 'dev') {
-        // Assert that $process[$parent_field][2]['values'] exists
+      if (env('CONFIG_SPLITS') == 'dev') {
+        // Assert that $process[$parent_field][2]['values'] exists.
         \assert(
           isset($process[$parent_field][2]['values']),
           '$process[' . $parent_field . '][2][\'values\'] does not exist for field: '
           . json_encode($field, JSON_THROW_ON_ERROR)
         );
 
-        // Check if the field already has a value
+        // Check if the field already has a value.
         if (isset($process[$parent_field][2]['values'][$child_field])) {
           $existing_value = $process[$parent_field][2]['values'][$child_field];
 
-          // Add an assertion to check the existing value
+          // Add an assertion to check the existing value.
           \assert(
             !empty($existing_value),
             'Non-empty value detected for '
