@@ -85,10 +85,12 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
     ];
 
     foreach ($tetiary_delimiter_fields_to_add as $field) {
-      $parent_field = $field[0];
-      $child_field = $field[1];
-      $source_key = $field[2];
-      $delimiter = $field[3];
+      [
+        $parent_field,
+        $child_field,
+        $source_key,
+        $delimiter,
+      ] = $field;
 
       // Ensure that the keys in 'values' are a subset of $allowed_child_fields.
       $values_keys = array_keys($process[$parent_field][2]['values']);
