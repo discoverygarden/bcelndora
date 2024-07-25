@@ -49,7 +49,7 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
         [
           'plugin' => 'skip_on_empty',
           'method' => 'row',
-          'message' => "No usable values in $field[1].",
+          'message' => "No usable values in $source.",
         ],
       ];
     }
