@@ -77,12 +77,6 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
       ['field_origin_information', 'field_issuance', 'issuance', '^'],
       ['field_origin_information', 'field_frequency', 'frequency', '^'],
     ];
-    $expected_child_fields = [
-      'field_event_type', 'field_place', 'field_date_created',
-      'field_date_issued', 'field_date_captured', 'field_date_valid', 'field_date_modified',
-      'field_other_date', 'field_copyright_date', 'field_publisher', 'field_edition',
-      'field_issuance', 'field_frequency',
-    ];
 
     foreach ($tetiary_delimiter_fields_to_add as $field) {
       [
@@ -92,14 +86,10 @@ class DssiNodeAlter extends MigrationAlterBase implements MigrationAlterInterfac
         $delimiter,
       ] = $field;
 
-      // Ensure that the keys in 'values' are a subset of $allowed_child_fields.
-      $values_keys = array_keys($process[$parent_field][2]['values']);
-      $is_subset = !array_diff($values_keys, $expected_child_fields);
       \assert(
-        $is_subset,
-        'Keys in $process['
-        . $parent_field . '][2][\'values\'] are not a subset of allowed child fields: '
-        . \json_encode($values_keys, JSON_THROW_ON_ERROR)
+        $process[$parent_field][2]['plugin'] === 'dgi_paragraph_generate',
+        'dgi_migrate.process.explode is not the correct plugin for '
+          . json_encode($process[$parent_field][2], JSON_THROW_ON_ERROR)
       );
 
       // Continue with overwrite.
