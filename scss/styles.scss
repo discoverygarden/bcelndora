@@ -1,0 +1,13 @@
+// Include icon loading directory.
+$icon-font-path: "../../../themes/contrib/dgi_i8_base/bootstrap/assets/fonts/bootstrap/";
+
+// Import default variables.
+@import "default-variables"; // From dgi_i8_base
+
+// Import base styles.
+@import "base-styles"; // From dgi_i8_base
+
+// Import BCELN Overrides, best organized into directories.
+// EX: @import "components/header/header" to import styles from
+// this modules "components/header/_header.scss" file;
+

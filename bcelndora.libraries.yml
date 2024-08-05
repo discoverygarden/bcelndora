@@ -1,0 +1,5 @@
+theme_overrides:
+  version: VERSION
+  css:
+    theme:
+      scss/styles.scss: {}
