@@ -1,0 +1,50 @@
+---
+id: bceln_mads_to_term_person
+label: Create terms in the Person taxonomy.
+migration_group: foxml_to_dgis
+source:
+  plugin: dgi_migrate.source.migration
+  track_changes: true
+  migration: dgis_foxml_files
+
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: person
+  validate: true
+
+process:
+  _node_foxml_parsed:
+    - plugin: dgi_migrate.load_entity
+      source: fid
+      entity_type: entity:file
+    - plugin: dgi_migrate.method
+      method: getFileUri
+    - plugin: foxml.parse
+  _models:
+    - plugin: dgi_migrate.method
+      source: '@_node_foxml_parsed'
+      method: models
+    - plugin: skip_on_empty
+      method: row
+  status:
+    - plugin: dgi_migrate.subproperty
+      source: '@_node_foxml_parsed'
+      property: state
+    - plugin: static_map
+      map:
+        'Active': 1
+        'Inactive': 0
+        'Deleted': 0
+  name:
+    - plugin: default_value
+      default_value: 'testing'
+
+migration_dependencies:
+  required:
+    - dgis_foxml_files
+
+dependencies:
+  enforced:
+    module:
+      - dgi_migrate
+      - dgi_migrate_foxml_standard_mods
