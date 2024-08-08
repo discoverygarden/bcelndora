@@ -6,6 +6,17 @@ source:
   plugin: dgi_migrate.source.migration
   track_changes: true
   migration: dgis_foxml_files
+  dsf_misc:
+    case_insensitive: &case_insensitive true
+    base_mads_node: &base_mads_node
+      plugin: dgi_migrate.process.xml.context_query
+      missing_behavior: skip_process
+      source: '@_mads_node'
+      xpath: '@_mads_xpath'
+    nested_mads_node: &nested_mads_node
+      plugin: dgi_migrate.process.xml.context_query
+      source: 'parent_value'
+      xpath: 'parent_row/dest/_mads_xpath'
 
 destination:
   plugin: entity:taxonomy_term
@@ -26,6 +37,35 @@ process:
       method: models
     - plugin: skip_on_empty
       method: row
+  _mads_xpath:
+    - plugin: dgi_migrate.subindex
+      index: 'MADS'
+      source: '@_node_foxml_parsed'
+      missing_behavior: skip_process
+    - plugin: dgi_migrate.method
+      method: getUri
+    # XXX: An issue in the passing off of paths/URIs to libxml prevents the use
+    # of "dgi_migrate.process.xml.domfile"
+    - plugin: callback
+      callable: file_get_contents
+    - plugin: dgi_migrate.process.xml.domstring
+      missing_behavior: skip_process
+    - plugin: dgi_migrate.process.xml.xpath
+      namespaces:
+        mods: 'http://www.loc.gov/mads/v2'
+        xsi: 'http://www.w3.org/2001/XMLSchema-instance'
+        xlink: 'http://www.w3.org/1999/xlink'
+  _mads_node:
+    - plugin: skip_on_empty
+      method: process
+      source: '@_mads_xpath'
+    - plugin: dgi_migrate.method
+      method: query
+      args:
+        - '//mads:mads[1]'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: array_shift
   status:
     - plugin: dgi_migrate.subproperty
       source: '@_node_foxml_parsed'
@@ -36,8 +76,15 @@ process:
         'Inactive': 0
         'Deleted': 0
   name:
-    - plugin: default_value
-      default_value: 'testing'
+    - << : *base_mads_node
+      query: 'mads:authority/mads:name'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+    - plugin: single_value
+    - plugin: null_coalesce
 
 migration_dependencies:
   required:
