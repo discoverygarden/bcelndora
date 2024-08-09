@@ -66,6 +66,69 @@ process:
     - plugin: callback
       callable: iterator_to_array
     - plugin: array_shift
+  _family_name:
+    - << : *base_mads_node
+      query: 'mads:authority/mads:name'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: row
+    - plugin: multiple_values
+    - plugin: dgi_migrate.sub_process
+      process_values: true
+      values:
+        _family:
+          - << : *nested_mads_node
+            query: 'normalize-space(mads:namePart[@type="family"][normalize-space()][1])'
+            method: evaluate
+          - plugin: skip_on_empty
+            method: process
+    - plugin: skip_on_empty
+      method: process
+    - plugin: dgi_migrate.process.single_extract
+      index: [ _family ]
+  _given_name:
+    - << : *base_mads_node
+      query: 'mads:authority/mads:name'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: row
+    - plugin: multiple_values
+    - plugin: dgi_migrate.sub_process
+      process_values: true
+      values:
+        _given:
+          - << : *nested_mads_node
+            query: 'normalize-space(mads:namePart[@type="given"][normalize-space()][1])'
+            method: evaluate
+          - plugin: skip_on_empty
+            method: process
+    - plugin: skip_on_empty
+      method: process
+    - plugin: dgi_migrate.process.single_extract
+      index: [ _given ]
+  _name_date:
+    - << : *base_mads_node
+      query: 'mads:authority/mads:name'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: row
+    - plugin: multiple_values
+    - plugin: dgi_migrate.sub_process
+      process_values: true
+      values:
+        _date:
+          - << : *nested_mads_node
+            query: 'normalize-space(mads:namePart[@type="date"][normalize-space()][1])'
+            method: evaluate
+          - plugin: skip_on_empty
+            method: process
+    - plugin: skip_on_empty
+      method: process
+    - plugin: dgi_migrate.process.single_extract
+      index: [ _date ]
   status:
     - plugin: dgi_migrate.subproperty
       source: '@_node_foxml_parsed'
@@ -76,15 +139,47 @@ process:
         'Inactive': 0
         'Deleted': 0
   name:
-    - << : *base_mads_node
-      query: 'mads:authority/mads:name'
+    - plugin: get
+      source:
+        - '@_family_name'
+        - '@_given_name'
+        - '@_name_date'
+    - plugin: flatten
     - plugin: callback
-      callable: iterator_to_array
-    - plugin: multiple_values
-    - plugin: dgi_migrate.subproperty
-      property: nodeValue
-    - plugin: single_value
+      callable: array_filter
+    - plugin: concat
+      delimiter: ', '
+    - plugin: skip_on_empty
+      method: row
+  # TODO: add 'tid' if a term with the same 'name' value exists.
+  field_person_preferred_name/family:
+    - plugin: get
+      source: '@_family_name'
+    - plugin: skip_on_empty
+      method: process
+    - plugin: flatten
     - plugin: null_coalesce
+  field_person_preferred_name/given:
+    - plugin: get
+      source: '@_given_name'
+    - plugin: skip_on_empty
+      method: process
+    - plugin: flatten
+    - plugin: null_coalesce
+  # TODO: add field_person_email_contact
+  # TODO: add field_phone
+  # TODO: add field_person_department (entity reference to term in vocab: discipline)
+  # TODO: add field_position
+  # TODO: add field_affiliation_date (EDTF date range)
+  # TODO: add field_description (two possible mapping sources)
+  # TODO: add field_address
+  # TODO: add field_status
+  # TODO: add field_orcid
+  # TODO: add field_field_of_activity
+  # TODO: add field_identifier_other
+  # TODO: add field_person_alternate_names/family
+  # TODO: add field_person_alternate_names/given
+  # TODO: add field_photograph (entity reference to Image Media)
 
 migration_dependencies:
   required:
