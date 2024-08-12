@@ -68,67 +68,22 @@ process:
     - plugin: array_shift
   _family_name:
     - << : *base_mads_node
-      query: 'mads:authority/mads:name'
-    - plugin: callback
-      callable: iterator_to_array
-    - plugin: skip_on_empty
-      method: row
-    - plugin: multiple_values
-    - plugin: dgi_migrate.sub_process
-      process_values: true
-      values:
-        _family:
-          - << : *nested_mads_node
-            query: 'normalize-space(mads:namePart[@type="family"][normalize-space()][1])'
-            method: evaluate
-          - plugin: skip_on_empty
-            method: process
+      query: 'normalize-space(mads:authority/mads:name/mads:namePart[@type="family"][normalize-space()][1])'
+      method: evaluate
     - plugin: skip_on_empty
       method: process
-    - plugin: dgi_migrate.process.single_extract
-      index: [ _family ]
   _given_name:
     - << : *base_mads_node
-      query: 'mads:authority/mads:name'
-    - plugin: callback
-      callable: iterator_to_array
-    - plugin: skip_on_empty
-      method: row
-    - plugin: multiple_values
-    - plugin: dgi_migrate.sub_process
-      process_values: true
-      values:
-        _given:
-          - << : *nested_mads_node
-            query: 'normalize-space(mads:namePart[@type="given"][normalize-space()][1])'
-            method: evaluate
-          - plugin: skip_on_empty
-            method: process
+      query: 'normalize-space(mads:authority/mads:name/mads:namePart[@type="given"][normalize-space()][1])'
+      method: evaluate
     - plugin: skip_on_empty
       method: process
-    - plugin: dgi_migrate.process.single_extract
-      index: [ _given ]
   _name_date:
     - << : *base_mads_node
-      query: 'mads:authority/mads:name'
-    - plugin: callback
-      callable: iterator_to_array
-    - plugin: skip_on_empty
-      method: row
-    - plugin: multiple_values
-    - plugin: dgi_migrate.sub_process
-      process_values: true
-      values:
-        _date:
-          - << : *nested_mads_node
-            query: 'normalize-space(mads:namePart[@type="date"][normalize-space()][1])'
-            method: evaluate
-          - plugin: skip_on_empty
-            method: process
+      query: 'normalize-space(mads:authority/mads:name/mads:namePart[@type="date"][normalize-space()][1])'
+      method: evaluate
     - plugin: skip_on_empty
       method: process
-    - plugin: dgi_migrate.process.single_extract
-      index: [ _date ]
   status:
     - plugin: dgi_migrate.subproperty
       source: '@_node_foxml_parsed'
@@ -144,7 +99,6 @@ process:
         - '@_family_name'
         - '@_given_name'
         - '@_name_date'
-    - plugin: flatten
     - plugin: callback
       callable: array_filter
     - plugin: concat
@@ -157,15 +111,11 @@ process:
       source: '@_family_name'
     - plugin: skip_on_empty
       method: process
-    - plugin: flatten
-    - plugin: null_coalesce
   field_person_preferred_name/given:
     - plugin: get
       source: '@_given_name'
     - plugin: skip_on_empty
       method: process
-    - plugin: flatten
-    - plugin: null_coalesce
   # TODO: add field_person_email_contact
   # TODO: add field_phone
   # TODO: add field_person_department (entity reference to term in vocab: discipline)
