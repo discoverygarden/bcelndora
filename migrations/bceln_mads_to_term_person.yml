@@ -105,7 +105,17 @@ process:
       delimiter: ', '
     - plugin: skip_on_empty
       method: row
-  # TODO: add 'tid' if a term with the same 'name' value exists.
+  tid:
+    - plugin: dgi_migrate.process.entity_query
+      entity_type: entity:taxonomy_term
+      static_conditions:
+        - [vid, person]
+      conditions:
+        - [name, '@name']
+    - plugin: skip_on_empty
+      method: process
+    - plugin: flatten
+    - plugin: null_coalesce
   field_person_preferred_name/family:
     - plugin: get
       source: '@_family_name'
