@@ -17,6 +17,36 @@ source:
       plugin: dgi_migrate.process.xml.context_query
       source: 'parent_value'
       xpath: 'parent_row/dest/_mads_xpath'
+    generic_term:
+      after: &generic_term_after
+        _auth_value_uri:
+          - << : *nested_mads_node
+            query: 'string(@valueURI)'
+            method: evaluate
+        _auth_source:
+          - << : *nested_mads_node
+            query: 'string(@authority)'
+            method: evaluate
+        _value:
+          - << : *nested_mads_node
+            query: 'normalize-space(.)'
+            method: evaluate
+        actual:
+          - plugin: get
+            source:
+              - '@_auth_source'
+              - '@_auth_value_uri'
+              - '@_value'
+              # XXX: Needs to be provided wherever this is used, corresponding
+              # to the vocab in which to do the things.
+              - '@_vid'
+          - plugin: flatten
+          - plugin: migration_lookup
+            migration: dgis_stub_terms_generic
+            stub_id: dgis_stub_terms_generic
+      extract: &generic_term_extract
+        plugin: dgi_migrate.process.single_extract
+        index: [actual]
 
 destination:
   plugin: entity:taxonomy_term
@@ -52,7 +82,7 @@ process:
       missing_behavior: skip_process
     - plugin: dgi_migrate.process.xml.xpath
       namespaces:
-        mods: 'http://www.loc.gov/mads/v2'
+        mads: 'http://www.loc.gov/mads/v2'
         xsi: 'http://www.w3.org/2001/XMLSchema-instance'
         xlink: 'http://www.w3.org/1999/xlink'
   _mads_node:
@@ -126,24 +156,167 @@ process:
       source: '@_given_name'
     - plugin: skip_on_empty
       method: process
-  # TODO: add field_person_email_contact
-  # TODO: add field_phone
-  # TODO: add field_person_department (entity reference to term in vocab: discipline)
-  # TODO: add field_position
-  # TODO: add field_affiliation_date (EDTF date range)
-  # TODO: add field_description (two possible mapping sources)
-  # TODO: add field_address
-  # TODO: add field_status
-  # TODO: add field_orcid
-  # TODO: add field_field_of_activity
-  # TODO: add field_identifier_other
+  field_position:
+    - << : *base_mads_node
+      query: 'mads:affiliation/mads:position'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_status:
+    - << : *base_mads_node
+      query: 'mads:note[@type="status"]'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+    - plugin: single_value
+    - plugin: null_coalesce
+  field_field_of_activity:
+    - << : *base_mads_node
+      query: 'mads:fieldOfActivity'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_identifier_other:
+    - << : *base_mads_node
+      query: 'mads:identifier[@type=u1]'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_person_department:
+    - <<: *base_mads_node
+      query: 'mads:affiliation/mads:organization'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.sub_process
+      process_values: true
+      values:
+        _auth_value_uri:
+          - plugin: default_value
+            default_value: ''
+        _auth_source:
+          - plugin: default_value
+            default_value: ''
+        _vid:
+          - plugin: default_value
+            default_value: discipline
+        <<: *generic_term_after
+    - <<: *generic_term_extract
+  _field_affiliation_date_start:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:affiliation/mads:dateValid[@point="start"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  _field_affiliation_date_end:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:affiliation/mads:dateValid[@point="end"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  # XXX: this should probably be adjusted to throw a message about the invalid date.
+  field_affiliation_date:
+    - plugin: get
+      source:
+        - '@_field_affiliation_date_start'
+        - '@_field_affiliation_date_end'
+    - plugin: skip_on_empty
+      method: process
+    - plugin: concat
+      delimiter: '/'
+    - plugin: dgi_migrate_edtf_validator
+      missing_behavior: skip_process
+  _mads_note_type_history:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:note[@type="history"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  _mads_note_orcid:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:note[not(@type) and starts-with(text(), "https://orcid.org")])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  _mads_note_not_orcid:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:note[not(@type) and not(starts-with(text(), "https://orcid.org"))])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  field_description:
+    - plugin: get
+      source:
+        - '@_mads_note_type_history'
+        - '@_mads_note_not_orcid'
+    - plugin: skip_on_empty
+      method: process
+    - plugin: callback
+      callable: array_filter
+    - plugin: concat
+      delimiter: ' '
+  field_orcid:
+    - plugin: get
+      source: '@_mads_note_orcid'
+    - plugin: skip_on_empty
+      method: process
   # TODO: add field_person_alternate_names/family
   # TODO: add field_person_alternate_names/given
   # TODO: add field_photograph (entity reference to Image Media)
+  # Cannot test these until more complete test foxml is made:
+  field_person_email_contact:
+    - << : *base_mads_node
+      query: 'mads:affiliation/mads:email'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_phone:
+    - << : *base_mads_node
+      query: 'mads:affiliation/mads:phone'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_address:
+    - << : *base_mads_node
+      query: 'mads:note[@type="address"]'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
 
 migration_dependencies:
   required:
     - dgis_foxml_files
+    - dgis_stub_terms_generic
 
 dependencies:
   enforced:
