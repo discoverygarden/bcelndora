@@ -278,9 +278,30 @@ process:
       source: '@_mads_note_orcid'
     - plugin: skip_on_empty
       method: process
-  # TODO: add field_website
-  # TODO: add field_person_alternate_names/family
-  # TODO: add field_person_alternate_names/given
+  field_website:
+    - << : *base_mads_node
+      query: 'mads:url'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  # XXX: Unsure how this might handle multiple field_person_alternate_names, or
+  # if it even needs to.
+  field_person_alternate_names/family:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:variant/mads:name/mads:namePart[@type="family"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  field_person_alternate_names/given:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:variant/mads:name/mads:namePart[@type="given"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
   # TODO: add field_photograph (entity reference to Image Media)
   # Cannot test these until more complete test foxml is made:
   field_person_email_contact:
