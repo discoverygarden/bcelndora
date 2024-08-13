@@ -1505,7 +1505,16 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
-        <xsl:for-each select="mods:namePart[@type='family']"><namePart type="family" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart></xsl:for-each>
+        <xsl:for-each select="mods:namePart[@type='family']">
+            <xsl:choose>
+                <xsl:when test="not(../mods:namePart[@type='given'])">
+                    <namePart xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
+                </xsl:when>
+                <xsl:otherwise>
+                    <namePart type="family" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
+                </xsl:otherwise>
+                </xsl:choose>
+        </xsl:for-each>
         <xsl:for-each select="mods:namePart[@type='given']"><namePart type="given" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart></xsl:for-each>    
         <xsl:for-each select="mods:namePart[@type='date']"><namePart type="date" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart></xsl:for-each>
         <xsl:for-each select="mods:namePart[@type='culture']"><namePart type="culture" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart></xsl:for-each>
