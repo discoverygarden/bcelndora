@@ -1498,82 +1498,50 @@
         <xsl:if test="mods:namePart[not(@type)]">
             <xsl:choose>
                 <xsl:when test="mods:namePart[not(@type)][2]">
-                    <namePart xmlns="http://www.loc.gov/mods/v3">
-                        <xsl:value-of select="normalize-space(mods:namePart[not(@type)][1])" />
-                        <xsl:text>. </xsl:text>
-                        <xsl:value-of select="normalize-space(mods:namePart[not(@type)][2])" />
-                    </namePart>
+                    <namePart xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(mods:namePart[not(@type)][1])"/><xsl:text>. </xsl:text><xsl:value-of select="normalize-space(mods:namePart[not(@type)][2])"/></namePart>
                 </xsl:when>
                 <xsl:otherwise>
-                    <namePart xmlns="http://www.loc.gov/mods/v3">
-                        <xsl:value-of select="normalize-space(mods:namePart[not(@type)])" />
-                    </namePart>
+                    <namePart xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(mods:namePart[not(@type)])"/></namePart>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
-        <xsl:for-each
-            select="mods:namePart[@type='family']">
+        <xsl:for-each select="mods:namePart[@type='family']">
             <xsl:choose>
                 <xsl:when test="not(../mods:namePart[@type='given'])">
-                    <namePart xmlns="http://www.loc.gov/mods/v3">
-                        <xsl:value-of select="normalize-space(.)" />
-                    </namePart>
+                    <namePart xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
                 </xsl:when>
                 <xsl:otherwise>
-                    <namePart type="family" xmlns="http://www.loc.gov/mods/v3">
-                        <xsl:value-of select="normalize-space(.)" />
-                    </namePart>
+                    <namePart type="family" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
-        <xsl:for-each
-            select="mods:namePart[@type='given']"><namePart type="given"
-                xmlns="http://www.loc.gov/mods/v3">
-                <xsl:value-of select="normalize-space(.)" />
-            </namePart></xsl:for-each>
-        <xsl:for-each
-            select="mods:namePart[@type='date']"><namePart type="date"
-                xmlns="http://www.loc.gov/mods/v3">
-                <xsl:value-of select="normalize-space(.)" />
-            </namePart></xsl:for-each>
-        <xsl:for-each
-            select="mods:namePart[@type='culture']"><namePart type="culture"
-                xmlns="http://www.loc.gov/mods/v3">
-                <xsl:value-of select="normalize-space(.)" />
-            </namePart></xsl:for-each>
-        <xsl:for-each
-            select="mods:affiliation"><affiliation xmlns="http://www.loc.gov/mods/v3">
-                <xsl:value-of select="normalize-space(.)" />
-            </affiliation></xsl:for-each>
-        <xsl:for-each
-            select="mods:alternativeName"><alternativeName xmlns="http://www.loc.gov/mods/v3">
-                <xsl:value-of select="normalize-space(.)" />
-            </alternativeName></xsl:for-each>
-        <xsl:for-each
-            select="mods:description"><description xmlns="http://www.loc.gov/mods/v3">
-                <xsl:value-of select="normalize-space(.)" />
-            </description></xsl:for-each>
-        <xsl:for-each
-            select="mods:nameIdentifier">
+        <xsl:for-each select="mods:namePart[@type='given']">
+            <xsl:choose>
+                <xsl:when test="not(../mods:namePart[@type='family'])">
+                    <namePart xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
+                </xsl:when>
+                <xsl:otherwise>
+                    <namePart type="given" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
+        <xsl:for-each select="mods:namePart[@type='date']"><namePart type="date" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart></xsl:for-each>
+        <xsl:for-each select="mods:namePart[@type='culture']"><namePart type="culture" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart></xsl:for-each>
+        <xsl:for-each select="mods:affiliation"><affiliation xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></affiliation></xsl:for-each>
+        <xsl:for-each select="mods:alternativeName"><alternativeName xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></alternativeName></xsl:for-each>
+        <xsl:for-each select="mods:description"><description xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></description></xsl:for-each>
+        <xsl:for-each select="mods:nameIdentifier">
             <xsl:choose>
                 <xsl:when test="starts-with(.,'https://orcid.org/')">
-                    <nameIdentifier type='orcid' xmlns="http://www.loc.gov/mods/v3">
-                        <xsl:value-of select="normalize-space(.)" />
-                    </nameIdentifier>
+                    <nameIdentifier type='orcid' xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></nameIdentifier>
                 </xsl:when>
                 <xsl:when test="@type='orcid'">
-                    <nameIdentifier type='orcid' xmlns="http://www.loc.gov/mods/v3">
-                        <xsl:value-of select="normalize-space(.)" />
-                    </nameIdentifier>
+                    <nameIdentifier type='orcid' xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></nameIdentifier>
                 </xsl:when>
                 <xsl:when test="@type='email'">
-                    <nameIdentifier type='email' xmlns="http://www.loc.gov/mods/v3">
-                        <xsl:value-of select="normalize-space(.)" />
-                    </nameIdentifier>
+                    <nameIdentifier type='email' xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></nameIdentifier>
                 </xsl:when>
-                <xsl:otherwise><nameIdentifier xmlns="http://www.loc.gov/mods/v3">
-                        <xsl:value-of select="normalize-space(.)" />
-                    </nameIdentifier></xsl:otherwise>
+                <xsl:otherwise><nameIdentifier xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></nameIdentifier></xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
     </xsl:template>
