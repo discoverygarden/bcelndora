@@ -71,7 +71,7 @@ process:
     - plugin: dgi_migrate.subindex
       index: 'MADS'
       source: '@_node_foxml_parsed'
-      missing_behavior: skip_process
+      missing_behavior: skip_row
     - plugin: dgi_migrate.method
       method: getUri
     # XXX: An issue in the passing off of paths/URIs to libxml prevents the use
@@ -79,7 +79,7 @@ process:
     - plugin: callback
       callable: file_get_contents
     - plugin: dgi_migrate.process.xml.domstring
-      missing_behavior: skip_process
+      missing_behavior: skip_row
     - plugin: dgi_migrate.process.xml.xpath
       namespaces:
         mads: 'http://www.loc.gov/mads/v2'
@@ -87,7 +87,7 @@ process:
         xlink: 'http://www.w3.org/1999/xlink'
   _mads_node:
     - plugin: skip_on_empty
-      method: process
+      method: row
       source: '@_mads_xpath'
     - plugin: dgi_migrate.method
       method: query
@@ -232,7 +232,6 @@ process:
       method: evaluate
     - plugin: skip_on_empty
       method: process
-  # XXX: this should probably be adjusted to throw a message about the invalid date.
   field_affiliation_date:
     - plugin: get
       source:
@@ -243,7 +242,7 @@ process:
     - plugin: concat
       delimiter: '/'
     - plugin: dgi_migrate_edtf_validator
-      missing_behavior: skip_process
+      missing_behavior: skip_process # TODO: change this to skip_row; just keeping as skip_process to facilitate development with the current sample FOXML I have.
   _mads_note_type_history:
     - << : *base_mads_node
       query: 'normalize-space(mads:note[@type="history"][normalize-space()][1])'
@@ -302,7 +301,14 @@ process:
       method: evaluate
     - plugin: skip_on_empty
       method: process
-  # TODO: add field_photograph (entity reference to Image Media)
+  field_photograph/0/target_id:
+    - plugin: migration_lookup
+      migration: bceln_person_tn_media
+      source: fid
+      no_stub: true
+    - plugin: skip_on_empty
+      method: process
+    
   # Cannot test these until more complete test foxml is made:
   field_person_email_contact:
     - << : *base_mads_node
@@ -339,7 +345,7 @@ migration_dependencies:
   required:
     - dgis_foxml_files
     - dgis_stub_terms_generic
-
+    - bceln_person_tn_media
 dependencies:
   enforced:
     module:

@@ -1,0 +1,104 @@
+---
+id: bceln_person_tn_media
+label: Create thumbnail media entities from Person FOXML
+migration_group: foxml_to_dgis
+source:
+  plugin: dgi_migrate.source.migration
+  track_changes: true
+  migration: dgis_foxml_files
+  constants:
+    valid_models:
+      - 'info:fedora/islandora:personCModel'
+destination:
+  plugin: entity:media
+  default_bundle: image
+  validate: true
+process:
+  _file_id:
+    - plugin: migration_lookup
+      migration: bceln_person_tn_file
+      source: fid
+      no_stub: true
+    - plugin: skip_on_empty
+      method: row
+  _file:
+    plugin: dgi_migrate.load_entity
+    source: '@_file_id'
+    entity_type: entity:file
+  _parsed:
+    - plugin: dgi_migrate.load_entity
+      source: fid
+      entity_type: entity:file
+    - plugin: dgi_migrate.method
+      method: getFileUri
+    - plugin: foxml.parse
+  _models:
+    - plugin: dgi_migrate.method
+      source: '@_parsed'
+      method: models
+    - plugin: skip_on_empty
+      method: row
+  _valid_present_models:
+    - plugin: callback
+      callable: array_intersect
+      unpack_source: true
+      source:
+        - constants/valid_models
+        - '@_models'
+    - plugin: skip_on_empty
+      method: row
+  name:
+    - plugin: dgi_migrate.subproperty
+      property: label
+      source: '@_parsed'
+  field_media_image/target_id:
+    - plugin: get
+      source: '@_file_id'
+    # XXX: To see that this does work with pre-existing files, you can swap the
+    # above with this (and a default value that matches some existing file in
+    # your local test env).
+    #- plugin: default_value
+    #  default_value: 59
+  field_media_image/alt: '@name'
+  bundle:
+    - plugin: static_map
+      source: '@_valid_present_models'
+      bypass: false
+      map:
+        'info:fedora/islandora:personCModel': 'image'
+    - plugin: extract
+      index: [0]
+  field_file_size:
+    - plugin: dgi_migrate.method
+      method: getSize
+      source: '@_file'
+  field_media_use:
+    - plugin: default_value
+      default_value: http://pcdm.org/use#ThumbnailImage
+    - plugin: entity_lookup
+      bundle_key: vid
+      bundle: islandora_media_use
+      value_key: field_external_uri
+      entity_type: taxonomy_term
+      # XXX: migrate_plus's case comparison makes assumptions about the entity's
+      # "main" property... we want "uri", but it assumes "value".
+      ignore_case: true
+  field_mime_type:
+    - plugin: dgi_migrate.method
+      method: getMimeType
+      source: '@_file'
+  status:
+    - plugin: default_value
+      default_value: 1
+  uid:
+    - plugin: dgi_migrate.method
+      method: getOwnerId
+      source: '@_file'
+migration_dependencies:
+  required:
+    - dgis_foxml_files
+    - bceln_person_tn_file
+dependencies:
+  enforced:
+    module:
+      - dgi_migrate_foxml_standard_mods
