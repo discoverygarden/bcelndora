@@ -25,7 +25,7 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
 
     $migration['source']['ids']['culture_tid'] = ['type' => 'string'];
     $migration['source']['ids']['alt_name'] = ['type' => 'string'];
-    $migration['source']['ids']['description'] = ['type' => 'string'];
+    $migration['source']['ids']['description'] = ['type' => 'string_long'];
     $migration['source']['ids']['other_id'] = ['type' => 'string'];
     $migration['source']['ids']['orcid'] = ['type' => 'string'];
 

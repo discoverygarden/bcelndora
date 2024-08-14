@@ -133,22 +133,22 @@ EOI
           '@_other_id',
           '@_orcid',
         ],
-        [
-          'plugin' => 'flatten',
-        ],
-        [
-          'plugin' => 'dgi_migrate.process.log',
-          'template' => 'Linked Agent: :value',
-        ],
-        [
-          'plugin' => 'migration_lookup',
-          'migration' => 'dgis_stub_terms_person',
-          'stub_id' => 'dgis_stub_terms_person',
-        ],
-        [
-          'plugin' => 'skip_on_empty',
-          'method' => 'row',
-        ],
+      ],
+      [
+        'plugin' => 'flatten',
+      ],
+      [
+        'plugin' => 'dgi_migrate.process.log',
+        'template' => 'Linked Agent: :value',
+      ],
+      [
+        'plugin' => 'migration_lookup',
+        'migration' => 'dgis_stub_terms_person',
+        'stub_id' => 'dgis_stub_terms_person',
+      ],
+      [
+        'plugin' => 'skip_on_empty',
+        'method' => 'row',
       ],
     ];
 
