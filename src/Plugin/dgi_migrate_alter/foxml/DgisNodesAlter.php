@@ -51,7 +51,7 @@ EOI
     );
 
     $found = FALSE;
-    $base_mods_node = NestedArray::getValue(
+    NestedArray::getValue(
       $migration,
       [
         'source',
@@ -170,24 +170,24 @@ EOI
     $process['field_record_information'][3]['values']['_field_record_creation_date_end'][0]['query'] =
       'mods:recordInfo/mods:recordCreationDate[@point="end"] or mods:originInfo/mods:dateCreated[@point="end"]';
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
-      'plugin' => 'single_value'
+      'plugin' => 'single_value',
     ];
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
       'plugin' => 'callback',
       'callable' => 'array_filter',
     ];
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
-      'plugin' => 'null_coalesce'
+      'plugin' => 'null_coalesce',
     ];
     $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
-      'plugin' => 'single_value'
+      'plugin' => 'single_value',
     ];
     $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
       'plugin' => 'callback',
       'callable' => 'array_filter',
     ];
     $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
-      'plugin' => 'null_coalesce'
+      'plugin' => 'null_coalesce',
     ];
 
     $process['field_remote_media_url'] = $process['field_ismn'];
