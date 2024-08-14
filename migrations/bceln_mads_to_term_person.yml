@@ -245,10 +245,14 @@ process:
       missing_behavior: skip_process # TODO: change this to skip_row; just keeping as skip_process to facilitate development with the current sample FOXML I have.
   _mads_note_type_history:
     - << : *base_mads_node
-      query: 'normalize-space(mads:note[@type="history"][normalize-space()][1])'
-      method: evaluate
+      query: 'mads:note[@type="history"]'
+    - plugin: callback
+      callable: iterator_to_array
     - plugin: skip_on_empty
       method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
   _mads_note_orcid:
     - << : *base_mads_node
       query: 'normalize-space(mads:note[not(@type) and starts-with(text(), "https://orcid.org")])'
@@ -257,10 +261,14 @@ process:
       method: process
   _mads_note_not_orcid:
     - << : *base_mads_node
-      query: 'normalize-space(mads:note[not(@type) and not(starts-with(text(), "https://orcid.org"))])'
-      method: evaluate
+      query: 'mads:note[not(@type) and not(starts-with(text(), "https://orcid.org"))]'
+    - plugin: callback
+      callable: iterator_to_array
     - plugin: skip_on_empty
       method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
   field_description:
     - plugin: get
       source:
@@ -268,10 +276,9 @@ process:
         - '@_mads_note_not_orcid'
     - plugin: skip_on_empty
       method: process
+    - plugin: flatten
     - plugin: callback
       callable: array_filter
-    - plugin: concat
-      delimiter: ' '
   field_orcid:
     - plugin: get
       source: '@_mads_note_orcid'
