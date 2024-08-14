@@ -2,10 +2,8 @@
 
 namespace Drupal\bcelndora\Plugin\dgi_migrate_alter\foxml;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\dgi_migrate_alter\Plugin\MigrationAlterBase;
 use Drupal\dgi_migrate_alter\Plugin\MigrationAlterInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Alter for dgis_stub_terms_person migration.
@@ -25,11 +23,11 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
   public function alter(array &$migration) {
     $logger = \Drupal::logger('bcelndora');
 
-    $migration['source']['ids']['culture_tid'] = [ 'type' => 'string' ];
-    $migration['source']['ids']['alt_name'] = [ 'type' => 'string' ];
-    $migration['source']['ids']['description'] = [ 'type' => 'string' ];
-    $migration['source']['ids']['other_id'] = [ 'type' => 'string' ];
-    $migration['source']['ids']['orcid'] = [ 'type' => 'string' ];
+    $migration['source']['ids']['culture_tid'] = ['type' => 'string'];
+    $migration['source']['ids']['alt_name'] = ['type' => 'string'];
+    $migration['source']['ids']['description'] = ['type' => 'string'];
+    $migration['source']['ids']['other_id'] = ['type' => 'string'];
+    $migration['source']['ids']['orcid'] = ['type' => 'string'];
 
     $process =& $migration['process'];
 
