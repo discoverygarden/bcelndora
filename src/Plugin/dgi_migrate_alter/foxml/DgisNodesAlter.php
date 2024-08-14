@@ -190,6 +190,9 @@ EOI
       'plugin' => 'null_coalesce'
     ];
 
+    $process['field_remote_media_url'] = $process['field_ismn'];
+    $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"]';
+
     $to_remove = [
       ['field_version_identifier'],
       ['field_resource_publication_statu'],
