@@ -61,12 +61,6 @@ process:
     - plugin: dgi_migrate.method
       method: getFileUri
     - plugin: foxml.parse
-  _models:
-    - plugin: dgi_migrate.method
-      source: '@_node_foxml_parsed'
-      method: models
-    - plugin: skip_on_empty
-      method: row
   _mads_xpath:
     - plugin: dgi_migrate.subindex
       index: 'MADS'
@@ -242,7 +236,7 @@ process:
     - plugin: concat
       delimiter: '/'
     - plugin: dgi_migrate_edtf_validator
-      missing_behavior: skip_process # TODO: change this to skip_row; just keeping as skip_process to facilitate development with the current sample FOXML I have.
+      missing_behavior: skip_row
   _mads_note_type_history:
     - << : *base_mads_node
       query: 'mads:note[@type="history"]'
@@ -315,8 +309,6 @@ process:
       no_stub: true
     - plugin: skip_on_empty
       method: process
-    
-  # Cannot test these until more complete test foxml is made:
   field_person_email_contact:
     - << : *base_mads_node
       query: 'mads:affiliation/mads:email'
