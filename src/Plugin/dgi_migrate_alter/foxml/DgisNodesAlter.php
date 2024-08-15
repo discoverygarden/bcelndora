@@ -66,7 +66,9 @@ EOI
       return;
     }
 
-    $process['_i8_model_uri'][0]['map']['islandora:sp_remoteMediaCModel'] = 'http://purl.org/coar/resource_type/c_12ce';
+
+    $process['_i8_model_uri'][0]['map']['info:fedora/islandora:sp_remoteMediaCModel'] = 'http://purl.org/coar/resource_type/c_12ce';
+    $process['_i8_model_uri'][0]['map']['info:fedora/ir:thesisCModel'] = 'https://schema.org/DigitalDocument';
 
     $process['_resource_type'][0]['query'] = 'mods:typeOfResource[1]';
     $process['_resource_type'][4]['values']['_vid'][0]['default_value'] = 'library_of_congress_resource_typ';
