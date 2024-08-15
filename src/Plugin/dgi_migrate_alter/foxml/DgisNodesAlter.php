@@ -66,7 +66,6 @@ EOI
       return;
     }
 
-
     $process['_i8_model_uri'][0]['map']['info:fedora/islandora:sp_remoteMediaCModel'] = 'http://purl.org/coar/resource_type/c_12ce';
     $process['_i8_model_uri'][0]['map']['info:fedora/ir:thesisCModel'] = 'https://schema.org/DigitalDocument';
 
@@ -190,10 +189,6 @@ EOI
       'plugin' => 'null_coalesce',
     ];
 
-    $process['field_publication_genre'][3] = [
-      'plugin' => 'single_value'
-    ];
-
     $process['_rights_statement'] = $process['_resource_type'];
     $process['_rights_statement'][0]['query'] = 'mods:accessCondition[@type="rights statement"]';
     $process['_rights_statement'][4]['values']['_vid'][0]['default_value'] = 'rights_statements';
@@ -208,6 +203,10 @@ EOI
       '@_unspecified_rights_statement',
     ];
 
+    $process['field_publication_genre'][3] = [
+      'plugin' => 'single_value',
+    ];
+
     array_splice($process['field_publication_genre'], 4, 0, [
       [
         'plugin' => 'callback',
@@ -219,7 +218,7 @@ EOI
     ]);
 
     $process['field_publication_title'][3] = [
-      'plugin' => 'single_value'
+      'plugin' => 'single_value',
     ];
 
     array_splice($process['field_publication_title'], 4, 0, [
