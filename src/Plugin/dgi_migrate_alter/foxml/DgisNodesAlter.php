@@ -74,6 +74,13 @@ EOI
 
     $process['field_peer_review_status'] = $process['field_ark'];
     $process['field_peer_review_status'][0]['query'] = 'mods:note[@displayLabel="Peer Reviewed"]';
+    $process['field_peer_review_status'][] = [
+      'plugin' => 'static_map',
+      'map' => [
+        'Yes' => 'Peer Reviewed',
+      ],
+      'default_value' => NULL,
+    ];
 
     $process['field_description'][0]['query'] = 'mods:abstract[not(@displayLabel)]';
 
@@ -138,10 +145,6 @@ EOI
         'plugin' => 'flatten',
       ],
       [
-        'plugin' => 'dgi_migrate.process.log',
-        'template' => 'Linked Agent: :value',
-      ],
-      [
         'plugin' => 'migration_lookup',
         'migration' => 'dgis_stub_terms_person',
         'stub_id' => 'dgis_stub_terms_person',
@@ -189,6 +192,34 @@ EOI
     $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
       'plugin' => 'null_coalesce',
     ];
+
+    $process['field_publication_genre'][3] = [
+      'plugin' => 'single_value'
+    ];
+
+    array_splice($process['field_publication_genre'], 4, 0, [
+      [
+        'plugin' => 'callback',
+        'callable' => 'array_filter',
+      ],
+      [
+        'plugin' => 'null_coalesce',
+      ],
+    ]);
+
+    $process['field_publication_title'][3] = [
+      'plugin' => 'single_value'
+    ];
+
+    array_splice($process['field_publication_title'], 4, 0, [
+      [
+        'plugin' => 'callback',
+        'callable' => 'array_filter',
+      ],
+      [
+        'plugin' => 'null_coalesce',
+      ],
+    ]);
 
     $process['field_remote_media_url'] = $process['field_ismn'];
     $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"]';
