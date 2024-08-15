@@ -104,13 +104,8 @@ EOI
     $values = &$process['field_linked_agent'][1]['values'];
     unset($values['target_id']);
 
-    $values['_culture_lookup'] = $values['_affiliation_lookup'];
-    $values['_culture_lookup'][0]['query'] = 'normalize-space(mods:namePart[@type="culture"][normalize-space()])';
-    $values['_culture_lookup'][2]['migration'] = 'bcelndora_stub_terms_culture';
-    $values['_culture_lookup'][2]['stub_id'] = 'bcelndora_stub_terms_culture';
-
-    $values['_culture'] = $values['_affiliation'];
-    $values['_culture'][0]['source'] = '_culture_lookup';
+    $values['_culture'] = $values['_family_name'];
+    $values['_culture'][0]['query'] = 'normalize-space(mods:namePart[@type="culture"][normalize-space()])';
 
     $values['_alt_name'] = $values['_family_name'];
     $values['_alt_name'][0]['query'] = 'normalize-space(mods:alternativeName[normalize-space()])';
@@ -197,6 +192,20 @@ EOI
 
     $process['field_publication_genre'][3] = [
       'plugin' => 'single_value'
+    ];
+
+    $process['_rights_statement'] = $process['_resource_type'];
+    $process['_rights_statement'][0]['query'] = 'mods:accessCondition[@type="rights statement"]';
+    $process['_rights_statement'][4]['values']['_vid'][0]['default_value'] = 'rights_statements';
+
+    $process['_unspecified_rights_statement'] = $process['_unspecified_resource_type'];
+    $process['_unspecified_rights_statement'][1]['use_as_key'] = '@_rights_statement';
+    $process['_unspecified_rights_statement'][2]['values']['_vid'][0]['default_value'] = 'rights_statements';
+
+    $process['field_rights_statement'] = $process['field_resource_type'];
+    $process['field_rights_statement'][0]['source'] = [
+      '@_rights_statement',
+      '@_unspecified_rights_statement',
     ];
 
     array_splice($process['field_publication_genre'], 4, 0, [
