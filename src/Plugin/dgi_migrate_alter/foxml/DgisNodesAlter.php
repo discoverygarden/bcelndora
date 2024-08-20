@@ -234,6 +234,11 @@ EOI
     $process['field_remote_media_url'] = $process['field_ismn'];
     $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"]';
 
+    $process['field_publication_number'][0]['query'] = 'mods:relatedItem[@type="host"]/mods:part/mods:detail[@type="issue"]/mods:number';
+
+    $process['field_extent_first_page'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:start';
+    $process['field_extent_last_page'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:end';
+
     $to_remove = [
       ['field_version_identifier'],
       ['field_resource_publication_statu'],
@@ -258,6 +263,7 @@ EOI
       ['field_origin_information', 3, 'values', '_field_date_created_start'],
       ['field_origin_information', 3, 'values', '_field_date_created_end'],
       ['field_origin_information', 3, 'values', '_field_date_created_assembled'],
+      ['field_origin_information', 3, 'values', 'field_date_created_backup'],
       ['field_origin_information', 3, 'values', 'field_date_created'],
       ['field_extent_total_pages'],
       ['field_conflict_of_interest'],
