@@ -78,14 +78,14 @@ class DgisOrigFileAlter extends MigrationAlterBase implements MigrationAlterInte
       [
         'plugin' => 'dgi_migrate.method',
         'method' => 'latest',
-      ]
+      ],
     ];
 
-    $position = array_search('_source_dsid', array_keys($process), true);
+    $position = array_search('_source_dsid', array_keys($process), TRUE);
     $process = array_merge(
-      array_slice($process, 0, $position + 1, true),
+      array_slice($process, 0, $position + 1, TRUE),
       $to_insert,
-      array_slice($process, $position + 1, null, true)
+      array_slice($process, $position + 1, NULL, TRUE)
     );
 
     $logger->info('Migration altered for dgis_orig_file.');
