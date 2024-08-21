@@ -234,6 +234,13 @@ EOI
     $process['field_remote_media_url'] = $process['field_ismn'];
     $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"]';
 
+    array_splice($process['field_weight'], 2, 0, [
+      [
+        'plugin' => 'callback',
+        'callable' => 'intval',
+      ],
+    ]);
+
     $to_remove = [
       ['field_version_identifier'],
       ['field_resource_publication_statu'],
