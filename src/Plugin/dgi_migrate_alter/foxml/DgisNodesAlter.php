@@ -69,9 +69,9 @@ EOI
     $process['_i8_model_uri'][0]['map']['info:fedora/islandora:sp_remoteMediaCModel'] = 'http://purl.org/coar/resource_type/c_12ce';
     $process['_i8_model_uri'][0]['map']['info:fedora/ir:thesisCModel'] = 'https://schema.org/DigitalDocument';
 
-    $process['_resource_type'][0]['query'] = 'mods:typeOfResource[1]';
-    $process['_resource_type'][4]['values']['_vid'][0]['default_value'] = 'library_of_congress_resource_typ';
-    $process['_unspecified_resource_type'][2]['values']['_vid'][0]['default_value'] = 'library_of_congress_resource_typ';
+    $process['_resource_type_query'][0]['query'] = 'mods:typeOfResource[1]';
+    $process['_resource_type'][3]['values']['_vid'][0]['default_value'] = 'library_of_congress_resource_typ';
+    $process['_unspecified_resource_type'][4]['values']['_vid'][0]['default_value'] = 'library_of_congress_resource_typ';
 
     $process['field_peer_review_status'] = $process['field_ark'];
     $process['field_peer_review_status'][0]['query'] = 'mods:note[@displayLabel="Peer Reviewed"]';
@@ -234,11 +234,6 @@ EOI
     $process['field_remote_media_url'] = $process['field_ismn'];
     $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"]';
 
-    $process['field_publication_number'][0]['query'] = 'mods:relatedItem[@type="host"]/mods:part/mods:detail[@type="issue"]/mods:number';
-
-    $process['field_extent_first_page'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:start';
-    $process['field_extent_last_page'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:end';
-
     $to_remove = [
       ['field_version_identifier'],
       ['field_resource_publication_statu'],
@@ -263,7 +258,6 @@ EOI
       ['field_origin_information', 3, 'values', '_field_date_created_start'],
       ['field_origin_information', 3, 'values', '_field_date_created_end'],
       ['field_origin_information', 3, 'values', '_field_date_created_assembled'],
-      ['field_origin_information', 3, 'values', 'field_date_created_backup'],
       ['field_origin_information', 3, 'values', 'field_date_created'],
       ['field_extent_total_pages'],
       ['field_conflict_of_interest'],
