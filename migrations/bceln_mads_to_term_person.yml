@@ -184,7 +184,7 @@ process:
       property: nodeValue
   field_identifier_other:
     - << : *base_mads_node
-      query: 'mads:identifier[@type=u1]'
+      query: 'mads:identifier[@type="u1"]'
     - plugin: callback
       callable: iterator_to_array
     - plugin: skip_on_empty
