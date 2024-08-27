@@ -1,0 +1,353 @@
+---
+id: bceln_mads_to_term_person
+label: Create terms in the Person taxonomy.
+migration_group: foxml_to_dgis
+source:
+  plugin: dgi_migrate.source.migration
+  track_changes: true
+  migration: dgis_foxml_files
+  dsf_misc:
+    case_insensitive: &case_insensitive true
+    base_mads_node: &base_mads_node
+      plugin: dgi_migrate.process.xml.context_query
+      missing_behavior: skip_process
+      source: '@_mads_node'
+      xpath: '@_mads_xpath'
+    nested_mads_node: &nested_mads_node
+      plugin: dgi_migrate.process.xml.context_query
+      source: 'parent_value'
+      xpath: 'parent_row/dest/_mads_xpath'
+    generic_term:
+      after: &generic_term_after
+        _auth_value_uri:
+          - << : *nested_mads_node
+            query: 'string(@valueURI)'
+            method: evaluate
+        _auth_source:
+          - << : *nested_mads_node
+            query: 'string(@authority)'
+            method: evaluate
+        _value:
+          - << : *nested_mads_node
+            query: 'normalize-space(.)'
+            method: evaluate
+        actual:
+          - plugin: get
+            source:
+              - '@_auth_source'
+              - '@_auth_value_uri'
+              - '@_value'
+              # XXX: Needs to be provided wherever this is used, corresponding
+              # to the vocab in which to do the things.
+              - '@_vid'
+          - plugin: flatten
+          - plugin: migration_lookup
+            migration: dgis_stub_terms_generic
+            stub_id: dgis_stub_terms_generic
+      extract: &generic_term_extract
+        plugin: dgi_migrate.process.single_extract
+        index: [actual]
+
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: person
+  validate: true
+
+process:
+  _node_foxml_parsed:
+    - plugin: dgi_migrate.load_entity
+      source: fid
+      entity_type: entity:file
+    - plugin: dgi_migrate.method
+      method: getFileUri
+    - plugin: foxml.parse
+  _mads_xpath:
+    - plugin: dgi_migrate.subindex
+      index: 'MADS'
+      source: '@_node_foxml_parsed'
+      missing_behavior: skip_row
+    - plugin: dgi_migrate.method
+      method: getUri
+    # XXX: An issue in the passing off of paths/URIs to libxml prevents the use
+    # of "dgi_migrate.process.xml.domfile"
+    - plugin: callback
+      callable: file_get_contents
+    - plugin: dgi_migrate.process.xml.domstring
+      missing_behavior: skip_row
+    - plugin: dgi_migrate.process.xml.xpath
+      namespaces:
+        mads: 'http://www.loc.gov/mads/v2'
+        xsi: 'http://www.w3.org/2001/XMLSchema-instance'
+        xlink: 'http://www.w3.org/1999/xlink'
+  _mads_node:
+    - plugin: skip_on_empty
+      method: row
+      source: '@_mads_xpath'
+    - plugin: dgi_migrate.method
+      method: query
+      args:
+        - '//mads:mads[1]'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: array_shift
+  _family_name:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:authority/mads:name/mads:namePart[@type="family"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  _given_name:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:authority/mads:name/mads:namePart[@type="given"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  _name_date:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:authority/mads:name/mads:namePart[@type="date"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  status:
+    - plugin: dgi_migrate.subproperty
+      source: '@_node_foxml_parsed'
+      property: state
+    - plugin: static_map
+      map:
+        'Active': 1
+        'Inactive': 0
+        'Deleted': 0
+  name:
+    - plugin: get
+      source:
+        - '@_family_name'
+        - '@_given_name'
+        - '@_name_date'
+    - plugin: callback
+      callable: array_filter
+    - plugin: concat
+      delimiter: ', '
+    - plugin: skip_on_empty
+      method: row
+  tid:
+    - plugin: dgi_migrate.process.entity_query
+      entity_type: entity:taxonomy_term
+      static_conditions:
+        - [vid, person]
+      conditions:
+        - [name, '@name']
+    - plugin: skip_on_empty
+      method: process
+    - plugin: flatten
+    - plugin: null_coalesce
+  field_person_preferred_name/family:
+    - plugin: get
+      source: '@_family_name'
+    - plugin: skip_on_empty
+      method: process
+  field_person_preferred_name/given:
+    - plugin: get
+      source: '@_given_name'
+    - plugin: skip_on_empty
+      method: process
+  field_position:
+    - << : *base_mads_node
+      query: 'mads:affiliation/mads:position'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_status:
+    - << : *base_mads_node
+      query: 'mads:note[@type="status"]'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+    - plugin: single_value
+    - plugin: null_coalesce
+  field_field_of_activity:
+    - << : *base_mads_node
+      query: 'mads:fieldOfActivity'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_identifier_other:
+    - << : *base_mads_node
+      query: 'mads:identifier[@type="u1"]'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_person_department:
+    - <<: *base_mads_node
+      query: 'mads:affiliation/mads:organization'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.sub_process
+      process_values: true
+      values:
+        _auth_value_uri:
+          - plugin: default_value
+            default_value: ''
+        _auth_source:
+          - plugin: default_value
+            default_value: ''
+        _vid:
+          - plugin: default_value
+            default_value: discipline
+        <<: *generic_term_after
+    - <<: *generic_term_extract
+  _field_affiliation_date_start:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:affiliation/mads:dateValid[@point="start"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  _field_affiliation_date_end:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:affiliation/mads:dateValid[@point="end"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  field_affiliation_date:
+    - plugin: get
+      source:
+        - '@_field_affiliation_date_start'
+        - '@_field_affiliation_date_end'
+    - plugin: skip_on_empty
+      method: process
+    - plugin: concat
+      delimiter: '/'
+    - plugin: dgi_migrate_edtf_validator
+      missing_behavior: skip_row
+  _mads_note_type_history:
+    - << : *base_mads_node
+      query: 'mads:note[@type="history"]'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  _mads_note_orcid:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:note[not(@type) and starts-with(text(), "https://orcid.org")])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  _mads_note_not_orcid:
+    - << : *base_mads_node
+      query: 'mads:note[not(@type) and not(starts-with(text(), "https://orcid.org"))]'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_description:
+    - plugin: get
+      source:
+        - '@_mads_note_type_history'
+        - '@_mads_note_not_orcid'
+    - plugin: skip_on_empty
+      method: process
+    - plugin: flatten
+    - plugin: callback
+      callable: array_filter
+  field_orcid:
+    - plugin: get
+      source: '@_mads_note_orcid'
+    - plugin: skip_on_empty
+      method: process
+  field_website:
+    - << : *base_mads_node
+      query: 'mads:url'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  # XXX: Unsure how this might handle multiple field_person_alternate_names, or
+  # if it even needs to.
+  field_person_alternate_names/family:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:variant/mads:name/mads:namePart[@type="family"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  field_person_alternate_names/given:
+    - << : *base_mads_node
+      query: 'normalize-space(mads:variant/mads:name/mads:namePart[@type="given"][normalize-space()][1])'
+      method: evaluate
+    - plugin: skip_on_empty
+      method: process
+  field_photograph/0/target_id:
+    - plugin: migration_lookup
+      migration: bceln_person_tn_media
+      source: fid
+      no_stub: true
+    - plugin: skip_on_empty
+      method: process
+  field_person_email_contact:
+    - << : *base_mads_node
+      query: 'mads:affiliation/mads:email'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_phone:
+    - << : *base_mads_node
+      query: 'mads:affiliation/mads:phone'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+  field_address:
+    - << : *base_mads_node
+      query: 'mads:note[@type="address"]'
+    - plugin: callback
+      callable: iterator_to_array
+    - plugin: skip_on_empty
+      method: process
+    - plugin: multiple_values
+    - plugin: dgi_migrate.subproperty
+      property: nodeValue
+
+migration_dependencies:
+  required:
+    - dgis_foxml_files
+    - dgis_stub_terms_generic
+    - bceln_person_tn_media
+dependencies:
+  enforced:
+    module:
+      - dgi_migrate
+      - dgi_migrate_foxml_standard_mods
+      - dgi_migrate_edtf_validator
