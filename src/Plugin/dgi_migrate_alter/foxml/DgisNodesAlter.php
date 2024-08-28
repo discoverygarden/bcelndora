@@ -168,6 +168,7 @@ EOI
       'mods:recordInfo/mods:recordCreationDate[@point="start"] or mods:originInfo/mods:dateCreated[@point="start"]';
     $process['field_record_information'][3]['values']['_field_record_creation_date_end'][0]['query'] =
       'mods:recordInfo/mods:recordCreationDate[@point="end"] or mods:originInfo/mods:dateCreated[@point="end"]';
+
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
       'plugin' => 'single_value',
     ];
@@ -187,20 +188,6 @@ EOI
     ];
     $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
       'plugin' => 'null_coalesce',
-    ];
-
-    $process['_rights_statement'] = $process['_resource_type'];
-    $process['_rights_statement'][0]['query'] = 'mods:accessCondition[@type="rights statement"]';
-    $process['_rights_statement'][4]['values']['_vid'][0]['default_value'] = 'rights_statements';
-
-    $process['_unspecified_rights_statement'] = $process['_unspecified_resource_type'];
-    $process['_unspecified_rights_statement'][1]['use_as_key'] = '@_rights_statement';
-    $process['_unspecified_rights_statement'][2]['values']['_vid'][0]['default_value'] = 'rights_statements';
-
-    $process['field_rights_statement'] = $process['field_resource_type'];
-    $process['field_rights_statement'][0]['source'] = [
-      '@_rights_statement',
-      '@_unspecified_rights_statement',
     ];
 
     $process['field_publication_genre'][3] = [
@@ -269,7 +256,6 @@ EOI
       ['field_note_location'],
       ['field_enumeration_and_chronology'],
       ['field_copyright_holder'],
-      ['field_part'],
     ];
 
     foreach ($to_remove as $path) {
