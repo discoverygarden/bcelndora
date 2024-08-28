@@ -38,8 +38,8 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
       ],
       [
         'plugin' => 'migration_lookup',
-        'migration' => 'bcelndora_stub_terms_culture',
-        'stub_id' => 'bcelndora_stub_terms_culture',
+        'migration' => 'bceln_stub_terms_culture',
+        'stub_id' => 'bceln_stub_terms_culture',
       ],
       [
         'plugin' => 'skip_on_empty',

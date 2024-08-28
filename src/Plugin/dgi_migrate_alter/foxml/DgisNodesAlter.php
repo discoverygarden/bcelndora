@@ -265,7 +265,7 @@ EOI
     if (!isset($migration['migration_dependencies']['required'])) {
       $migration['migration_dependencies']['required'] = [];
     }
-    $migration['migration_dependencies']['required'][] = 'bcelndora_stub_terms_culture';
+    $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_culture';
 
     $logger->info('Migration altered for dgis_nodes.');
   }
