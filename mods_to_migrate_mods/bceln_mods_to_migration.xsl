@@ -606,7 +606,7 @@
 
 
     <!-- testing out date cast and formatting here -->
-    <xsl:template match="mods:dateCreated[normalize-space()] | mods:dateIssued[normalize-space()] | mods:dateCaptured[normalize-space()] | mods:dateModified[normalize-space()] | mods:dateOther[normalize-space()] | mods:copyrightDate[normalize-space()] | mods:recordCreationDate[normalize-space()] | mods:recordChangeDate[normalize-space()]" exclude-result-prefixes="#all">
+    <xsl:template match="mods:dateIssued[normalize-space()] | mods:dateCaptured[normalize-space()] | mods:dateModified[normalize-space()] | mods:dateOther[normalize-space()] | mods:copyrightDate[normalize-space()] | mods:recordCreationDate[normalize-space()] | mods:recordChangeDate[normalize-space()]" exclude-result-prefixes="#all">
 
              <xsl:variable name="element-name" select="local-name()"/>
 
@@ -1469,6 +1469,21 @@
                     </xsl:call-template>
                 </xsl:element>
             </xsl:for-each>
+            <xsl:for-each select="../mods:originInfo/mods:dateCreated">
+                <xsl:if test="../mods:dateIssued">
+                    <recordCreationDate xmlns="http://www.loc.gov/mods/v3">
+                        <xsl:copy-of select="@point"/>
+                        <xsl:variable name="newDate">
+                            <xsl:call-template name="format-dates">
+                                <xsl:with-param name="date-value" select="normalize-space(.)"/>
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:call-template name="qualifier">
+                            <xsl:with-param name="qual-date" select="normalize-space($newDate)"/>
+                        </xsl:call-template>
+                    </recordCreationDate>
+                </xsl:if>
+            </xsl:for-each>
             <xsl:for-each select="mods:recordChangeDate">
                 <xsl:variable name="element-name" select="local-name()"/>
                 <xsl:element name="{$element-name}" xmlns="http://www.loc.gov/mods/v3">
@@ -1534,6 +1549,16 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <namePart type="family" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each>
+        <xsl:for-each select="mods:namePart[@type='given']">
+            <xsl:choose>
+                <xsl:when test="not(../mods:namePart[@type='family'])">
+                    <namePart xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
+                </xsl:when>
+                <xsl:otherwise>
+                    <namePart type="given" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
