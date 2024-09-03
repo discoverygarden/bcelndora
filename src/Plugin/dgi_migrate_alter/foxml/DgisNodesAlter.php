@@ -261,7 +261,7 @@ EOI
     $process['field_extent_last_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:end';
 
     $process['_use_license_query'][0]['query'] =
-      'mods:accessCondition[@type="use and reproduction" or @type="Use and Reproduction][@displayLabe="Creative Commons license" or @displayLabel="Creative Commons license"]';
+      'mods:accessCondition[@type="use and reproduction" or @type="Use and Reproduction"][@displayLabe="Creative Commons license" or @displayLabel="Creative Commons license"]';
 
     $process['field_remote_media_url'] = $process['field_ismn'];
     $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"]';
