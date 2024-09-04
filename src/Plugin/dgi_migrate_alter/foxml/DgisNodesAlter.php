@@ -100,96 +100,17 @@ EOI
     $process['field_keywords'] = $process['field_form'];
     $process['field_keywords'][0]['query'] = 'mods:note[@displayLabel="keywords"]';
 
-    $values = &$process['field_linked_agent'][1]['values'];
-    unset($values['target_id']);
+    $personValues = &$process['field_linked_agent'][1]['values'];
+    $this->processPersonValues($personValues);
 
-    $values['_culture'] = $values['_family_name'];
-    $values['_culture'][0]['query'] = 'normalize-space(mods:namePart[@type="culture"][normalize-space()])';
-
-    $values['_institution'] = $values['_family_name'];
-    $values['_institution'][0]['query'] = 'normalize-space(mods:affiliation[normalize-space()])';
-
-    $values['_alt_name'] = $values['_family_name'];
-    $values['_alt_name'][0]['query'] = 'normalize-space(mods:alternativeName[normalize-space()])';
-
-    $values['_description'] = $values['_family_name'];
-    $values['_description'][0]['query'] = 'normalize-space(mods:description[normalize-space()][1])';
-
-    $values['_other_id'] = $values['_family_name'];
-    $values['_other_id'][0]['query'] = 'normalize-space(mods:nameIdentifier[not(@type)][normalize-space()][1])';
-
-    $values['_orcid'] = $values['_family_name'];
-    $values['_orcid'][0]['query'] = 'normalize-space(mods:nameIdentifier[@type="orcid"][normalize-space()][1])';
-
-    $values['target_id'] = [
-      [
-        'plugin' => 'get',
-        'source' => [
-          '@_authority',
-          '@_value_uri',
-          '@_untyped_names',
-          '@_given_name',
-          '@_family_name',
-          '@_date_name',
-          '@_display_form',
-          '@_affiliation',
-          '@_culture',
-          '@_institution',
-          '@_alt_name',
-          '@_description',
-          '@_other_id',
-          '@_orcid',
-        ],
-      ],
-      [
-        'plugin' => 'flatten',
-      ],
-      [
-        'plugin' => 'migration_lookup',
-        'migration' => 'dgis_stub_terms_person',
-        'stub_id' => 'dgis_stub_terms_person',
-      ],
-      [
-        'plugin' => 'skip_on_empty',
-        'method' => 'row',
-      ],
-    ];
-
-    $process['field_subject_name_person'] = $process['field_linked_agent'];
-    $process['field_subject_name_person'][0]['query'] = 'mods:subject/mods:name[@type="personal"]';
+    $subjectPersonValues = &$process['field_subject_name_person'][4]['values'];
+    $this->processPersonValues($subjectPersonValues);
 
     $orgValues = &$process['field_organizations'][1]['values'];
-    unset($orgValues['target_id']);
+    $this->processOrganizationValues($orgValues);
 
-    $orgValues['_institution'] = $orgValues['_date_name'];
-    $orgValues['_institution'][0]['query'] = 'normalize-space(mods:affiliation[normalize-space()])';
-
-    $orgValues['target_id'] = [
-      [
-        'plugin' => 'get',
-        'source' => [
-          '@_authority',
-          '@_value_uri',
-          '@_untyped_names',
-          '@_date_name',
-          '@_display_form',
-          '@_affiliation',
-          '@_institution',
-        ],
-      ],
-      [
-        'plugin' => 'flatten',
-      ],
-      [
-        'plugin' => 'migration_lookup',
-        'migration' => 'dgis_stub_terms_corporate_body',
-        'stub_id' => 'dgis_stub_terms_corporate_body',
-      ],
-      [
-        'plugin' => 'skip_on_empty',
-        'method' => 'row',
-      ],
-    ];
+    $subjectOrgValues = &$process['field_subject_name_organization'][4]['values'];
+    $this->processOrganizationValues($subjectOrgValues);
 
     $process['field_hierarchical_geographic_su'][3]['values']['field_state']['0']['query'] =
       'mods:subject/mods:hierarchicalGeographic/mods:state | mods:subject/mods:hierarchicalGeographic/mods:province';
@@ -314,6 +235,108 @@ EOI
     $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_institution';
 
     $logger->info('Migration altered for dgis_nodes.');
+  }
+
+  /**
+   * Process the person values.
+   *
+   * @param array $values
+   *   The values to process.
+   */
+  private function processPersonValues(array &$values): void {
+    unset($values['target_id']);
+
+    $values['_culture'] = $values['_family_name'];
+    $values['_culture'][0]['query'] = 'normalize-space(mods:namePart[@type="culture"][normalize-space()])';
+
+    $values['_institution'] = $values['_family_name'];
+    $values['_institution'][0]['query'] = 'normalize-space(mods:affiliation[normalize-space()])';
+
+    $values['_alt_name'] = $values['_family_name'];
+    $values['_alt_name'][0]['query'] = 'normalize-space(mods:alternativeName[normalize-space()])';
+
+    $values['_description'] = $values['_family_name'];
+    $values['_description'][0]['query'] = 'normalize-space(mods:description[normalize-space()][1])';
+
+    $values['_other_id'] = $values['_family_name'];
+    $values['_other_id'][0]['query'] = 'normalize-space(mods:nameIdentifier[not(@type)][normalize-space()][1])';
+
+    $values['_orcid'] = $values['_family_name'];
+    $values['_orcid'][0]['query'] = 'normalize-space(mods:nameIdentifier[@type="orcid"][normalize-space()][1])';
+
+    $values['target_id'] = [
+      [
+        'plugin' => 'get',
+        'source' => [
+          '@_authority',
+          '@_value_uri',
+          '@_untyped_names',
+          '@_given_name',
+          '@_family_name',
+          '@_date_name',
+          '@_display_form',
+          '@_affiliation',
+          '@_culture',
+          '@_institution',
+          '@_alt_name',
+          '@_description',
+          '@_other_id',
+          '@_orcid',
+        ],
+      ],
+      [
+        'plugin' => 'flatten',
+      ],
+      [
+        'plugin' => 'migration_lookup',
+        'migration' => 'dgis_stub_terms_person',
+        'stub_id' => 'dgis_stub_terms_person',
+      ],
+      [
+        'plugin' => 'skip_on_empty',
+        'method' => 'row',
+      ],
+    ];
+  }
+
+  /**
+   * Process the organization values.
+   *
+   * @param array $values
+   *   The values to process.
+   */
+  private function processOrganizationValues(array &$values): void {
+    unset($values['target_id']);
+
+    $values['_institution'] = $values['_date_name'];
+    $values['_institution'][0]['query'] = 'normalize-space(mods:affiliation[normalize-space()])';
+
+    $values['target_id'] = [
+      [
+        'plugin' => 'get',
+        'source' => [
+          '@_authority',
+          '@_value_uri',
+          '@_untyped_names',
+          '@_date_name',
+          '@_display_form',
+          '@_affiliation',
+          '@_institution',
+        ],
+      ],
+      [
+        'plugin' => 'flatten',
+      ],
+      [
+        'plugin' => 'migration_lookup',
+        'migration' => 'dgis_stub_terms_corporate_body',
+        'stub_id' => 'dgis_stub_terms_corporate_body',
+      ],
+      [
+        'plugin' => 'skip_on_empty',
+        'method' => 'row',
+      ],
+    ];
   }
 
 }

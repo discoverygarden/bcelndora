@@ -27,7 +27,7 @@ class DgisStubTermsCorporateBodyAlter extends MigrationAlterBase implements Migr
 
     $process =& $migration['process'];
 
-    $process['field_affiliation'] = [
+    $process['field_corporate_body_affiliation'] = [
       [
         'plugin' => 'get',
         'source' => 'institution_tid',
@@ -47,6 +47,7 @@ class DgisStubTermsCorporateBodyAlter extends MigrationAlterBase implements Migr
       $migration['migration_dependencies']['required'] = [];
     }
     $migration['migration_dependencies']['required'][] = 'bcelndora_stub_terms_culture';
+    $migration['migration_dependencies']['required'][] = 'bcelndora_stub_terms_institution';
 
     $logger->info('Migration altered for dgis_stub_terms_person.');
   }

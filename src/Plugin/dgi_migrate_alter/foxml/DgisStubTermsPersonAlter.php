@@ -48,7 +48,7 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
       ],
     ];
 
-    $process['field_affiliation'] = [
+    $process['field_person_affiliation'] = [
       [
         'plugin' => 'get',
         'source' => 'institution_tid',
