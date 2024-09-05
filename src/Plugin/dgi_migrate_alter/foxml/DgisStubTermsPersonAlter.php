@@ -111,8 +111,8 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
     if (!isset($migration['migration_dependencies']['required'])) {
       $migration['migration_dependencies']['required'] = [];
     }
-    $migration['migration_dependencies']['required'][] = 'bcelndora_stub_terms_culture';
-    $migration['migration_dependencies']['required'][] = 'bcelndora_stub_terms_institution';
+    $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_culture';
+    $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_institution';
 
     $logger->info('Migration altered for dgis_stub_terms_person.');
   }
