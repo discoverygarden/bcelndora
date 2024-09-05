@@ -25,7 +25,8 @@ class DgisStubTermsAffiliateAlter extends MigrationAlterBase implements Migratio
 
     $process =& $migration['process'];
 
-    $process['tid'][0]['source'][] = '@_blank';
+    // Shouldn't be needed anymore, but keep this around as a reminder.
+    // $process['tid'][0]['source'][] = '@_blank';
 
     $logger->info('Migration altered for dgis_stub_terms_affiliate.');
   }

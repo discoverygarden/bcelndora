@@ -231,6 +231,7 @@ EOI
     if (!isset($migration['migration_dependencies']['required'])) {
       $migration['migration_dependencies']['required'] = [];
     }
+    unset($migration['migration_dependencies']['required']['bceln_stub_terms_affiliate']);
     $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_culture';
     $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_institution';
 
@@ -264,6 +265,9 @@ EOI
     $values['_orcid'] = $values['_family_name'];
     $values['_orcid'][0]['query'] = 'normalize-space(mods:nameIdentifier[@type="orcid"][normalize-space()][1])';
 
+    unset($values['_affiliation_lookup']);
+    unset($values['_affiliation']);
+
     $values['target_id'] = [
       [
         'plugin' => 'get',
@@ -275,7 +279,6 @@ EOI
           '@_family_name',
           '@_date_name',
           '@_display_form',
-          '@_affiliation',
           '@_culture',
           '@_institution',
           '@_alt_name',
@@ -311,6 +314,9 @@ EOI
     $values['_institution'] = $values['_date_name'];
     $values['_institution'][0]['query'] = 'normalize-space(mods:affiliation[normalize-space()])';
 
+    unset($values['_affiliation_lookup']);
+    unset($values['_affiliation']);
+
     $values['target_id'] = [
       [
         'plugin' => 'get',
@@ -320,7 +326,6 @@ EOI
           '@_untyped_names',
           '@_date_name',
           '@_display_form',
-          '@_affiliation',
           '@_institution',
         ],
       ],
