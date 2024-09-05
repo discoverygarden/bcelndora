@@ -23,8 +23,8 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
   public function alter(array &$migration) {
     $logger = \Drupal::logger('bcelndora');
 
-    $migration['source']['ids']['culture_tid'] = ['type' => 'string'];
-    $migration['source']['ids']['institution_tid'] = ['type' => 'string'];
+    $migration['source']['ids']['culture'] = ['type' => 'string'];
+    $migration['source']['ids']['institution'] = ['type' => 'string'];
     $migration['source']['ids']['alt_name'] = ['type' => 'string'];
     $migration['source']['ids']['description'] = ['type' => 'string_long'];
     $migration['source']['ids']['other_id'] = ['type' => 'string'];
@@ -35,7 +35,7 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
     $process['field_culture'] = [
       [
         'plugin' => 'get',
-        'source' => 'culture_tid',
+        'source' => 'culture',
       ],
       [
         'plugin' => 'migration_lookup',
@@ -51,7 +51,7 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
     $process['field_person_affiliation'] = [
       [
         'plugin' => 'get',
-        'source' => 'institution_tid',
+        'source' => 'institution',
       ],
       [
         'plugin' => 'migration_lookup',

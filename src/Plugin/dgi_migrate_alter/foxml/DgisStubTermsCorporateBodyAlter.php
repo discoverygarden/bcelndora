@@ -23,14 +23,14 @@ class DgisStubTermsCorporateBodyAlter extends MigrationAlterBase implements Migr
   public function alter(array &$migration) {
     $logger = \Drupal::logger('bcelndora');
 
-    $migration['source']['ids']['institution_tid'] = ['type' => 'string'];
+    $migration['source']['ids']['institution'] = ['type' => 'string'];
 
     $process =& $migration['process'];
 
     $process['field_corporate_body_affiliation'] = [
       [
         'plugin' => 'get',
-        'source' => 'institution_tid',
+        'source' => 'institution',
       ],
       [
         'plugin' => 'migration_lookup',
