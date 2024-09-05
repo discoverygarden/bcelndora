@@ -23,6 +23,7 @@ class DgisStubTermsCorporateBodyAlter extends MigrationAlterBase implements Migr
   public function alter(array &$migration) {
     $logger = \Drupal::logger('bcelndora');
 
+    unset($migration['source']['ids']['affiliation_tid']);
     $migration['source']['ids']['institution'] = ['type' => 'string'];
 
     $process =& $migration['process'];
@@ -42,6 +43,8 @@ class DgisStubTermsCorporateBodyAlter extends MigrationAlterBase implements Migr
         'method' => 'process',
       ],
     ];
+
+    unset($process['field_relationship']);
 
     if (!isset($migration['migration_dependencies']['required'])) {
       $migration['migration_dependencies']['required'] = [];
