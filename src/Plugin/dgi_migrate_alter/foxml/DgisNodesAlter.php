@@ -386,11 +386,6 @@ EOI
         ],
         'default_value' => NULL,
       ],
-      [
-        'plugin' => 'dgi_migrate.process.log',
-        'template' => 'Policy status :value',
-        'level' => 4,
-      ],
     ];
     // XXX: Unset so it gets re-keyed after the internal fields are made.
     unset($process['status']);
