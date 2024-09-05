@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Drupal\bcelndora\Plugin\dgi_migrate_alter\foxml;
 
 use Drupal\dgi_migrate_alter\Plugin\MigrationAlterBase;
@@ -16,14 +15,12 @@ use Drupal\dgi_migrate_alter\Plugin\MigrationAlterInterface;
  *   migration_id = "dgis_stub_terms_affiliate"
  * )
  */
-class DgisStubTermsAffiliateAlter extends MigrationAlterBase implements MigrationAlterInterface
-{
+class DgisStubTermsAffiliateAlter extends MigrationAlterBase implements MigrationAlterInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$migration)
-  {
+  public function alter(array &$migration) {
     $logger = \Drupal::logger('bcelndora');
 
     $process =& $migration['process'];
