@@ -33,6 +33,9 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
 
     $process =& $migration['process'];
 
+    unset($process['name'][0]['map']['family']);
+    unset($process['name'][0]['map']['given']);
+
     $process['field_culture'] = [
       [
         'plugin' => 'get',

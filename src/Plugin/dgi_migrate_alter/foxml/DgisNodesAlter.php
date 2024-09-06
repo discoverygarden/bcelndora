@@ -191,6 +191,9 @@ EOI
     $process['field_remote_media_url'] = $process['field_ismn'];
     $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"]';
 
+    $process['field_physical_location'] = $process['field_note_location'];
+    $process['field_physical_location'][0]['query'] = 'mods:location/mods:physicalLocation';
+
     $to_remove = [
       ['field_version_identifier'],
       ['field_resource_publication_statu'],
