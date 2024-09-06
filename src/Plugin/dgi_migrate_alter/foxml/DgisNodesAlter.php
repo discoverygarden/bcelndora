@@ -194,6 +194,8 @@ EOI
     $process['field_physical_location'] = $process['field_note_location'];
     $process['field_physical_location'][0]['query'] = 'mods:location/mods:physicalLocation';
 
+    unset($process['field_note'][5]);
+
     $to_remove = [
       ['field_version_identifier'],
       ['field_resource_publication_statu'],
