@@ -94,6 +94,10 @@ EOI
     $process['field_identifier_uri'] = $process['field_publication_url'];
     $process['field_identifier_uri'][0]['query'] = 'mods:identifier[@type="uri"]';
 
+    unset($process['field_url/uri']);
+    $process['field_url'] = $process['field_publication_url'];
+    $process['field_url'][0]['query'] = 'mods:location/mods:url[normalize-space()]';
+
     $process['field_issn'] = $process['field_ismn'];
     $process['field_issn'][0]['query'] = 'mods:identifier[@type="issn"]';
 
@@ -176,7 +180,7 @@ EOI
     $process['field_geographic_code'][0]['query'] = 'mods:subject/mods:geographicCode';
 
     $process['field_publication_number'] = $process['field_item_identifier'];
-    $process['field_publication_number'][0]['query'] = 'mods:relatedItem[@type="host"]/mods:part/mods:detail[@type="issue"]/mods:number';
+    $process['field_publication_number'][0]['query'] = 'mods:relatedItem[@type="host"]/mods:part/mods:detail[@type="issue"]';
 
     $process['field_extent_first_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:start';
     $process['field_extent_last_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:end';
