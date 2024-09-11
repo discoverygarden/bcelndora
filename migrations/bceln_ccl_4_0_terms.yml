@@ -28,6 +28,7 @@ process:
       method: process
   name: name
   vid: vid
+  field_url: url
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: creative_commons_licenses_4_0
