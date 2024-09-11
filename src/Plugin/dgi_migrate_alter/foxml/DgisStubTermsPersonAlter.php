@@ -23,7 +23,9 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
   public function alter(array &$migration) {
     $logger = \Drupal::logger('bcelndora');
 
-    $migration['source']['ids']['culture_tid'] = ['type' => 'string'];
+    unset($migration['source']['ids']['affiliation_tid']);
+    $migration['source']['ids']['culture'] = ['type' => 'string'];
+    $migration['source']['ids']['institution'] = ['type' => 'string'];
     $migration['source']['ids']['alt_name'] = ['type' => 'string'];
     $migration['source']['ids']['description'] = ['type' => 'string_long'];
     $migration['source']['ids']['other_id'] = ['type' => 'string'];
@@ -34,12 +36,28 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
     $process['field_culture'] = [
       [
         'plugin' => 'get',
-        'source' => 'culture_tid',
+        'source' => 'culture',
       ],
       [
         'plugin' => 'migration_lookup',
         'migration' => 'bceln_stub_terms_culture',
         'stub_id' => 'bceln_stub_terms_culture',
+      ],
+      [
+        'plugin' => 'skip_on_empty',
+        'method' => 'process',
+      ],
+    ];
+
+    $process['field_person_affiliation'] = [
+      [
+        'plugin' => 'get',
+        'source' => 'institution',
+      ],
+      [
+        'plugin' => 'migration_lookup',
+        'migration' => 'bceln_stub_terms_institution',
+        'stub_id' => 'bceln_stub_terms_institution',
       ],
       [
         'plugin' => 'skip_on_empty',
@@ -91,10 +109,13 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
       ],
     ];
 
+    unset($process['field_relationship']);
+
     if (!isset($migration['migration_dependencies']['required'])) {
       $migration['migration_dependencies']['required'] = [];
     }
-    $migration['migration_dependencies']['required'][] = 'bcelndora_stub_terms_culture';
+    $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_culture';
+    $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_institution';
 
     $logger->info('Migration altered for dgis_stub_terms_person.');
   }

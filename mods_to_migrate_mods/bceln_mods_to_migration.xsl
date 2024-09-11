@@ -15,7 +15,28 @@
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
     
     <xsl:strip-space elements="*"/>
-    
+
+        <xsl:template match="/*">
+        <!-- Manually create the root element and add any missing namespaces -->
+        <xsl:element name="{name()}" namespace="{namespace-uri()}">
+            <!-- Always add existing namespaces -->
+            <xsl:copy-of select="namespace::*"/>
+
+            <!-- Add xmlns:etd if missing -->
+            <xsl:if test="not(namespace::*[. = 'http://www.ndltd.org/standards/metadata/etdms/1.0'])">
+                <xsl:namespace name="etd">http://www.ndltd.org/standards/metadata/etdms/1.0</xsl:namespace>
+            </xsl:if>
+
+            <!-- Add xmlns:etd1 if missing -->
+            <xsl:if test="not(namespace::*[. = 'http://www.ndltd.org/standards/metadata/etdms/1-0'])">
+                <xsl:namespace name="etd1">http://www.ndltd.org/standards/metadata/etdms/1-0</xsl:namespace>
+            </xsl:if>
+
+            <!-- Apply templates to attributes and child nodes -->
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:element>
+    </xsl:template>
+  
     <!-- identity transform to copy through all nodes (except those with specific templates modifying them) -->
     <xsl:template match="/" exclude-result-prefixes="#all">
         <xsl:copy>
