@@ -8,12 +8,12 @@
     xmlns:etd="http://www.ndltd.org/standards/metadata/etdms/1.0" xmlns:etd1="http://www.ndltd.org/standards/metadata/etdms/1-0"
     xmlns:fgdc="http://www.fgdc.gov/schemas/metadata/fgdc-std-001-1998.xsd"
     >
-
+    
     <!-- Thies xsl transform the CTDA I7 MODS xml to align with
          the MODS profile supported by the base I7-to-I8 migrate configuration. -->
-
+    
     <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-
+    
     <xsl:strip-space elements="*"/>
 
         <xsl:template match="/*">
@@ -36,25 +36,25 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:element>
     </xsl:template>
-
+  
     <!-- identity transform to copy through all nodes (except those with specific templates modifying them) -->
     <xsl:template match="/" exclude-result-prefixes="#all">
         <xsl:copy>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
-
+    
     <xsl:template match="* | @*" exclude-result-prefixes="#all">
         <xsl:copy>
             <xsl:apply-templates select="@* | * | text() | comment() | processing-instruction()"/>
         </xsl:copy>
     </xsl:template>
-
+    
     <!-- keep comments and PIs -->
     <xsl:template match="comment() | processing-instruction()">
         <xsl:copy-of select="."/>
     </xsl:template>
-
+    
     <!-- remove empty elements -->
     <xsl:template match="mods:name[not(normalize-space())] | mods:titleInfo[not(normalize-space())] |
         mods:typeOfResource[not(normalize-space())] | mods:tableOfContents[not(normalize-space())] | mods:abstract[not(normalize-space())] |
@@ -63,7 +63,7 @@
         mods:originInfo/*[(not(normalize-space()) and not(descendant::*[normalize-space()]))] |
         mods:targetAudience[not(normalize-space())] | mods:note[not(normalize-space())] | mods:relatedItem[(not(normalize-space()))] | mods:location[(not(normalize-space()))] |
         mods:accessCondition[(not(normalize-space()))] | mods:recordInfo[not(normalize-space())]"/>
-
+    
     <!-- CONCATENATE nonSort + title + subTitle-->
     <xsl:template match="mods:titleInfo">
         <titleInfo xmlns="http://www.loc.gov/mods/v3">
@@ -84,7 +84,7 @@
             </xsl:if>
         </titleInfo>
     </xsl:template>
-
+    
     <xsl:template match="mods:name">
         <xsl:choose>
             <xsl:when test="not(@type)">
@@ -134,7 +134,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <!-- STRIP ATTRIBUTES + UPDATE SOME VOCABULARY -->
     <xsl:template match="mods:typeOfResource">
         <xsl:copy>
@@ -150,7 +150,7 @@
             </xsl:choose>
         </xsl:copy>
     </xsl:template>
-
+    
     <xsl:template match="mods:typeOfResource[2]">
         <xsl:choose>
             <xsl:when test="../mods:typeOfResource"/>
@@ -161,7 +161,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:extension">
         <xsl:variable name="kingdom"><xsl:value-of select="normalize-space(mods:kingdom)"/></xsl:variable>
         <xsl:variable name="class"><xsl:value-of select="normalize-space(mods:class)"/></xsl:variable>
@@ -172,7 +172,7 @@
         <xsl:variable name="habitat"><xsl:value-of select="normalize-space(mods:habitat)"/></xsl:variable>
         <xsl:variable name="BoxName"><xsl:value-of select="normalize-space(mods:BoxName)"/></xsl:variable>
         <xsl:variable name="BoxNumber"><xsl:value-of select="normalize-space(mods:BoxNumber)"/></xsl:variable>
-
+        
         <xsl:choose>
             <xsl:when test="etd:degree">
                 <xsl:for-each select="etd:degree">
@@ -228,7 +228,7 @@
             </xsl:when>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:abstract">
         <xsl:choose>
             <xsl:when test="@displayLabel='academic'">
@@ -267,11 +267,11 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:tableofcontents">
         <tableOfContents xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></tableOfContents>
     </xsl:template>
-
+    
     <xsl:template match="mods:targetAudience">
         <xsl:choose>
             <xsl:when test="starts-with(.,'Beginner')">
@@ -282,7 +282,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:language">
         <xsl:choose>
             <xsl:when test="contains(., ';')">
@@ -322,7 +322,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:identifier">
         <xsl:choose>
             <xsl:when test="not(@type)">
@@ -371,7 +371,7 @@
                 </xsl:choose>
             </xsl:when>
             <xsl:when test="@type=('lcc','lccn')">
-                <classification type='lcc' xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></classification>
+                <classification authority='lcc' xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></classification>
             </xsl:when>
             <xsl:when test="@type='uri'">
                 <xsl:choose>
@@ -393,7 +393,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:subject">
         <xsl:variable name="subAuth">
             <xsl:call-template name="newAuth"/>
@@ -548,7 +548,7 @@
     </xsl:choose>
         </xsl:for-each>
     </xsl:template>
-
+    
     <xsl:template match="mods:place">
         <xsl:choose>
             <xsl:when test="not(mods:placeTerm)">
@@ -571,7 +571,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:dateCreated">
         <xsl:choose>
             <xsl:when test="../mods:dateIssued">
@@ -603,29 +603,29 @@
         </xsl:choose>
     </xsl:template>
 
-
+    
     <!-- testing out date cast and formatting here -->
     <xsl:template match="mods:dateIssued[normalize-space()] | mods:dateCaptured[normalize-space()] | mods:dateModified[normalize-space()] | mods:dateOther[normalize-space()] | mods:copyrightDate[normalize-space()] | mods:recordCreationDate[normalize-space()] | mods:recordChangeDate[normalize-space()]" exclude-result-prefixes="#all">
 
              <xsl:variable name="element-name" select="local-name()"/>
-
+             
              <xsl:element name="{$element-name}" xmlns="http://www.loc.gov/mods/v3">
                  <xsl:copy-of select="@point"/>
-
+                 
                  <xsl:variable name="newDate">
                      <xsl:call-template name="format-dates">
                          <xsl:with-param name="date-value" select="normalize-space(.)"/>
                      </xsl:call-template>
                  </xsl:variable>
-
+                 
 
                  <xsl:call-template name="qualifier">
                      <xsl:with-param name="qual-date" select="normalize-space($newDate)"/>
                  </xsl:call-template>
-
+                 
              </xsl:element>
     </xsl:template>
-
+    
     <xsl:template name="format-dates" exclude-result-prefixes="#all">
         <!-- format all valid date values as iso8601 -->
         <xsl:param name="date-value" as="xs:string"/>
@@ -649,69 +649,69 @@
             <xsl:when test="$date-value castable as xs:date">
                 <xsl:value-of select="format-date($date-value cast as xs:date,'[Y0001]-[M01]-[D01]')"/>
             </xsl:when>
-
+            
             <!-- REMOVE VALUE -->
             <!-- Remove non-date values -->
-            <xsl:when test="lower-case($date-value)=('?','n.a.','n.d.','no date','test','unknown','[unknown]')"/>
-
+            <xsl:when test="lower-case($date-value)=('?','n.a.','n.d.','no date','test','unknown','[unknown]')"/>    
+            
             <!-- START WITH ~ -->
-
+            
             <!-- change "~YYY0s" | change to YYYX~ -->
             <xsl:when test="matches($date-value,'^~\d{3}[0]s$')">
                 <xsl:value-of select="concat((substring($date-value,2,3)),'X~')"/>
             </xsl:when>
-
-
+            
+            
             <!-- fix YYYY-YYYY ranges to YYYY/YYYY -->
             <xsl:when test="matches($date-value,'^\d{4}-\d{4}$')">
                 <xsl:value-of select="concat(tokenize($date-value,'-')[1],'/',tokenize($date-value,'-')[2])"/>
             </xsl:when>
-
+            
             <!-- change MM/D/YYYY | change to YYYY-MM-DD -->
             <xsl:when test="matches($date-value,'^\d{2}/\d{1}/\d{4}$')">
                 <xsl:value-of select="concat(tokenize($date-value,'/')[3],'-',tokenize($date-value,'/')[1],'-0',tokenize($date-value,'/')[2])"/>
             </xsl:when>
-
+            
             <!-- change YYYY \-\- MM | change to YYYY-MM -->
             <xsl:when test="matches($date-value,'^\d{4}\s\-\-\s\d{2}$')">
                 <xsl:value-of select="concat(tokenize($date-value,' -- ')[1],'-',tokenize($date-value,' -- ')[2])"/>
             </xsl:when>
-
+            
             <!-- change YYYY-M | change to YYYY-MM -->
             <xsl:when test="matches($date-value,'^\d{4}\-\d{1}$')">
                 <xsl:value-of select="concat(tokenize($date-value,'-')[1],'-0',tokenize($date-value,'-')[2])"/>
             </xsl:when>
-
+            
             <!-- change YYYY-M-D | change to YYYY-MM-DD -->
             <xsl:when test="matches($date-value,'^\d{4}\-\d{1}\-\d{1}$')">
                 <xsl:value-of select="concat(tokenize($date-value,'-')[1],'-0',tokenize($date-value,'-')[2],'-0',tokenize($date-value,'-')[3])"/>
             </xsl:when>
-
+            
             <!-- change YYYY-M-DD | change to YYYY-MM-DD -->
             <xsl:when test="matches($date-value,'^\d{4}\-\d{1}\-\d{2}$')">
                 <xsl:value-of select="concat(tokenize($date-value,'-')[1],'-0',tokenize($date-value,'-')[2],'-',tokenize($date-value,'-')[3])"/>
             </xsl:when>
-
+            
             <!-- change YYYY-MM-D | change to YYYY-MM-DD -->
             <xsl:when test="matches($date-value,'^\d{4}\-\d{2}\-\d{1}$')">
                 <xsl:value-of select="concat(tokenize($date-value,'-')[1],'-',tokenize($date-value,'-')[2],'-0',tokenize($date-value,'-')[3])"/>
             </xsl:when>
-
+            
             <!-- change YYYY/M/DD | change to YYYY-MM-DD -->
             <xsl:when test="matches($date-value,'^\d{4}/\d{1}/\d{2}$')">
                 <xsl:value-of select="concat(tokenize($date-value,'/')[1],'-0',tokenize($date-value,'/')[2],'-',tokenize($date-value,'/')[3])"/>
             </xsl:when>
-
+            
             <!-- change YYYY/MM/DD | change to YYYY-MM-DD -->
             <xsl:when test="matches($date-value,'^\d{4}/\d{2}/\d{2}$')">
                 <xsl:value-of select="concat(tokenize($date-value,'/')[1],'-',tokenize($date-value,'/')[2],'-',tokenize($date-value,'/')[3])"/>
             </xsl:when>
-
+            
             <!-- change YYYY-MM-DD-YYYY-MM-DD | change to YYYY-MM-DD/YYYY-MM-DD -->
             <xsl:when test="matches($date-value,'^\d{4}-\d{2}-\d{2}\-\d{4}-\d{2}-\d{2}$')">
                 <xsl:value-of select="concat(tokenize($date-value,'-')[1],'-',tokenize($date-value,'-')[2],'-',tokenize($date-value,'-')[3],'/',tokenize($date-value,'-')[4],'-',tokenize($date-value,'-')[5],'-',tokenize($date-value,'-')[6])"/>
             </xsl:when>
-
+            
             <!-- change YYMMDD | change to YYYY-MM-DD -->
             <xsl:when test="matches($date-value,'^\d{6}$')">
                 <xsl:value-of select="concat('20',(substring($date-value,1,2)),'-',(substring($date-value,3,2)),'-',(substring($date-value,5,2)))"/>
@@ -721,98 +721,98 @@
             <xsl:when test="matches($date-value,'^\d{8}$')">
                 <xsl:value-of select="concat((substring($date-value,1,4)),'-',(substring($date-value,5,2)),'-',(substring($date-value,7,2)))"/>
             </xsl:when>
-
+            
             <!-- change YYYYMMDDHHMMSS.0 | change to YYYY-MM-DDTHH:MM:SS -->
             <xsl:when test="matches($date-value,'^\d{14}\.0$')">
                 <xsl:value-of select="concat((substring($date-value,1,4)),'-',(substring($date-value,5,2)),'-',(substring($date-value,7,2)),'T',(substring($date-value,9,2)),':',(substring($date-value,11,2)),':',(substring($date-value,13,2)))"/>
             </xsl:when>
-
+            
             <!-- change YYYY- | change to YYYY/.. -->
             <xsl:when test="matches($date-value,'^\d{4}\-$')">
                 <xsl:value-of select="concat((substring($date-value,1,4)),'/..')"/>
             </xsl:when>
-
+            
             <!-- change from "YYYYs" | change to YYYX~ -->
             <xsl:when test="matches($date-value,'^\d{4}s$')">
                 <xsl:value-of select="concat((substring($date-value,1,3)),'X~')"/>
-            </xsl:when>
-
+            </xsl:when> 
+            
             <!-- [DATE] -->
             <!-- change from [YYYY] | change to YYYY~ -->
             <xsl:when test="matches($date-value,'^\[\d{4}\]$')">
                 <xsl:value-of select="concat((substring($date-value,2,4)),'~')"/>
             </xsl:when>
-
+            
             <!-- change from [YYYYs?] | change to YYYX? -->
             <xsl:when test="matches($date-value,'^\[\d{4}s\?\]$')">
                 <xsl:value-of select="concat((substring($date-value,2,3)),'X?')"/>
             </xsl:when>
-
+            
             <!-- change from YYYY. | change to YYYY-->
             <xsl:when test="matches($date-value,'^\d{4}\.$')">
                 <xsl:value-of select="(substring($date-value,1,4))"/>
             </xsl:when>
-
+            
             <!-- change from YYYY..YYYY | change to YYYY/YYYY~ -->
             <xsl:when test="matches($date-value,'^\d{4}\.\.\d{4}$')">
                 <xsl:value-of select="concat((substring($date-value,1,4)),'/',(substring($date-value,7,4)))"/>
             </xsl:when>
-
+            
             <!-- change from after YYYY | change to YYYY/.. -->
             <xsl:when test="matches($date-value,'^after \d{4}$')">
                 <xsl:value-of select="concat((substring($date-value,7,10)),'/..')"/>
             </xsl:when>
-
+            
             <!-- change from before YYYY | change to ../YYYY -->
             <xsl:when test="matches($date-value,'^before \d{4}$')">
                 <xsl:value-of select="concat('../', (substring($date-value,8,10)))"/>
             </xsl:when>
-
+            
             <!-- change from ca. YYYY | change to YYYY~ -->
             <xsl:when test="matches($date-value,'^ca\. \d{4}$')">
                 <xsl:value-of select="concat((substring($date-value,4,7)),'~')"/>
             </xsl:when>
-
+            
             <!-- change from cYYYY | change to YYYY~ -->
             <xsl:when test="matches($date-value,'^c\d{4}$')">
                 <xsl:value-of select="concat((substring($date-value,2,4)),'~')"/>
             </xsl:when>
-
+            
             <!-- change from circa YYYY-YYYY | change to YYYY/YYYY~ -->
             <xsl:when test="matches($date-value,'^circa\s\d{4}-\d{4}$')">
                 <xsl:value-of select="concat((substring($date-value,7,4)),'/',(substring($date-value,12,4)),'~')"/>
             </xsl:when>
-
+            
             <!-- change from "circa YYYYs" | change to YYYX~ -->
             <xsl:when test="matches($date-value,'^circa\s\d{4}s$')">
                 <xsl:value-of select="concat((substring($date-value,7,3)),'X~')"/>
-            </xsl:when>
-
+            </xsl:when> 
+            
             <!-- change from "circa YYYY" | change to YYYX~ -->
             <xsl:when test="matches($date-value,'^circa\s\d{4}$')">
                 <xsl:value-of select="concat((substring($date-value,7,4)),'~')"/>
             </xsl:when>
-
-
+            
+            
             <!-- change from circa YYYY-YYYY | change to YYYY/YYYY~ -->
             <xsl:when test="matches($date-value,'^circa\s\d{4}-\d{4}$')">
                 <xsl:value-of select="concat((substring($date-value,7,4)),'/',(substring($date-value,12,4)),'~')"/>
             </xsl:when>
-
+            
             <!-- change from "YYYY-MM-DDTHH:MM:SSZ" | change to YYYY-MM-DDTHH:MM:SS -->
             <xsl:when test="matches($date-value,'^\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}Z$')">
                 <xsl:value-of select="(substring($date-value,1,19))"/>
             </xsl:when>
-
+            
             <!-- change from "YYYY-MM-DD HH:MM:SS" | change to YYYY-MM-DDTHH:MM:SS -->
             <xsl:when test="matches($date-value,'^\d{4}\-\d{2}\-\d{2}\s\d{2}:\d{2}:\d{2}$')">
                 <xsl:value-of select="concat(tokenize($date-value,' ')[1],'T',tokenize($date-value,' ')[2])"/>
-            </xsl:when>
-
+            </xsl:when> 
+            
             <!-- change from "Summer YYYY" | change to YYYY-22 -->
             <xsl:when test="matches($date-value,'^Summer\s\d{4}$')">
                 <xsl:value-of select="concat(tokenize($date-value,' ')[2],'-22')"/>
-            </xsl:when>
+            </xsl:when> 
 
             <!-- input as: D Month YYYY | change to YYYY-MM-DD -->
             <xsl:when test="matches(lower-case($date-value),'^\d{1}\s(january|february|march|april|may|june|july|august|september|october|november|december)\s\d{4}$')">
@@ -829,7 +829,7 @@
                 <xsl:variable name="year" select="tokenize($date-value,' ')[3]"/>
                 <xsl:value-of select="concat($year,'-',$month,'-',$day)"/>
             </xsl:when>
-
+            
             <!-- input as: month DD, YYYY | change to YYYY-MM-DD -->
             <xsl:when test="matches(lower-case(.),'^(january|february|march|april|may|june|july|august|september|october|november|december)\s\d{2},\s\d{4}$')">
                 <xsl:variable name="month" select="$month-name-to-number/months/month[name[lower-case(.) = lower-case(tokenize($date-value,' ')[1])]]/number"/>
@@ -837,13 +837,13 @@
                 <xsl:variable name="year" select="tokenize($date-value,' ')[3]"/>
                 <xsl:value-of select="concat($year,'-',$month,'-',$day)"/>
             </xsl:when>
-
+            
             <!-- INCLUDE / -->
             <!-- change MM/D/YYYY | change to YYYY-MM-DD -->
             <xsl:when test="matches($date-value,'^\d{2}/\d{1}/\d{4}$')">
                 <xsl:value-of select="concat(tokenize($date-value,'/')[3],'-',tokenize($date-value,'/')[1],'-0',tokenize($date-value,'/')[2])"/>
             </xsl:when>
-
+            
             <!-- TRANSFORM TEXT DATES TO NUMERIC DATES -->
             <!-- input as: 'YYYY month D' | change to YYYY-MM-DD -->
             <xsl:when test="matches(lower-case($date-value),'^\d{4}\s(january|february|march|april|may|june|july|august|september|october|november|december) \d{1}$')">
@@ -852,21 +852,21 @@
                 <xsl:variable name="year" select="tokenize($date-value,' ')[1]"/>
                 <xsl:value-of select="concat($year,'-',$month,'-',$day)"/>
             </xsl:when>
-
+            
             <!-- month YYYY to YYYY-MM -->
             <xsl:when test="matches(lower-case(.),'^(january|february|march|april|may|june|july|august|september|october|november|december)\s\d{4}$')">
                 <xsl:variable name="month" select="$month-name-to-number/months/month[name[lower-case(.) = lower-case(tokenize($date-value,' ')[1])]]/number"/>
                 <xsl:variable name="year" select="tokenize(.,' ')[2]"/>
                 <xsl:value-of select="concat($year,'-',$month)"/>
             </xsl:when>
-
+            
             <xsl:otherwise>
                 <xsl:value-of select="normalize-space(.)"/>
             </xsl:otherwise>
-
+            
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template name="qualifier">
         <xsl:param name="qual-date" as="xs:string"/>
         <xsl:choose>
@@ -875,14 +875,14 @@
                     <xsl:when test="ends-with($qual-date, '~')"><xsl:value-of select="normalize-space($qual-date)"/></xsl:when>
                     <xsl:when test="ends-with($qual-date, '?')"><xsl:value-of select="substring($qual-date, 1, string-length($qual-date) - 1)"/><xsl:text>%</xsl:text></xsl:when>
                     <xsl:otherwise><xsl:value-of select="normalize-space($qual-date)"/><xsl:text>~</xsl:text></xsl:otherwise>
-                </xsl:choose>
+                </xsl:choose>               
             </xsl:when>
             <xsl:when test="lower-case(@qualifier) = 'questionable'">
                 <xsl:choose>
                     <xsl:when test="ends-with($qual-date, '?')"><xsl:value-of select="normalize-space($qual-date)"/></xsl:when>
                     <xsl:when test="ends-with($qual-date, '~')"><xsl:value-of select="substring($qual-date, 1, string-length($qual-date) - 1)"/><xsl:text>%</xsl:text></xsl:when>
                     <xsl:otherwise><xsl:value-of select="normalize-space($qual-date)"/><xsl:text>?</xsl:text></xsl:otherwise>
-                </xsl:choose>
+                </xsl:choose> 
             </xsl:when>
             <xsl:when test="lower-case(@qualifier) = 'before'">
                 <xsl:text>../</xsl:text><xsl:value-of select="normalize-space($qual-date)"/>
@@ -895,20 +895,20 @@
                     <xsl:when test="ends-with($qual-date, '~')"><xsl:value-of select="normalize-space($qual-date)"/></xsl:when>
                     <xsl:when test="ends-with($qual-date, '?')"><xsl:value-of select="substring($qual-date, 1, string-length($qual-date) - 1)"/><xsl:text>%</xsl:text></xsl:when>
                     <xsl:otherwise><xsl:value-of select="normalize-space($qual-date)"/><xsl:text>~</xsl:text></xsl:otherwise>
-                </xsl:choose>
+                </xsl:choose> 
             </xsl:when>
             <xsl:when test="lower-case(@qualifier) = 'inferred'">
                 <xsl:choose>
                     <xsl:when test="ends-with($qual-date, '~')"><xsl:value-of select="normalize-space($qual-date)"/></xsl:when>
                     <xsl:when test="ends-with($qual-date, '?')"><xsl:value-of select="substring($qual-date, 1, string-length($qual-date) - 1)"/><xsl:text>%</xsl:text></xsl:when>
                     <xsl:otherwise><xsl:value-of select="normalize-space($qual-date)"/><xsl:text>~</xsl:text></xsl:otherwise>
-                </xsl:choose>
+                </xsl:choose> 
             </xsl:when>
             <xsl:otherwise><xsl:value-of select="normalize-space($qual-date)"/></xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-
+    
 <!--    <xsl:template match="mods:dateModified">
         <xsl:choose>
             <xsl:when test="contains(., ';')">
@@ -924,17 +924,17 @@
                     </xsl:copy>
                 </xsl:otherwise>
 
-
+            
         </xsl:choose>
     </xsl:template>-->
-
+    
     <xsl:template match="mods:edition">
         <xsl:copy>
             <xsl:copy-of select="* | text()"/>
         </xsl:copy>
     </xsl:template>
-
-
+    
+    
     <xsl:template name="note">
         <xsl:for-each select="mods:note">
             <xsl:choose>
@@ -966,8 +966,8 @@
             <note xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></note>
         </xsl:for-each>
     </xsl:template>
-
-
+    
+    
     <xsl:template match="mods:note">
         <xsl:if test="@type='descriptive'">
             <extension xmlns="http://www.loc.gov/mods/v3">
@@ -1029,7 +1029,7 @@
         </xsl:choose>
     </xsl:template>
 
-
+    
     <xsl:template match="mods:physicalDescription">
         <xsl:for-each select="mods:genre"><genre xmlns="http://www.loc.gov/mods/v3"><xsl:copy-of select="@* | * | text()"/></genre></xsl:for-each>
         <xsl:for-each select="mods:location">
@@ -1048,7 +1048,7 @@
                             <xsl:attribute name="authority"><xsl:value-of select="normalize-space($newAuth)"/></xsl:attribute>
                         </xsl:if>
                         <xsl:value-of select="normalize-space(.)"/>
-                    </xsl:copy>
+                    ac</xsl:copy>
                 </xsl:for-each>
                 <xsl:for-each select="mods:digitalOrigin">
                     <xsl:copy>
@@ -1114,7 +1114,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:reformattingQuality">
         <xsl:choose>
             <xsl:when test="parent::mods:physicalDescription">
@@ -1172,7 +1172,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template name="extent">
         <xsl:for-each select="mods:extent">
             <xsl:copy>
@@ -1199,7 +1199,7 @@
     </xsl:template>
 
     <xsl:template match="mods:internetMediaType"/>
-
+    
     <xsl:template match="mods:relatedItem">
         <xsl:for-each select="mods:name">
             <xsl:choose>
@@ -1301,7 +1301,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:shelfLocator">
         <xsl:choose>
             <xsl:when test="parent::mods:location">
@@ -1318,7 +1318,7 @@
             </xsl:when>
             <xsl:otherwise>
                 <location xmlns="http://www.loc.gov/mods/v3">
-                    <holdingSimple>
+                    <holdingSimple xmlns="http://www.loc.gov/mods/v3">
                         <copyInformation>
                             <shelfLocator><xsl:value-of select="normalize-space(.)"/></shelfLocator>
                         </copyInformation>
@@ -1327,19 +1327,47 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:note_accessCondition_use_and_reproduction">
         <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
     </xsl:template>
-
+    
     <xsl:template match="mods:accessCondition_abstract">
         <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
     </xsl:template>
-
+    
     <xsl:template match="mods:accessCondition">
         <xsl:choose>
             <xsl:when test="starts-with(lower-case(@displayLabel), 'creative')">
-                <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
+                <xsl:choose>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by-nc-nd/2.0/','http://creativecommons.org/licenses/by-nc-nd/2.5/br/','http://creativecommons.org/licenses/by-nc-nd/2.5/ca/','http://creativecommons.org/licenses/by-nc-nd/3.0/','http://creativecommons.org/licenses/by-nc-nd/4.0/','https://creativecommons.org/licenses/by-nc-nd/2.5/ca/','https://creativecommons.org/licenses/by-nc-nd/4.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by-nc-sa/2.5/ca/','http://creativecommons.org/licenses/by-nc-sa/4.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by-nc/2.5/ca/','http://creativecommons.org/licenses/by-nc/2.5/pt/','http://creativecommons.org/licenses/by-nc/3.0/','http://creativecommons.org/licenses/by-nc/4.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by-nd/2.0/ca/','http://creativecommons.org/licenses/by-nd/2.5/ca/','http://creativecommons.org/licenses/by-nd/4.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-NoDerivatives 4.0 International (CC BY-ND 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by-sa/2.0/','http://creativecommons.org/licenses/by-sa/2.5/ca/','http://creativecommons.org/licenses/by-sa/4.0/','https://creativecommons.org/licenses/by-sa/2.0/','https://creativecommons.org/licenses/by-sa/2.0/ca/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by/2.0/','http://creativecommons.org/licenses/by/2.5/ca/','http://creativecommons.org/licenses/by/3.0/','http://creativecommons.org/licenses/by/4.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution 4.0 International (CC BY 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/publicdomain/mark/1.0/',' http://creativecommons.org/publicdomain/mark/1.0')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Public Domain Mark 1.0 Universal</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/publicdomain/zero/1.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">CC0 1.0 Universal</accessCondition>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
+                    </xsl:otherwise>
+                </xsl:choose>               
             </xsl:when>
             <xsl:when test="@type='useAndReproduction'">
                 <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
@@ -1347,7 +1375,7 @@
             <xsl:when test="@type='restriction on access'">
                 <xsl:choose>
                     <xsl:when test="starts-with(lower-case(@displayLabel), 'rights statement')">
-                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
+                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - NON-COMMERCIAL USE PERMITTED</accessCondition>
                     </xsl:when>
                     <xsl:otherwise>
                         <accessCondition type="restriction on access" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
@@ -1360,7 +1388,57 @@
                         <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
                     </xsl:when>
                     <xsl:when test="starts-with(lower-case(@displayLabel), 'rights ')">
-                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
+                        <xsl:choose>
+                            <xsl:when test=".=('http://rightsssatements.org/vocab/CNE/1.0/','http://rightsstatements.org/vocab/CNE/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">COPYRIGHT NOT EVALUATED</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/InC-EDU/1.0/','http://rightsstatements.org/vocab/inC-EDU/1.0/','https://rightsstatements.org/page/InC-EDU/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - EDUCATIONAL USE PERMITTED</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/InC-NC/1.0/','IN COPYRIGHT - NON-COMMERCIAL USE PERMITTED')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - NON-COMMERCIAL USE PERMITTED</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/InC-RUU/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - RIGHTS-HOLDER(S) UNLOCATABLE OR UNIDENTIFIABLE</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/InC/1.0/','http://rightsstatements.org/vocab/InC/1.1/','http://rightsstatements.org/vocab/InC/1.2/','http://rightsstatements.org/vocab/InC/1.3/','https://rightsstatements.org/page/InC/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/NKC/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">NO KNOWN COPYRIGHT</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/NoC-NC/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">NO COPYRIGHT - NON-COMMERCIAL USE ONLY</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/NoC-OKLR/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">NO COPYRIGHT - OTHER KNOWN LEGAL RESTRICTIONS</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/NoC-US/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">NO COPYRIGHT - UNITED STATES</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/UND/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">COPYRIGHT UNDETERMINED</accessCondition>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:when test=".='http://creativecommons.org/licenses/by-nc-sa/4.0/'">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test=".='https://rightsstatements.org/page/InC-EDU/1.0/?language=en'">
+                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - EDUCATIONAL USE PERMITTED</accessCondition>
+                    </xsl:when>
+                    <xsl:when test=".='http://rightsstatements.org/vocab/InC-RUU/1.0/'">
+                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - RIGHTS-HOLDER(S) UNLOCATABLE OR UNIDENTIFIABLE</accessCondition>
+                    </xsl:when>
+                    <xsl:when test=".='http://rightsstatements.org/vocab/InC/1.0/'">
+                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT</accessCondition>
+                    </xsl:when>
+                    <xsl:when test=".='NO KNOWN COPYRIGHT + Public Domain Mark 1.0 Universal'">
+                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">NO KNOWN COPYRIGHT</accessCondition>
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Public Domain Mark 1.0 Universal</accessCondition>
                     </xsl:when>
                     <xsl:otherwise>
                         <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
@@ -1371,8 +1449,8 @@
                 <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:template>
-
+    </xsl:template>   
+    
     <xsl:template match="mods:part">
         <xsl:choose>
             <xsl:when test="parent::mods:relatedItem">
@@ -1389,20 +1467,24 @@
             </xsl:when>
             <xsl:when test="mods:detail[not(@type)]">
                 <relatedItem type="host" xmlns="http://www.loc.gov/mods/v3">
+                    <part>
                 <detail type="issue"><xsl:value-of select="normalize-space(.)"/></detail>
                     <xsl:for-each select="mods:extent">
                         <xsl:copy>
                             <xsl:copy-of select="@* | * | text()"/>
                         </xsl:copy>
                     </xsl:for-each>
+                    </part>
                 </relatedItem>
             </xsl:when>
             <xsl:when test="mods:detail[@type='page']">
                 <relatedItem type="host" xmlns="http://www.loc.gov/mods/v3">
+                    <part>
                     <xsl:call-template name="partDetail"/>
                     <extent unit="page">
                         <start><xsl:value-of select="normalize-space(mods:detail[@type='page'])"/></start>
                     </extent>
+                    </part>
                 </relatedItem>
             </xsl:when>
             <xsl:otherwise>
@@ -1417,7 +1499,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template match="mods:detail">
         <xsl:choose>
             <xsl:when test="not(parent::mods:part)"/>
@@ -1428,25 +1510,25 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template name="partDetail">
         <xsl:if test="mods:detail!=''">
             <xsl:variable name="volNo"><xsl:value-of select="normalize-space(mods:detail[@type='volume'])"/></xsl:variable>
             <xsl:variable name="issNo"><xsl:value-of select="normalize-space(mods:detail[@type='issue'])"/></xsl:variable>
             <detail type="issue" xmlns="http://www.loc.gov/mods/v3">
                 <xsl:if test="$volNo!='' and $issNo!=''">
-                    <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/><xsl:text>, Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>
+                    <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/><xsl:text>, Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>  
                 </xsl:if>
                 <xsl:if test="$volNo!='' and $issNo=''">
-                    <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/>
+                    <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/>  
                 </xsl:if>
                 <xsl:if test="$volNo='' and $issNo!=''">
-                    <xsl:text>Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>
+                    <xsl:text>Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>  
                 </xsl:if>
             </detail>
         </xsl:if>
     </xsl:template>
-
+    
     <xsl:template match="mods:recordInfo">
         <xsl:copy>
             <xsl:for-each select="mods:recordContentSource">
@@ -1581,7 +1663,7 @@
             </xsl:choose>
         </xsl:for-each>
     </xsl:template>
-
+    
     <xsl:template name="creatorRole">
         <xsl:choose>
             <xsl:when test="mods:role[not(mods:roleTerm)]">
@@ -1595,21 +1677,60 @@
                         <xsl:choose>
                             <xsl:when test="../mods:roleTerm[@type='text']"/>
                             <xsl:otherwise>
-                                <roleTerm><xsl:value-of select="normalize-space(.)"/></roleTerm>
+                                <xsl:variable name="cleanRole">
+                                    <xsl:call-template name="cleanRole"/>
+                                </xsl:variable>
+                                <roleTerm><xsl:value-of select="normalize-space($cleanRole)"/></roleTerm>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
                     <xsl:for-each select="mods:role/mods:roleTerm[@type='text']">
-                        <roleTerm><xsl:value-of select="normalize-space(.)"/></roleTerm>
+                        <xsl:variable name="cleanRole">
+                            <xsl:call-template name="cleanRole"/>
+                        </xsl:variable>
+                        <roleTerm><xsl:value-of select="normalize-space($cleanRole)"/></roleTerm>
                     </xsl:for-each>
                     <xsl:for-each select="mods:role/mods:roleTerm[not(@type)]">
-                        <roleTerm><xsl:value-of select="normalize-space(.)"/></roleTerm>
+                        <xsl:variable name="cleanRole">
+                            <xsl:call-template name="cleanRole"/>
+                        </xsl:variable>
+                        <roleTerm><xsl:value-of select="normalize-space($cleanRole)"/></roleTerm>
                     </xsl:for-each>
                 </role>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
-
+    
+    <xsl:template name="cleanRole">
+        <xsl:choose>
+            <xsl:when test="lower-case(.) = ('artisit','artist','artists','artists (visual artist)')">Artist</xsl:when>
+            <xsl:when test="lower-case(.) = ('author')">Author</xsl:when>
+            <xsl:when test="lower-case(.) = ('collaborator')">Contributor</xsl:when>
+            <xsl:when test="lower-case(.) = ('collector')">Collector</xsl:when>
+            <xsl:when test="lower-case(.) = ('committee member')">Degree Committee Member</xsl:when>
+            <xsl:when test="lower-case(.) = ('compiler','complier')">Compiler</xsl:when>
+            <xsl:when test="lower-case(.) = ('composer')">Composer</xsl:when>
+            <xsl:when test="lower-case(.) = ('creator','crreator')">Creator</xsl:when>
+            <xsl:when test="lower-case(.) = ('degree granting institution','degree grantor')">Degree granting institution</xsl:when>
+            <xsl:when test="lower-case(.) = ('editior','editor','editor.')">Editor</xsl:when>
+            <xsl:when test="lower-case(.) = ('expert')">Expert</xsl:when>
+            <xsl:when test="lower-case(.) = ('funder')">Funder</xsl:when>
+            <xsl:when test="lower-case(.) = ('illustrator.')">Illustrator</xsl:when>
+            <xsl:when test="lower-case(.) = ('interview')">Interviewer</xsl:when>
+            <xsl:when test="lower-case(.) = ('interviewee')">Interviewee</xsl:when>
+            <xsl:when test="lower-case(.) = ('performer')">Performer</xsl:when>
+            <xsl:when test="lower-case(.) = ('photogragher','photograher','photographer')">Photographer</xsl:when>
+            <xsl:when test="lower-case(.) = ('presenter')">Presenter</xsl:when>
+            <xsl:when test="lower-case(.) = ('producer')">Producer</xsl:when>
+            <xsl:when test="lower-case(.) = ('production company')">Production company</xsl:when>
+            <xsl:when test="lower-case(.) = ('production personnel')">Production personnel</xsl:when>
+            <xsl:when test="lower-case(.) = ('speaker')">Speaker</xsl:when>
+            <xsl:when test="lower-case(.) = ('thesis advisor')">Thesis advisor</xsl:when>
+            <xsl:when test="lower-case(.) = ('translator')">Translator</xsl:when>
+            <xsl:otherwise><xsl:value-of select="normalize-space(.)"/></xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
     <xsl:template name="newAuth">
         <xsl:choose>
             <xsl:when test="lower-case(@authority) = ('lcnaf')">naf</xsl:when>
@@ -1617,7 +1738,7 @@
             <xsl:otherwise><xsl:value-of select="normalize-space(@authority)"/></xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
     <xsl:template name="langToText">
         <xsl:choose>
             <xsl:when test="lower-case(normalize-space(.))=('eng','e','en','end','Englsih')">
@@ -1641,5 +1762,5 @@
             <xsl:otherwise><xsl:value-of select="normalize-space(.)"/></xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
 </xsl:stylesheet>
