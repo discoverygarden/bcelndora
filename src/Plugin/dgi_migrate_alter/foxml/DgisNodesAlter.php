@@ -47,6 +47,7 @@ class DgisNodesAlter extends MigrationAlterBase implements MigrationAlterInterfa
     mods: 'http://www.loc.gov/mods/v3'
     xsi: 'http://www.w3.org/2001/XMLSchema-instance'
     xlink: 'http://www.w3.org/1999/xlink'
+    etd: 'http://www.ndltd.org/standards/metadata/etdms/1.0'                                  
 EOI
     );
 
