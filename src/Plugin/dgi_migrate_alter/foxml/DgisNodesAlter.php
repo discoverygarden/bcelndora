@@ -124,6 +124,7 @@ EOI
     $process['field_scale'][0]['query'] = 'mods:subject/mods:cartographics/mods:scale';
 
     $process['field_use_and_reproduction'][0]['query'] = 'mods:accessCondition[@type="use and reproduction"][not(@displayLabel)]';
+    $process['_rights_statement_query'][0]['query'] = 'mods:accessCondition[@displayLabel="Rights Statement" or @displayLabel="rights statement"]';
 
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
       'plugin' => 'single_value',
