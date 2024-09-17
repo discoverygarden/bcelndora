@@ -1048,7 +1048,7 @@
                             <xsl:attribute name="authority"><xsl:value-of select="normalize-space($newAuth)"/></xsl:attribute>
                         </xsl:if>
                         <xsl:value-of select="normalize-space(.)"/>
-                    ac</xsl:copy>
+                    </xsl:copy>
                 </xsl:for-each>
                 <xsl:for-each select="mods:digitalOrigin">
                     <xsl:copy>
