@@ -1,0 +1,36 @@
+id: bceln_ccl_4_0_terms
+label: 'BCELNDora Creative Commons Licenses 4.0 terms'
+migration_group: islandora
+migration_tags:
+  - dgi_taxonomies
+source:
+  plugin: embedded_data
+  track_changes: true
+  data_rows:
+    - name: 'Public Domain Mark 1.0 Universal'
+      vid: 'creative_commons_licenses_4_0'
+      url: 'https://creativecommons.org/publicdomain/mark/1.0/'
+    - name: 'CC0 1.0 Universal'
+      vid: 'creative_commons_licenses_4_0'
+      url: 'https://creativecommons.org/publicdomain/zero/1.0/'
+  ids:
+    name:
+      type: string
+process:
+  tid:
+    - plugin: entity_lookup
+      source: name
+      entity_type: taxonomy_term
+      value_key: name
+      bundle_key: vid
+      bundle: creative_commons_licenses_4_0
+    - plugin: skip_on_empty
+      method: process
+  name: name
+  vid: vid
+  field_url: url
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: creative_commons_licenses_4_0
+migration_dependencies:
+  required: []
