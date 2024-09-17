@@ -135,16 +135,6 @@ EOI
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
       'plugin' => 'null_coalesce',
     ];
-    $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
-      'plugin' => 'single_value',
-    ];
-    $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
-      'plugin' => 'callback',
-      'callable' => 'array_filter',
-    ];
-    $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
-      'plugin' => 'null_coalesce',
-    ];
 
     $process['field_publication_genre'][3] = [
       'plugin' => 'single_value',
@@ -175,7 +165,7 @@ EOI
     ]);
 
     $process['field_hierarchical_geographic_su'][3]['values']['field_state'][0]['query'] = 'mods:state | mods:province';
-    $process['field_note_paragraph'][0]['query'] = 'mods:note[not(@type="funding" or @type="admin" or @displayLabel="Peer Reviewed")]';
+    $process['field_note_paragraph'][0]['query'] = 'mods:note[not(@type="admin" or @displayLabel="Peer Reviewed")]';
 
     $process['field_geographic_code'] = $process['field_lcc_classification'];
     $process['field_geographic_code'][0]['query'] = 'mods:subject/mods:geographicCode';
@@ -232,6 +222,10 @@ EOI
       ['field_note_location'],
       ['field_enumeration_and_chronology'],
       ['field_copyright_holder'],
+      ['field_related_item_paragraph', 3, 'values', 'field_related_item_identifier', 7],
+      ['_rights_statement', 5],
+      ['_rights_statement', 6],
+      ['_rights_statement', 7],
     ];
 
     foreach ($to_remove as $path) {
