@@ -47,6 +47,7 @@ class DgisNodesAlter extends MigrationAlterBase implements MigrationAlterInterfa
     mods: 'http://www.loc.gov/mods/v3'
     xsi: 'http://www.w3.org/2001/XMLSchema-instance'
     xlink: 'http://www.w3.org/1999/xlink'
+    etd: 'http://www.ndltd.org/standards/metadata/etdms/1.0'                                  
 EOI
     );
 
@@ -96,6 +97,10 @@ EOI
     $process['field_identifier_uri'] = $process['field_publication_url'];
     $process['field_identifier_uri'][0]['query'] = 'mods:identifier[@type="uri"]';
 
+    unset($process['field_url/uri']);
+    $process['field_url'] = $process['field_publication_url'];
+    $process['field_url'][0]['query'] = 'mods:location/mods:url[normalize-space()]';
+
     $process['field_issn'] = $process['field_ismn'];
     $process['field_issn'][0]['query'] = 'mods:identifier[@type="issn"]';
 
@@ -121,6 +126,7 @@ EOI
     $process['field_scale'][0]['query'] = 'mods:subject/mods:cartographics/mods:scale';
 
     $process['field_use_and_reproduction'][0]['query'] = 'mods:accessCondition[@type="use and reproduction"][not(@displayLabel)]';
+    $process['_rights_statement_query'][0]['query'] = 'mods:accessCondition[@displayLabel="Rights Statement" or @displayLabel="rights statement"]';
 
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
       'plugin' => 'single_value',
@@ -130,16 +136,6 @@ EOI
       'callable' => 'array_filter',
     ];
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
-      'plugin' => 'null_coalesce',
-    ];
-    $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
-      'plugin' => 'single_value',
-    ];
-    $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
-      'plugin' => 'callback',
-      'callable' => 'array_filter',
-    ];
-    $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
       'plugin' => 'null_coalesce',
     ];
 
@@ -172,13 +168,13 @@ EOI
     ]);
 
     $process['field_hierarchical_geographic_su'][3]['values']['field_state'][0]['query'] = 'mods:state | mods:province';
-    $process['field_note_paragraph'][0]['query'] = 'mods:note[not(@type="funding" or @type="admin" or @displayLabel="Peer Reviewed")]';
+    $process['field_note_paragraph'][0]['query'] = 'mods:note[not(@type="admin" or @displayLabel="Peer Reviewed")]';
 
     $process['field_geographic_code'] = $process['field_lcc_classification'];
     $process['field_geographic_code'][0]['query'] = 'mods:subject/mods:geographicCode';
 
     $process['field_publication_number'] = $process['field_item_identifier'];
-    $process['field_publication_number'][0]['query'] = 'mods:relatedItem[@type="host"]/mods:part/mods:detail[@type="issue"]/mods:number';
+    $process['field_publication_number'][0]['query'] = 'mods:relatedItem[@type="host"]/mods:part/mods:detail[@type="issue"]';
 
     $process['field_extent_first_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:start';
     $process['field_extent_last_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:end';
@@ -188,6 +184,11 @@ EOI
 
     $process['field_remote_media_url'] = $process['field_ismn'];
     $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"]';
+
+    $process['field_physical_location'] = $process['field_note_location'];
+    $process['field_physical_location'][0]['query'] = 'mods:location/mods:physicalLocation';
+
+    unset($process['field_note'][5]);
 
     $to_remove = [
       ['field_version_identifier'],
@@ -224,6 +225,10 @@ EOI
       ['field_note_location'],
       ['field_enumeration_and_chronology'],
       ['field_copyright_holder'],
+      ['field_related_item_paragraph', 3, 'values', 'field_related_item_identifier', 7],
+      ['_rights_statement', 5],
+      ['_rights_statement', 6],
+      ['_rights_statement', 7],
     ];
 
     foreach ($to_remove as $path) {
@@ -255,9 +260,6 @@ EOI
     $values['_institution'] = $values['_family_name'];
     $values['_institution'][0]['query'] = 'normalize-space(mods:affiliation[normalize-space()])';
 
-    $values['_alt_name'] = $values['_family_name'];
-    $values['_alt_name'][0]['query'] = 'normalize-space(mods:alternativeName[normalize-space()])';
-
     $values['_description'] = $values['_family_name'];
     $values['_description'][0]['query'] = 'normalize-space(mods:description[normalize-space()][1])';
 
@@ -283,7 +285,6 @@ EOI
           '@_display_form',
           '@_culture',
           '@_institution',
-          '@_alt_name',
           '@_description',
           '@_other_id',
           '@_orcid',

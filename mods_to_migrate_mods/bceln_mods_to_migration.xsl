@@ -16,7 +16,6 @@
 
     <xsl:strip-space elements="*"/>
 
-    <!-- Check and add missing namespaces by explicitly creating the root element -->
     <xsl:template match="/*">
         <!-- Manually create the root element and add any missing namespaces -->
         <xsl:element name="{name()}" namespace="{namespace-uri()}">
@@ -372,7 +371,7 @@
                 </xsl:choose>
             </xsl:when>
             <xsl:when test="@type=('lcc','lccn')">
-                <classification type='lcc' xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></classification>
+                <classification authority='lcc' xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></classification>
             </xsl:when>
             <xsl:when test="@type='uri'">
                 <xsl:choose>
@@ -1032,9 +1031,9 @@
 
 
     <xsl:template match="mods:physicalDescription">
-        <xsl:for-each select="mods:genre"><genre><xsl:copy-of select="@* | * | text()"/></genre></xsl:for-each>
+        <xsl:for-each select="mods:genre"><genre xmlns="http://www.loc.gov/mods/v3"><xsl:copy-of select="@* | * | text()"/></genre></xsl:for-each>
         <xsl:for-each select="mods:location">
-            <location>
+            <location xmlns="http://www.loc.gov/mods/v3">
                 <xsl:copy-of select="@* | * | text()"/>
             </location></xsl:for-each>
         <xsl:copy>
@@ -1065,7 +1064,7 @@
                 <xsl:call-template name="extent"/>
                 <xsl:call-template name="note"/>
                 <xsl:call-template name="note_condition"/>
-                <xsl:for-each select="mods:form">
+                <xsl:for-each select="mods:form">a
                     <xsl:copy>
                         <xsl:variable name="newAuth">
                             <xsl:call-template name="newAuth"/>
@@ -1077,7 +1076,7 @@
                     </xsl:copy>
                 </xsl:for-each>
                 <xsl:for-each select="mods:quality">
-                    <reformattingQuality><xsl:value-of select="normalize-space(.)"/></reformattingQuality>
+                    <reformattingQuality xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></reformattingQuality>
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
@@ -1296,7 +1295,7 @@
                 </xsl:copy>
             </xsl:when>
             <xsl:otherwise>
-                <location>
+                <location xmlns="http://www.loc.gov/mods/v3">
                     <physicalLocation><xsl:value-of select="normalize-space(.)"/></physicalLocation>
                 </location>
             </xsl:otherwise>
@@ -1306,7 +1305,7 @@
     <xsl:template match="mods:shelfLocator">
         <xsl:choose>
             <xsl:when test="parent::mods:location">
-                <holdingSimple>
+                <holdingSimple xmlns="http://www.loc.gov/mods/v3">
                     <copyInformation>
                         <shelfLocator><xsl:value-of select="normalize-space(.)"/></shelfLocator>
                     </copyInformation>
@@ -1318,8 +1317,8 @@
                 </xsl:copy>
             </xsl:when>
             <xsl:otherwise>
-                <location>
-                    <holdingSimple>
+                <location xmlns="http://www.loc.gov/mods/v3">
+                    <holdingSimple xmlns="http://www.loc.gov/mods/v3">
                         <copyInformation>
                             <shelfLocator><xsl:value-of select="normalize-space(.)"/></shelfLocator>
                         </copyInformation>
@@ -1340,7 +1339,35 @@
     <xsl:template match="mods:accessCondition">
         <xsl:choose>
             <xsl:when test="starts-with(lower-case(@displayLabel), 'creative')">
-                <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
+                <xsl:choose>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by-nc-nd/2.0/','http://creativecommons.org/licenses/by-nc-nd/2.5/br/','http://creativecommons.org/licenses/by-nc-nd/2.5/ca/','http://creativecommons.org/licenses/by-nc-nd/3.0/','http://creativecommons.org/licenses/by-nc-nd/4.0/','https://creativecommons.org/licenses/by-nc-nd/2.5/ca/','https://creativecommons.org/licenses/by-nc-nd/4.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by-nc-sa/2.5/ca/','http://creativecommons.org/licenses/by-nc-sa/4.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by-nc/2.5/ca/','http://creativecommons.org/licenses/by-nc/2.5/pt/','http://creativecommons.org/licenses/by-nc/3.0/','http://creativecommons.org/licenses/by-nc/4.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by-nd/2.0/ca/','http://creativecommons.org/licenses/by-nd/2.5/ca/','http://creativecommons.org/licenses/by-nd/4.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-NoDerivatives 4.0 International (CC BY-ND 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by-sa/2.0/','http://creativecommons.org/licenses/by-sa/2.5/ca/','http://creativecommons.org/licenses/by-sa/4.0/','https://creativecommons.org/licenses/by-sa/2.0/','https://creativecommons.org/licenses/by-sa/2.0/ca/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/licenses/by/2.0/','http://creativecommons.org/licenses/by/2.5/ca/','http://creativecommons.org/licenses/by/3.0/','http://creativecommons.org/licenses/by/4.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution 4.0 International (CC BY 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/publicdomain/mark/1.0/',' http://creativecommons.org/publicdomain/mark/1.0')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Public Domain Mark 1.0 Universal</accessCondition>
+                    </xsl:when>
+                    <xsl:when test="lower-case(.)=('http://creativecommons.org/publicdomain/zero/1.0/')">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">CC0 1.0 Universal</accessCondition>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             <xsl:when test="@type='useAndReproduction'">
                 <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
@@ -1348,7 +1375,7 @@
             <xsl:when test="@type='restriction on access'">
                 <xsl:choose>
                     <xsl:when test="starts-with(lower-case(@displayLabel), 'rights statement')">
-                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
+                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - NON-COMMERCIAL USE PERMITTED</accessCondition>
                     </xsl:when>
                     <xsl:otherwise>
                         <accessCondition type="restriction on access" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
@@ -1361,7 +1388,57 @@
                         <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
                     </xsl:when>
                     <xsl:when test="starts-with(lower-case(@displayLabel), 'rights ')">
-                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
+                        <xsl:choose>
+                            <xsl:when test=".=('http://rightsssatements.org/vocab/CNE/1.0/','http://rightsstatements.org/vocab/CNE/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">COPYRIGHT NOT EVALUATED</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/InC-EDU/1.0/','http://rightsstatements.org/vocab/inC-EDU/1.0/','https://rightsstatements.org/page/InC-EDU/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - EDUCATIONAL USE PERMITTED</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/InC-NC/1.0/','IN COPYRIGHT - NON-COMMERCIAL USE PERMITTED')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - NON-COMMERCIAL USE PERMITTED</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/InC-RUU/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - RIGHTS-HOLDER(S) UNLOCATABLE OR UNIDENTIFIABLE</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/InC/1.0/','http://rightsstatements.org/vocab/InC/1.1/','http://rightsstatements.org/vocab/InC/1.2/','http://rightsstatements.org/vocab/InC/1.3/','https://rightsstatements.org/page/InC/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/NKC/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">NO KNOWN COPYRIGHT</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/NoC-NC/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">NO COPYRIGHT - NON-COMMERCIAL USE ONLY</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/NoC-OKLR/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">NO COPYRIGHT - OTHER KNOWN LEGAL RESTRICTIONS</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/NoC-US/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">NO COPYRIGHT - UNITED STATES</accessCondition>
+                            </xsl:when>
+                            <xsl:when test=".=('http://rightsstatements.org/vocab/UND/1.0/')">
+                                <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">COPYRIGHT UNDETERMINED</accessCondition>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:when test=".='http://creativecommons.org/licenses/by-nc-sa/4.0/'">
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)</accessCondition>
+                    </xsl:when>
+                    <xsl:when test=".='https://rightsstatements.org/page/InC-EDU/1.0/?language=en'">
+                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - EDUCATIONAL USE PERMITTED</accessCondition>
+                    </xsl:when>
+                    <xsl:when test=".='http://rightsstatements.org/vocab/InC-RUU/1.0/'">
+                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT - RIGHTS-HOLDER(S) UNLOCATABLE OR UNIDENTIFIABLE</accessCondition>
+                    </xsl:when>
+                    <xsl:when test=".='http://rightsstatements.org/vocab/InC/1.0/'">
+                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">IN COPYRIGHT</accessCondition>
+                    </xsl:when>
+                    <xsl:when test=".='NO KNOWN COPYRIGHT + Public Domain Mark 1.0 Universal'">
+                        <accessCondition type="use and reproduction" displayLabel="rights statement" xmlns="http://www.loc.gov/mods/v3">NO KNOWN COPYRIGHT</accessCondition>
+                        <accessCondition type="use and reproduction" displayLabel="Creative Commons license" xmlns="http://www.loc.gov/mods/v3">Public Domain Mark 1.0 Universal</accessCondition>
                     </xsl:when>
                     <xsl:otherwise>
                         <accessCondition type="use and reproduction" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></accessCondition>
@@ -1390,20 +1467,24 @@
             </xsl:when>
             <xsl:when test="mods:detail[not(@type)]">
                 <relatedItem type="host" xmlns="http://www.loc.gov/mods/v3">
+                    <part>
                 <detail type="issue"><xsl:value-of select="normalize-space(.)"/></detail>
                     <xsl:for-each select="mods:extent">
                         <xsl:copy>
                             <xsl:copy-of select="@* | * | text()"/>
                         </xsl:copy>
                     </xsl:for-each>
+                    </part>
                 </relatedItem>
             </xsl:when>
             <xsl:when test="mods:detail[@type='page']">
                 <relatedItem type="host" xmlns="http://www.loc.gov/mods/v3">
+                    <part>
                     <xsl:call-template name="partDetail"/>
                     <extent unit="page">
                         <start><xsl:value-of select="normalize-space(mods:detail[@type='page'])"/></start>
                     </extent>
+                    </part>
                 </relatedItem>
             </xsl:when>
             <xsl:otherwise>
@@ -1434,17 +1515,36 @@
         <xsl:if test="mods:detail!=''">
             <xsl:variable name="volNo"><xsl:value-of select="normalize-space(mods:detail[@type='volume'])"/></xsl:variable>
             <xsl:variable name="issNo"><xsl:value-of select="normalize-space(mods:detail[@type='issue'])"/></xsl:variable>
-            <detail type="issue" xmlns="http://www.loc.gov/mods/v3">
-                <xsl:if test="$volNo!='' and $issNo!=''">
-                    <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/><xsl:text>, Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>
-                </xsl:if>
-                <xsl:if test="$volNo!='' and $issNo=''">
-                    <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/>
-                </xsl:if>
-                <xsl:if test="$volNo='' and $issNo!=''">
-                    <xsl:text>Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>
-                </xsl:if>
-            </detail>
+            <xsl:choose>
+                <xsl:when test="ancestor::mods:relatedItem">
+                    <detail type="issue" xmlns="http://www.loc.gov/mods/v3">
+                        <xsl:if test="$volNo!='' and $issNo!=''">
+                            <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/><xsl:text>, Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>
+                        </xsl:if>
+                        <xsl:if test="$volNo!='' and $issNo=''">
+                            <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/>
+                        </xsl:if>
+                        <xsl:if test="$volNo='' and $issNo!=''">
+                            <xsl:text>Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>
+                        </xsl:if>
+                    </detail>
+                </xsl:when>
+                <xsl:otherwise>
+                    <part xmlns="http://www.loc.gov/mods/v3">
+                        <detail type="issue">
+                            <xsl:if test="$volNo!='' and $issNo!=''">
+                                <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/><xsl:text>, Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>
+                            </xsl:if>
+                            <xsl:if test="$volNo!='' and $issNo=''">
+                                <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/>
+                            </xsl:if>
+                            <xsl:if test="$volNo='' and $issNo!=''">
+                                <xsl:text>Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>
+                            </xsl:if>
+                        </detail>
+                    </part>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
     </xsl:template>
 
@@ -1550,17 +1650,7 @@
                 <xsl:otherwise>
                     <namePart type="family" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
                 </xsl:otherwise>
-            </xsl:choose>
-        </xsl:for-each>
-        <xsl:for-each select="mods:namePart[@type='given']">
-            <xsl:choose>
-                <xsl:when test="not(../mods:namePart[@type='family'])">
-                    <namePart xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
-                </xsl:when>
-                <xsl:otherwise>
-                    <namePart type="given" xmlns="http://www.loc.gov/mods/v3"><xsl:value-of select="normalize-space(.)"/></namePart>
-                </xsl:otherwise>
-            </xsl:choose>
+                </xsl:choose>
         </xsl:for-each>
         <xsl:for-each select="mods:namePart[@type='given']">
             <xsl:choose>
@@ -1606,18 +1696,57 @@
                         <xsl:choose>
                             <xsl:when test="../mods:roleTerm[@type='text']"/>
                             <xsl:otherwise>
-                                <roleTerm><xsl:value-of select="normalize-space(.)"/></roleTerm>
+                                <xsl:variable name="cleanRole">
+                                    <xsl:call-template name="cleanRole"/>
+                                </xsl:variable>
+                                <roleTerm><xsl:value-of select="normalize-space($cleanRole)"/></roleTerm>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
                     <xsl:for-each select="mods:role/mods:roleTerm[@type='text']">
-                        <roleTerm><xsl:value-of select="normalize-space(.)"/></roleTerm>
+                        <xsl:variable name="cleanRole">
+                            <xsl:call-template name="cleanRole"/>
+                        </xsl:variable>
+                        <roleTerm><xsl:value-of select="normalize-space($cleanRole)"/></roleTerm>
                     </xsl:for-each>
                     <xsl:for-each select="mods:role/mods:roleTerm[not(@type)]">
-                        <roleTerm><xsl:value-of select="normalize-space(.)"/></roleTerm>
+                        <xsl:variable name="cleanRole">
+                            <xsl:call-template name="cleanRole"/>
+                        </xsl:variable>
+                        <roleTerm><xsl:value-of select="normalize-space($cleanRole)"/></roleTerm>
                     </xsl:for-each>
                 </role>
             </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="cleanRole">
+        <xsl:choose>
+            <xsl:when test="lower-case(.) = ('artisit','artist','artists','artists (visual artist)')">Artist</xsl:when>
+            <xsl:when test="lower-case(.) = ('author')">Author</xsl:when>
+            <xsl:when test="lower-case(.) = ('collaborator')">Contributor</xsl:when>
+            <xsl:when test="lower-case(.) = ('collector')">Collector</xsl:when>
+            <xsl:when test="lower-case(.) = ('committee member')">Degree Committee Member</xsl:when>
+            <xsl:when test="lower-case(.) = ('compiler','complier')">Compiler</xsl:when>
+            <xsl:when test="lower-case(.) = ('composer')">Composer</xsl:when>
+            <xsl:when test="lower-case(.) = ('creator','crreator')">Creator</xsl:when>
+            <xsl:when test="lower-case(.) = ('degree granting institution','degree grantor')">Degree granting institution</xsl:when>
+            <xsl:when test="lower-case(.) = ('editior','editor','editor.')">Editor</xsl:when>
+            <xsl:when test="lower-case(.) = ('expert')">Expert</xsl:when>
+            <xsl:when test="lower-case(.) = ('funder')">Funder</xsl:when>
+            <xsl:when test="lower-case(.) = ('illustrator.')">Illustrator</xsl:when>
+            <xsl:when test="lower-case(.) = ('interview')">Interviewer</xsl:when>
+            <xsl:when test="lower-case(.) = ('interviewee')">Interviewee</xsl:when>
+            <xsl:when test="lower-case(.) = ('performer')">Performer</xsl:when>
+            <xsl:when test="lower-case(.) = ('photogragher','photograher','photographer')">Photographer</xsl:when>
+            <xsl:when test="lower-case(.) = ('presenter')">Presenter</xsl:when>
+            <xsl:when test="lower-case(.) = ('producer')">Producer</xsl:when>
+            <xsl:when test="lower-case(.) = ('production company')">Production company</xsl:when>
+            <xsl:when test="lower-case(.) = ('production personnel')">Production personnel</xsl:when>
+            <xsl:when test="lower-case(.) = ('speaker')">Speaker</xsl:when>
+            <xsl:when test="lower-case(.) = ('thesis advisor')">Thesis advisor</xsl:when>
+            <xsl:when test="lower-case(.) = ('translator')">Translator</xsl:when>
+            <xsl:otherwise><xsl:value-of select="normalize-space(.)"/></xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 

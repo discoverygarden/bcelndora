@@ -26,7 +26,6 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
     unset($migration['source']['ids']['affiliation_tid']);
     $migration['source']['ids']['culture'] = ['type' => 'string'];
     $migration['source']['ids']['institution'] = ['type' => 'string'];
-    $migration['source']['ids']['alt_name'] = ['type' => 'string'];
     $migration['source']['ids']['description'] = ['type' => 'string_long'];
     $migration['source']['ids']['other_id'] = ['type' => 'string'];
     $migration['source']['ids']['orcid'] = ['type' => 'string'];
@@ -58,17 +57,6 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
         'plugin' => 'migration_lookup',
         'migration' => 'bceln_stub_terms_institution',
         'stub_id' => 'bceln_stub_terms_institution',
-      ],
-      [
-        'plugin' => 'skip_on_empty',
-        'method' => 'process',
-      ],
-    ];
-
-    $process['field_person_alt_names'] = [
-      [
-        'plugin' => 'get',
-        'source' => 'alt_name',
       ],
       [
         'plugin' => 'skip_on_empty',
