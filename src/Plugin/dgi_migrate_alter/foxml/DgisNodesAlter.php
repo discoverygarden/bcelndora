@@ -258,9 +258,6 @@ EOI
     $values['_institution'] = $values['_family_name'];
     $values['_institution'][0]['query'] = 'normalize-space(mods:affiliation[normalize-space()])';
 
-    $values['_alt_name'] = $values['_family_name'];
-    $values['_alt_name'][0]['query'] = 'normalize-space(mods:alternativeName[normalize-space()])';
-
     $values['_description'] = $values['_family_name'];
     $values['_description'][0]['query'] = 'normalize-space(mods:description[normalize-space()][1])';
 
@@ -286,7 +283,6 @@ EOI
           '@_display_form',
           '@_culture',
           '@_institution',
-          '@_alt_name',
           '@_description',
           '@_other_id',
           '@_orcid',
