@@ -1,16 +1,16 @@
 ---
-id: bcelndora_stub_terms_culture
-label: Create stub culture terms.
+id: bceln_stub_terms_institution
+label: Create stub institution terms.
 migration_group: foxml_to_dgis
 source:
   plugin: embedded_data
   data_rows: []
   ids:
-    culture:
+    institution:
       type: string
   dsf_misc:
     type: &type entity:taxonomy_term
-    bundle: &bundle culture
+    bundle: &bundle institution
 destination:
   plugin: *type
   default_bundle: *bundle
@@ -22,7 +22,7 @@ destination:
 process:
   name:
     - plugin: get
-      source: culture
+      source: institution
 
 dependencies:
   enforced:

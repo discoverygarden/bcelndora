@@ -1,0 +1,121 @@
+---
+id: bceln_person_tn_file
+label: Create file entities from TNs in Person FOXML
+migration_group: foxml_to_dgis
+source:
+  plugin: dgi_migrate.source.migration
+  track_changes: true
+  migration: dgis_foxml_files
+  constants:
+    file_dest: 'repo-bin:/'
+    valid_models:
+      - 'info:fedora/islandora:personCModel'
+destination:
+  plugin: entity:file
+  validate: true
+process:
+  _parsed:
+    - plugin: dgi_migrate.load_entity
+      source: fid
+      entity_type: entity:file
+    - plugin: dgi_migrate.method
+      method: getFileUri
+    - plugin: foxml.parse
+  _models:
+    - plugin: dgi_migrate.method
+      source: '@_parsed'
+      method: models
+    - plugin: skip_on_empty
+      method: row
+  _valid_present_models:
+    - plugin: callback
+      callable: array_intersect
+      unpack_source: true
+      source:
+        - constants/valid_models
+        - '@_models'
+    - plugin: skip_on_empty
+      method: row
+  _source_dsid:
+    - plugin: static_map
+      source: '@_valid_present_models'
+      bypass: false
+      map:
+        'info:fedora/islandora:personCModel': 'TN'
+    - plugin: extract
+      index: [0]
+  _latest:
+    - plugin: dgi_migrate.subindex
+      source: '@_parsed'
+      index_from_destination: _source_dsid
+      skip_row_if_missing: true
+    - plugin: dgi_migrate.method
+      method: latest
+  created:
+    - plugin: dgi_migrate.subproperty
+      source: '@_latest'
+      property: CREATED
+    - plugin: callback
+      callable: strtotime
+  _source_uri:
+    - plugin: dgi_migrate.method
+      source: '@_latest'
+      method: getUri
+  _path:
+    - plugin: format_date
+      source: '@created'
+      from_format: U
+      to_format: 'Y-m'
+  filemime:
+    - plugin: dgi_migrate.subproperty
+      property: MIMETYPE
+      source: '@_latest'
+  _ext:
+    plugin: dgi_migrate.process.extension_from_mimetype
+    source: '@filemime'
+  _safe_pid:
+    - plugin: dgi_migrate.subproperty
+      source: '@_parsed'
+      property: PID
+    - plugin: machine_name
+  filename:
+    - plugin: concat
+      source:
+        - '@_safe_pid'
+        - '@_ext'
+      delimiter: '.'
+  _dest_uri:
+    - plugin: concat
+      source:
+        - constants/file_dest
+        - '@_path'
+        - '@filename'
+      delimiter: '/'
+  uri:
+    - plugin: dgi_migrate.naive_file_copy
+      file_exists: rename
+      source:
+        - '@_source_uri'
+        - '@_dest_uri'
+  filesize:
+    - plugin: callback
+      source: '@uri'
+      callable: filesize
+    - plugin: skip_on_value
+      method: row
+      value: 0
+      message: 'Thumbnail file has a filesize of 0'
+  status:
+    - plugin: default_value
+      default_value: 1
+  uid:
+    - plugin: default_value
+      source: shared/default_uid
+      default_value: 0
+migration_dependencies:
+  required:
+    - dgis_foxml_files
+dependencies:
+  enforced:
+    module:
+      - dgi_migrate_foxml_standard_mods

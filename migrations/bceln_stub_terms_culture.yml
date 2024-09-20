@@ -1,0 +1,31 @@
+---
+id: bceln_stub_terms_culture
+label: Create stub culture terms.
+migration_group: foxml_to_dgis
+source:
+  plugin: embedded_data
+  data_rows: []
+  ids:
+    culture:
+      type: string
+  dsf_misc:
+    type: &type entity:taxonomy_term
+    bundle: &bundle culture
+destination:
+  plugin: *type
+  default_bundle: *bundle
+  # XXX: We're not really dealing with translations here. To do so, seems like
+  # you would need separate migrations.
+  #translations: true
+  validate: &validate false
+  overwrite_properties: []
+process:
+  name:
+    - plugin: get
+      source: culture
+
+dependencies:
+  enforced:
+    module:
+      - dgi_migrate
+      - dgi_migrate_foxml_standard_mods

@@ -47,6 +47,7 @@ class DgisNodesAlter extends MigrationAlterBase implements MigrationAlterInterfa
     mods: 'http://www.loc.gov/mods/v3'
     xsi: 'http://www.w3.org/2001/XMLSchema-instance'
     xlink: 'http://www.w3.org/1999/xlink'
+    etd: 'http://www.ndltd.org/standards/metadata/etdms/1.0'                                  
 EOI
     );
 
@@ -69,9 +70,9 @@ EOI
     $process['_i8_model_uri'][0]['map']['info:fedora/islandora:sp_remoteMediaCModel'] = 'http://purl.org/coar/resource_type/c_12ce';
     $process['_i8_model_uri'][0]['map']['info:fedora/ir:thesisCModel'] = 'https://schema.org/DigitalDocument';
 
-    $process['_resource_type'][0]['query'] = 'mods:typeOfResource[1]';
-    $process['_resource_type'][4]['values']['_vid'][0]['default_value'] = 'library_of_congress_resource_typ';
-    $process['_unspecified_resource_type'][2]['values']['_vid'][0]['default_value'] = 'library_of_congress_resource_typ';
+    $process['_resource_type_query'][0]['query'] = 'mods:typeOfResource[1]';
+    $process['_resource_type'][3]['values']['_vid'][0]['default_value'] = 'library_of_congress_resource_typ';
+    $process['_unspecified_resource_type'][4]['values']['_vid'][0]['default_value'] = 'library_of_congress_resource_typ';
 
     $process['field_peer_review_status'] = $process['field_ark'];
     $process['field_peer_review_status'][0]['query'] = 'mods:note[@displayLabel="Peer Reviewed"]';
@@ -94,65 +95,27 @@ EOI
     $process['field_identifier_uri'] = $process['field_publication_url'];
     $process['field_identifier_uri'][0]['query'] = 'mods:identifier[@type="uri"]';
 
+    unset($process['field_url/uri']);
+    $process['field_url'] = $process['field_publication_url'];
+    $process['field_url'][0]['query'] = 'mods:location/mods:url[normalize-space()]';
+
     $process['field_issn'] = $process['field_ismn'];
     $process['field_issn'][0]['query'] = 'mods:identifier[@type="issn"]';
 
     $process['field_keywords'] = $process['field_form'];
     $process['field_keywords'][0]['query'] = 'mods:note[@displayLabel="keywords"]';
 
-    $values = &$process['field_linked_agent'][1]['values'];
-    unset($values['target_id']);
+    $personValues = &$process['field_linked_agent'][1]['values'];
+    $this->processPersonValues($personValues);
 
-    $values['_culture'] = $values['_family_name'];
-    $values['_culture'][0]['query'] = 'normalize-space(mods:namePart[@type="culture"][normalize-space()])';
+    $subjectPersonValues = &$process['field_subject_name_person'][4]['values'];
+    $this->processPersonValues($subjectPersonValues);
 
-    $values['_alt_name'] = $values['_family_name'];
-    $values['_alt_name'][0]['query'] = 'normalize-space(mods:alternativeName[normalize-space()])';
+    $orgValues = &$process['field_organizations'][1]['values'];
+    $this->processOrganizationValues($orgValues);
 
-    $values['_description'] = $values['_family_name'];
-    $values['_description'][0]['query'] = 'normalize-space(mods:description[normalize-space()][1])';
-
-    $values['_other_id'] = $values['_family_name'];
-    $values['_other_id'][0]['query'] = 'normalize-space(mods:nameIdentifier[not(@type)][normalize-space()][1])';
-
-    $values['_orcid'] = $values['_family_name'];
-    $values['_orcid'][0]['query'] = 'normalize-space(mods:nameIdentifier[@type="orcid"][normalize-space()][1])';
-
-    $values['target_id'] = [
-      [
-        'plugin' => 'get',
-        'source' => [
-          '@_authority',
-          '@_value_uri',
-          '@_untyped_names',
-          '@_given_name',
-          '@_family_name',
-          '@_date_name',
-          '@_display_form',
-          '@_affiliation',
-          '@_culture',
-          '@_alt_name',
-          '@_description',
-          '@_other_id',
-          '@_orcid',
-        ],
-      ],
-      [
-        'plugin' => 'flatten',
-      ],
-      [
-        'plugin' => 'migration_lookup',
-        'migration' => 'dgis_stub_terms_person',
-        'stub_id' => 'dgis_stub_terms_person',
-      ],
-      [
-        'plugin' => 'skip_on_empty',
-        'method' => 'row',
-      ],
-    ];
-
-    $process['field_subject_name_person'] = $process['field_linked_agent'];
-    $process['field_subject_name_person'][0]['query'] = 'mods:subject/mods:name[@type="personal"]';
+    $subjectOrgValues = &$process['field_subject_name_organization'][4]['values'];
+    $this->processOrganizationValues($subjectOrgValues);
 
     $process['field_hierarchical_geographic_su'][3]['values']['field_state']['0']['query'] =
       'mods:subject/mods:hierarchicalGeographic/mods:state | mods:subject/mods:hierarchicalGeographic/mods:province';
@@ -161,13 +124,8 @@ EOI
     $process['field_scale'][0]['query'] = 'mods:subject/mods:cartographics/mods:scale';
 
     $process['field_use_and_reproduction'][0]['query'] = 'mods:accessCondition[@type="use and reproduction"][not(@displayLabel)]';
+    $process['_rights_statement_query'][0]['query'] = 'mods:accessCondition[@displayLabel="Rights Statement" or @displayLabel="rights statement"]';
 
-    $process['field_record_information'][3]['values']['_field_record_creation_date_single'][0]['query'] =
-      'mods:recordInfo/mods:recordCreationDate[not(@point)] or mods:originInfo/mods:dateCreated[not(@point)]';
-    $process['field_record_information'][3]['values']['_field_record_creation_date_start'][0]['query'] =
-      'mods:recordInfo/mods:recordCreationDate[@point="start"] or mods:originInfo/mods:dateCreated[@point="start"]';
-    $process['field_record_information'][3]['values']['_field_record_creation_date_end'][0]['query'] =
-      'mods:recordInfo/mods:recordCreationDate[@point="end"] or mods:originInfo/mods:dateCreated[@point="end"]';
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
       'plugin' => 'single_value',
     ];
@@ -177,30 +135,6 @@ EOI
     ];
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
       'plugin' => 'null_coalesce',
-    ];
-    $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
-      'plugin' => 'single_value',
-    ];
-    $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
-      'plugin' => 'callback',
-      'callable' => 'array_filter',
-    ];
-    $process['field_related_item_paragraph'][3]['values']['field_related_item_genre'][] = [
-      'plugin' => 'null_coalesce',
-    ];
-
-    $process['_rights_statement'] = $process['_resource_type'];
-    $process['_rights_statement'][0]['query'] = 'mods:accessCondition[@type="rights statement"]';
-    $process['_rights_statement'][4]['values']['_vid'][0]['default_value'] = 'rights_statements';
-
-    $process['_unspecified_rights_statement'] = $process['_unspecified_resource_type'];
-    $process['_unspecified_rights_statement'][1]['use_as_key'] = '@_rights_statement';
-    $process['_unspecified_rights_statement'][2]['values']['_vid'][0]['default_value'] = 'rights_statements';
-
-    $process['field_rights_statement'] = $process['field_resource_type'];
-    $process['field_rights_statement'][0]['source'] = [
-      '@_rights_statement',
-      '@_unspecified_rights_statement',
     ];
 
     $process['field_publication_genre'][3] = [
@@ -231,15 +165,28 @@ EOI
       ],
     ]);
 
+    $process['field_hierarchical_geographic_su'][3]['values']['field_state'][0]['query'] = 'mods:state | mods:province';
+    $process['field_note_paragraph'][0]['query'] = 'mods:note[not(@type="admin" or @displayLabel="Peer Reviewed")]';
+
+    $process['field_geographic_code'] = $process['field_lcc_classification'];
+    $process['field_geographic_code'][0]['query'] = 'mods:subject/mods:geographicCode';
+
+    $process['field_publication_number'] = $process['field_item_identifier'];
+    $process['field_publication_number'][0]['query'] = 'mods:relatedItem[@type="host"]/mods:part/mods:detail[@type="issue"]';
+
+    $process['field_extent_first_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:start';
+    $process['field_extent_last_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:end';
+
+    $process['_use_license_query'][0]['query'] =
+      'mods:accessCondition[@type="use and reproduction" or @type="Use and Reproduction"][@displayLabe="Creative Commons license" or @displayLabel="Creative Commons license"]';
+
     $process['field_remote_media_url'] = $process['field_ismn'];
     $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"]';
 
-    array_splice($process['field_weight'], 2, 0, [
-      [
-        'plugin' => 'callback',
-        'callable' => 'intval',
-      ],
-    ]);
+    $process['field_physical_location'] = $process['field_note_location'];
+    $process['field_physical_location'][0]['query'] = 'mods:location/mods:physicalLocation';
+
+    unset($process['field_note'][5]);
 
     $to_remove = [
       ['field_version_identifier'],
@@ -276,7 +223,10 @@ EOI
       ['field_note_location'],
       ['field_enumeration_and_chronology'],
       ['field_copyright_holder'],
-      ['field_part'],
+      ['field_related_item_paragraph', 3, 'values', 'field_related_item_identifier', 7],
+      ['_rights_statement', 5],
+      ['_rights_statement', 6],
+      ['_rights_statement', 7],
     ];
 
     foreach ($to_remove as $path) {
@@ -286,9 +236,113 @@ EOI
     if (!isset($migration['migration_dependencies']['required'])) {
       $migration['migration_dependencies']['required'] = [];
     }
-    $migration['migration_dependencies']['required'][] = 'bcelndora_stub_terms_culture';
+    unset($migration['migration_dependencies']['required']['dgis_stub_terms_affiliate']);
+    $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_culture';
+    $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_institution';
 
     $logger->info('Migration altered for dgis_nodes.');
+  }
+
+  /**
+   * Process the person values.
+   *
+   * @param array $values
+   *   The values to process.
+   */
+  private function processPersonValues(array &$values): void {
+    unset($values['target_id']);
+
+    $values['_culture'] = $values['_family_name'];
+    $values['_culture'][0]['query'] = 'normalize-space(mods:namePart[@type="culture"][normalize-space()])';
+
+    $values['_institution'] = $values['_family_name'];
+    $values['_institution'][0]['query'] = 'normalize-space(mods:affiliation[normalize-space()])';
+
+    $values['_description'] = $values['_family_name'];
+    $values['_description'][0]['query'] = 'normalize-space(mods:description[normalize-space()][1])';
+
+    $values['_other_id'] = $values['_family_name'];
+    $values['_other_id'][0]['query'] = 'normalize-space(mods:nameIdentifier[not(@type)][normalize-space()][1])';
+
+    $values['_orcid'] = $values['_family_name'];
+    $values['_orcid'][0]['query'] = 'normalize-space(mods:nameIdentifier[@type="orcid"][normalize-space()][1])';
+
+    unset($values['_affiliation_lookup']);
+    unset($values['_affiliation']);
+
+    $values['target_id'] = [
+      [
+        'plugin' => 'get',
+        'source' => [
+          '@_authority',
+          '@_value_uri',
+          '@_untyped_names',
+          '@_given_name',
+          '@_family_name',
+          '@_date_name',
+          '@_display_form',
+          '@_culture',
+          '@_institution',
+          '@_description',
+          '@_other_id',
+          '@_orcid',
+        ],
+      ],
+      [
+        'plugin' => 'flatten',
+      ],
+      [
+        'plugin' => 'migration_lookup',
+        'migration' => 'dgis_stub_terms_person',
+        'stub_id' => 'dgis_stub_terms_person',
+      ],
+      [
+        'plugin' => 'skip_on_empty',
+        'method' => 'row',
+      ],
+    ];
+  }
+
+  /**
+   * Process the organization values.
+   *
+   * @param array $values
+   *   The values to process.
+   */
+  private function processOrganizationValues(array &$values): void {
+    unset($values['target_id']);
+
+    $values['_institution'] = $values['_date_name'];
+    $values['_institution'][0]['query'] = 'normalize-space(mods:affiliation[normalize-space()])';
+
+    unset($values['_affiliation_lookup']);
+    unset($values['_affiliation']);
+
+    $values['target_id'] = [
+      [
+        'plugin' => 'get',
+        'source' => [
+          '@_authority',
+          '@_value_uri',
+          '@_untyped_names',
+          '@_date_name',
+          '@_display_form',
+          '@_institution',
+        ],
+      ],
+      [
+        'plugin' => 'flatten',
+      ],
+      [
+        'plugin' => 'migration_lookup',
+        'migration' => 'dgis_stub_terms_corporate_body',
+        'stub_id' => 'dgis_stub_terms_corporate_body',
+      ],
+      [
+        'plugin' => 'skip_on_empty',
+        'method' => 'row',
+      ],
+    ];
   }
 
 }
