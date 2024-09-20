@@ -353,11 +353,6 @@ EOI
   private function processStatusCheck(array &$process): void {
     // The default status behavior is retained as a fallback.
     $process['_status'] = $process['status'];
-    $process['_status'][] = [
-      'plugin' => 'dgi_migrate.process.log',
-      'template' => 'Status :value',
-      'level' => 4,
-    ];
     $process['_policy_status'] = [
       [
         'plugin' => 'dgi_migrate.subindex',
