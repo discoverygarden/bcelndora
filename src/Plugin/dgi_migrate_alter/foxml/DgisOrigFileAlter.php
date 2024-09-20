@@ -26,6 +26,67 @@ class DgisOrigFileAlter extends MigrationAlterBase implements MigrationAlterInte
     $process =& $migration['process'];
 
     $process['_source_dsid'][0]['map']['info:fedora/ir:thesisCModel'] = 'PDF';
+    unset($process['_latest']);
+
+    $to_insert['_source_dsid_2'] = [
+      [
+        'plugin' => 'static_map',
+        'source' => '@_models',
+        'bypass' => FALSE,
+        'map' => [
+          'info:fedora/islandora:sp_large_image_cmodel' => 'JP2',
+          'info:fedora/islandora:pageCModel' => 'JP2',
+          'info:fedora/islandora:newspaperPageCModel' => 'JP2',
+        ],
+      ],
+      [
+        'plugin' => 'extract',
+        'index' => [0],
+      ],
+    ];
+
+    $to_insert['_latest_1'] = [
+      [
+        'plugin' => 'dgi_migrate.subindex',
+        'source' => '@_parsed',
+        'index_from_destination' => '_source_dsid',
+        'missing_behavior' => 'skip_process',
+      ],
+    ];
+
+    $to_insert['_latest_2'] = [
+      [
+        'plugin' => 'dgi_migrate.subindex',
+        'source' => '@_parsed',
+        'index_from_destination' => '_source_dsid_2',
+        'missing_behavior' => 'skip_process',
+      ],
+    ];
+
+    $to_insert['_latest'] = [
+      [
+        'plugin' => 'null_coalesce',
+        'source' => [
+          '@_latest_1',
+          '@_latest_2',
+        ],
+      ],
+      [
+        'plugin' => 'skip_on_empty',
+        'method' => 'row',
+      ],
+      [
+        'plugin' => 'dgi_migrate.method',
+        'method' => 'latest',
+      ],
+    ];
+
+    $position = array_search('_source_dsid', array_keys($process), TRUE);
+    $process = array_merge(
+      array_slice($process, 0, $position + 1, TRUE),
+      $to_insert,
+      array_slice($process, $position + 1, NULL, TRUE)
+    );
 
     $logger->info('Migration altered for dgis_orig_file.');
   }
