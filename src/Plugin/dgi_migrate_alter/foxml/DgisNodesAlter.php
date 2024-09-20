@@ -358,7 +358,7 @@ EOI
         'plugin' => 'dgi_migrate.subindex',
         'source' => '@_node_foxml_parsed',
         'index' => 'POLICY',
-        'missing_behaviour' => 'skip_process',
+        'missing_behavior' => 'skip_process',
       ],
       [
         'plugin' => 'dgi_migrate.subproperty',
