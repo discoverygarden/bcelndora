@@ -84,8 +84,6 @@ EOI
       'default_value' => NULL,
     ];
 
-    $this->processStatusCheck($process);
-
     $process['field_description'][0]['query'] = 'mods:abstract[not(@displayLabel)]';
 
     $process['field_local_contexts'] = $process['field_ismn'];
@@ -343,55 +341,6 @@ EOI
       [
         'plugin' => 'skip_on_empty',
         'method' => 'row',
-      ],
-    ];
-  }
-
-  /**
-   * Changes how the status is set based upon defined conditions.
-   */
-  private function processStatusCheck(array &$process): void {
-    // The default status behavior is retained as a fallback.
-    $process['_status'] = $process['status'];
-    $process['_policy_status'] = [
-      [
-        'plugin' => 'dgi_migrate.subindex',
-        'source' => '@_node_foxml_parsed',
-        'index' => 'POLICY',
-        'missing_behaviour' => 'skip_process',
-      ],
-      [
-        'plugin' => 'dgi_migrate.subproperty',
-        'source' => '@_node_foxml_parsed',
-        'property' => 'PID',
-      ],
-      [
-        'plugin' => 'explode',
-        'delimiter' => ':',
-      ],
-      [
-        'plugin' => 'extract',
-        'index' => [0],
-      ],
-      [
-        'plugin' => 'static_map',
-        'map' => [
-          'cmtn' => 0,
-          'nwcc' => 0,
-          'cotr' => 0,
-        ],
-        'default_value' => NULL,
-      ],
-    ];
-    // XXX: Unset so it gets re-keyed after the internal fields are made.
-    unset($process['status']);
-    $process['status'] = [
-      [
-        'plugin' => 'null_coalesce',
-        'source' => [
-          '@_policy_status',
-          '@_status',
-        ],
       ],
     ];
   }
