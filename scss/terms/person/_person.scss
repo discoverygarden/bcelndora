@@ -1,0 +1,35 @@
+/**
+* Styling definitions for the 'Person' Taxonomy terms.
+*/
+
+.path-taxonomy {
+  .view-taxonomy-term {
+    .views-row article.islandora-object {
+      h2 {
+        font-size: 24px;
+      }
+    }
+
+    .taxonomy-container {
+      padding: 0;
+
+      .column-one {
+        padding-left: 0;
+      }
+
+      .column-two {
+        padding-right: 0;
+      }
+    }
+
+    ul.links {
+      .node-readmore,
+      .comment-add {
+        a {
+          @extend %unique-button;
+          display: block;
+        }
+      }
+    }
+  }
+}
