@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
  */
 function bcelndora_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
   // Add a views template suggestion for the taxonomy term 'person' vocab.
-  if (in_array($hook, array('views_view'))) {
+  if (in_array($hook, ['views_view'])) {
     $parameters = \Drupal::routeMatch()->getParameters()->all();
     if (isset($parameters['taxonomy_term'])) {
       $term = $parameters['taxonomy_term'];
