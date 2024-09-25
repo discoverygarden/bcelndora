@@ -9,6 +9,36 @@ use Drupal\scss_compiler\ScssCompilerAlterStorage;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
+ * Implements hook_theme_suggestions_alter().
+ */
+function bcelndora_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  // Add a views template suggstion for the taxonomy term 'person' vocab.
+  if (in_array($hook, array('views_view'))) {
+    $parameters = \Drupal::routeMatch()->getParameters()->all();
+    if (isset($parameters['taxonomy_term'])) {
+      $term = $parameters['taxonomy_term'];
+      $vid = $term->bundle();
+      $vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load($vid);
+      if ($vocabulary->getOriginalId() === "person") {
+        $suggestions[] = $hook . '__' . 'taxonomy_term__person';
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function bcelndora_theme($existing, $type, $theme, $path) {
+  return [
+    'views_view__taxonomy_term__person' => [
+      'template' => 'views-view--taxonomy-term--person',
+      'base hook' => 'views_view',
+    ],
+  ];
+}
+
+/**
  * Implements hook_scss_compiler_import_paths_alter().
  */
 function bcelndora_scss_compiler_import_paths_alter(array &$additional_import_paths) {

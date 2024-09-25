@@ -2,6 +2,8 @@
 * Styling definitions for the 'Person' Taxonomy terms.
 */
 
+@import "media-queries";
+
 .path-taxonomy {
   .view-taxonomy-term {
     .views-row article.islandora-object {
@@ -10,16 +12,9 @@
       }
     }
 
-    .taxonomy-container {
+    .view-header.container.col {
       padding: 0;
-
-      .column-one {
-        padding-left: 0;
-      }
-
-      .column-two {
-        padding-right: 0;
-      }
+      margin-bottom: 1.5rem;
     }
 
     ul.links {
@@ -30,6 +25,19 @@
           display: block;
         }
       }
+    }
+
+    .table-responsive {
+      border: none;
+    }
+  }
+
+  .feed-icons {
+    display: inline-block;
+
+    a.feed-icon {
+      @extend %unique-button;
+      display: inline-block;
     }
   }
 }
