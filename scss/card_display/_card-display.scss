@@ -1,0 +1,34 @@
+/**
+* Styling definitions for the 'Person' Taxonomy term card display.
+*/
+
+body.path-taxonomy {
+  @extend %card-display;
+
+  .main-container {
+    margin-bottom: 1.5rem;
+  }
+
+  div.solr-search-row-content {
+    .views-row {
+      .card-view-thumbnail {
+        .field.field--name-did-image {
+          @extend %basic-thumbnail;
+          overflow: hidden;
+        }
+      }
+
+      .card-view-metadata {
+        .page-title {
+          a {
+            padding-top: 0px;
+            font-size: 18px;
+            font-weight: normal;
+            line-height: 28px;
+            color: $base-color;
+          }
+        }
+      }
+    }
+  }
+}
