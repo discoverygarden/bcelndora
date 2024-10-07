@@ -2,10 +2,8 @@
 
 namespace Drupal\bcelndora\Plugin\dgi_migrate_alter\foxml;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\dgi_migrate_alter\Plugin\MigrationAlterBase;
 use Drupal\dgi_migrate_alter\Plugin\MigrationAlterInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Alter for dgis_stub_nodes migration.
@@ -37,7 +35,8 @@ class DgisStubNodesAlter extends MigrationAlterBase implements MigrationAlterInt
         'value_key' => 'field_external_uri',
         'entity_type' => 'taxonomy_term',
         'ignore_case' => TRUE,
-      ]
+      ],
     ];
   }
+
 }
