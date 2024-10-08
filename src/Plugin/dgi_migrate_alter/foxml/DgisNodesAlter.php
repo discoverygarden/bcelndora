@@ -39,6 +39,9 @@ class DgisNodesAlter extends MigrationAlterBase implements MigrationAlterInterfa
   method: getUri
 - plugin: callback
   callable: file_get_contents
+- plugin: skip_on_empty
+  method: row
+  message: 'Failed to fetch the MODS XML.'
 - plugin: dgi_saxon_helper_migrate.process
   path: $xslt_path
 - plugin: dgi_migrate.process.xml.domstring
