@@ -9,7 +9,7 @@ use Drupal\dgi_migrate_alter\Plugin\MigrationAlterInterface;
  * Alter for dgis_stub_nodes migration.
  *
  * @MigrationAlter(
- *   id = "bcelndora_dgis_nodes_alter",
+ *   id = "bcelndora_dgis_stub_nodes_alter",
  *   label = @Translation("DGIS Stub Nodes Migration Alteration"),
  *   description = @Translation("Alters the DGIS Stub Nodes migration."),
  *   migration_id = "dgis_stub_nodes"
