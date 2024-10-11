@@ -1492,8 +1492,8 @@
     
     <xsl:template name="partDetail">
         <xsl:if test="mods:detail!=''">
-            <xsl:variable name="volNo"><xsl:value-of select="normalize-space(mods:detail[@type='volume'])"/></xsl:variable>
-            <xsl:variable name="issNo"><xsl:value-of select="normalize-space(mods:detail[@type='issue'])"/></xsl:variable>
+            <xsl:variable name="volNo"><xsl:value-of select="normalize-space(mods:detail[@type='volume']/mods:number)"/></xsl:variable>
+            <xsl:variable name="issNo"><xsl:value-of select="normalize-space(mods:detail[@type='issue']/mods:number)"/></xsl:variable>
             <detail type="issue" xmlns="http://www.loc.gov/mods/v3">
                 <xsl:if test="$volNo!='' and $issNo!=''">
                     <xsl:text>Volume </xsl:text><xsl:value-of select="normalize-space($volNo)"/><xsl:text>, Issue </xsl:text><xsl:value-of select="normalize-space($issNo)"/>  
