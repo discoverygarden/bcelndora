@@ -232,9 +232,6 @@ EOI
       ['_rights_statement', 5],
       ['_rights_statement', 6],
       ['_rights_statement', 7],
-      // XXX: For the time being coordinates is being removed as there is data
-      // clean-up issues that the client will address.
-      ['field_coordinates'],
     ];
 
     foreach ($to_remove as $path) {
