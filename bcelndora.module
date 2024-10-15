@@ -1,0 +1,98 @@
+<?php
+
+/**
+ * @file
+ * bcelndora.module
+ */
+
+use Drupal\scss_compiler\ScssCompilerAlterStorage;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function bcelndora_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  // Add a views template suggestion for the taxonomy term 'person' vocab.
+  if (in_array($hook, ['views_view'])) {
+    $parameters = \Drupal::routeMatch()->getParameters()->all();
+    if (isset($parameters['taxonomy_term'])) {
+      $term = $parameters['taxonomy_term'];
+      $vid = $term->bundle();
+      $vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load($vid);
+      if ($vocabulary->getOriginalId() === "person") {
+        $suggestions[] = $hook . '__' . 'taxonomy_term__person';
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function bcelndora_theme($existing, $type, $theme, $path) {
+  return [
+    'views_view__taxonomy_term__person' => [
+      'template' => 'views-view--taxonomy-term--person',
+      'base hook' => 'views_view',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_scss_compiler_import_paths_alter().
+ */
+function bcelndora_scss_compiler_import_paths_alter(array &$additional_import_paths) {
+  $theme_list = \Drupal::service('extension.list.theme');
+  $file_system = \Drupal::service('file_system');
+  $additional_import_paths[] = $file_system->realpath($theme_list->getPath('dgi_i8_base')) . "/scss/";
+}
+
+/**
+ * Implements hook_scss_compiler_variables_alter().
+ */
+function bcelndora_scss_compiler_variables_alter(ScssCompilerAlterStorage $storage) {
+  if (function_exists('dgi_i8_base_scss_compiler_variables_alter')) {
+    dgi_i8_base_scss_compiler_variables_alter($storage);
+  }
+
+  $theme_list = \Drupal::service('extension.list.theme');
+  $theme_path = $theme_list->getPath('dgi_i8_base');
+  $module_list = \Drupal::service('extension.list.module');
+  $module_path = $module_list->getPath('bcelndora');
+
+  /** @var \Drupal\scss_compiler\ScssCompilerInterface $scss_compiler */
+  $scss_compiler = \Drupal::service('scss_compiler');
+  $upstream = $storage->getByFile($scss_compiler->replaceTokens('@dgi_i8_base/scss/style.scss'));
+
+  $to_set = array_merge(
+    $upstream,
+    [
+      'theme-path' => UrlGenerator::getRelativePath("/{$module_path}/", "/{$theme_path}"),
+    ],
+  );
+
+  $storage->setByFile($to_set, '@bcelndora/scss/styles.scss');
+}
+
+/**
+ * Implements hook_page_attachments().
+ *
+ * Attach AUC specific base theme overrides via the module library.
+ */
+function bcelndora_page_attachments(array &$page) {
+  if (\Drupal::theme()->getActiveTheme()->getName() === "dgi_i8_base") {
+    $page['#attached']['library'][] = 'bcelndora/theme_overrides';
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ *
+ * Unset the theme's 'framework' library CSS, as this module provides its own
+ * via this module's 'hook_page_attachments' implementation.
+ */
+function bcelndora_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'dgi_i8_base' && isset($libraries['framework']['css']['theme']['scss/style.scss'])) {
+    unset($libraries['framework']['css']['theme']['scss/style.scss']);
+  }
+}

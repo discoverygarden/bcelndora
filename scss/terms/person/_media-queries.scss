@@ -1,0 +1,51 @@
+/**
+* Media queries for the 'Person' Taxonomy terms.
+*/
+
+.path-taxonomy {
+  .view-taxonomy-term {
+    @media #{$mobile " || " $tablet " || " $normal} {
+      .view-header.container.col {
+        h2 {
+          padding: 0;
+        }
+
+        .view-content.view-solr-grid-display {
+          padding: 0;
+        }
+
+        .column-one {
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+        .column-two {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+    }
+
+    @media #{$wide} {
+      .view-header.container.col {
+        h2 {
+          padding: $grid-gutter-width-half;
+        }
+
+        .view-content.view-solr-grid-display {
+          padding: 0 $grid-gutter-width-half;
+        }
+
+        .column-one {
+          padding-left: 0;
+          padding-right: $grid-gutter-width-half;
+        }
+
+        .column-two {
+          padding-right: 0;
+          padding-left: $grid-gutter-width-half;
+        }
+      }
+    }
+  }
+}

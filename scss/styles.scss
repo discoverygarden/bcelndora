@@ -1,0 +1,9 @@
+// Import default variables.
+@import "default-variables"; // From dgi_i8_base
+
+// Import base styles.
+@import "base-styles"; // From dgi_i8_base
+
+// BCELN Specific imports from this module.
+@import "terms/person/person";
+@import "card_display/card-display";
