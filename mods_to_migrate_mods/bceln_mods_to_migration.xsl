@@ -1513,8 +1513,8 @@
 
     <xsl:template name="partDetail">
         <xsl:if test="mods:detail!=''">
-            <xsl:variable name="volNo"><xsl:value-of select="normalize-space(mods:detail[@type='volume'])"/></xsl:variable>
-            <xsl:variable name="issNo"><xsl:value-of select="normalize-space(mods:detail[@type='issue'])"/></xsl:variable>
+            <xsl:variable name="volNo"><xsl:value-of select="normalize-space(mods:detail[@type='volume']/mods:number)"/></xsl:variable>
+            <xsl:variable name="issNo"><xsl:value-of select="normalize-space(mods:detail[@type='issue']/mods:number)"/></xsl:variable>
             <xsl:choose>
                 <xsl:when test="ancestor::mods:relatedItem">
                     <detail type="issue" xmlns="http://www.loc.gov/mods/v3">
