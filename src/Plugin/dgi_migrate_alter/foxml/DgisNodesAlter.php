@@ -89,26 +89,26 @@ EOI
 
     $this->processStatusCheck($process);
 
-    $process['field_description'][0]['query'] = 'mods:abstract[not(@displayLabel)]';
+    $process['field_description'][0]['query'] = 'mods:abstract[not(@displayLabel)][normalize-space()]';
 
     $process['field_local_contexts'] = $process['field_ismn'];
-    $process['field_local_contexts'][0]['query'] = 'mods:identifier[@type="Local Contexts Project ID"]';
+    $process['field_local_contexts'][0]['query'] = 'mods:identifier[@type="Local Contexts Project ID"][normalize-space()]';
 
     $process['field_access_id'] = $process['field_ismn'];
-    $process['field_access_id'][0]['query'] = 'mods:identifier[@type="access"]';
+    $process['field_access_id'][0]['query'] = 'mods:identifier[@type="access"][normalize-space()]';
 
     $process['field_identifier_uri'] = $process['field_publication_url'];
-    $process['field_identifier_uri'][0]['query'] = 'mods:identifier[@type="uri"]';
+    $process['field_identifier_uri'][0]['query'] = 'mods:identifier[@type="uri"][normalize-space()]';
 
     unset($process['field_url/uri']);
     $process['field_url'] = $process['field_publication_url'];
     $process['field_url'][0]['query'] = 'mods:location/mods:url[normalize-space()]';
 
     $process['field_issn'] = $process['field_ismn'];
-    $process['field_issn'][0]['query'] = 'mods:identifier[@type="issn"]';
+    $process['field_issn'][0]['query'] = 'mods:identifier[@type="issn"][normalize-space()]';
 
     $process['field_keywords'] = $process['field_form'];
-    $process['field_keywords'][0]['query'] = 'mods:note[@displayLabel="keywords"]';
+    $process['field_keywords'][0]['query'] = 'mods:note[@displayLabel="keywords"][normalize-space()]';
 
     $personValues = &$process['field_linked_agent'][1]['values'];
     $this->processPersonValues($personValues);
@@ -123,13 +123,13 @@ EOI
     $this->processOrganizationValues($subjectOrgValues);
 
     $process['field_hierarchical_geographic_su'][3]['values']['field_state']['0']['query'] =
-      'mods:subject/mods:hierarchicalGeographic/mods:state | mods:subject/mods:hierarchicalGeographic/mods:province';
+      'mods:subject/mods:hierarchicalGeographic/mods:state[normalize-space()] | mods:subject/mods:hierarchicalGeographic/mods:province[normalize-space()]';
 
     $process['field_scale'] = $process['field_ark'];
-    $process['field_scale'][0]['query'] = 'mods:subject/mods:cartographics/mods:scale';
+    $process['field_scale'][0]['query'] = 'mods:subject/mods:cartographics/mods:scale[normalize-space()]';
 
-    $process['field_use_and_reproduction'][0]['query'] = 'mods:accessCondition[@type="use and reproduction"][not(@displayLabel)]';
-    $process['_rights_statement_query'][0]['query'] = 'mods:accessCondition[@displayLabel="Rights Statement" or @displayLabel="rights statement"]';
+    $process['field_use_and_reproduction'][0]['query'] = 'mods:accessCondition[@type="use and reproduction"][not(@displayLabel)][normalize-space()]';
+    $process['_rights_statement_query'][0]['query'] = 'mods:accessCondition[@displayLabel="Rights Statement" or @displayLabel="rights statement"][normalize-space()]';
 
     $process['field_record_information'][3]['values']['field_record_information_note'][] = [
       'plugin' => 'single_value',
@@ -170,26 +170,26 @@ EOI
       ],
     ]);
 
-    $process['field_hierarchical_geographic_su'][3]['values']['field_state'][0]['query'] = 'mods:state | mods:province';
-    $process['field_note_paragraph'][0]['query'] = 'mods:note[not(@type="admin" or @displayLabel="Peer Reviewed")]';
+    $process['field_hierarchical_geographic_su'][3]['values']['field_state'][0]['query'] = 'mods:state[normalize-space()] | mods:province[normalize-space()]';
+    $process['field_note_paragraph'][0]['query'] = 'mods:note[not(@type="admin" or @displayLabel="Peer Reviewed")][normalize-space()]';
 
     $process['field_geographic_code'] = $process['field_lcc_classification'];
-    $process['field_geographic_code'][0]['query'] = 'mods:subject/mods:geographicCode';
+    $process['field_geographic_code'][0]['query'] = 'mods:subject/mods:geographicCode[normalize-space()]';
 
     $process['field_publication_number'] = $process['field_item_identifier'];
-    $process['field_publication_number'][0]['query'] = 'mods:relatedItem[@type="host"]/mods:part/mods:detail[@type="issue"]';
+    $process['field_publication_number'][0]['query'] = 'mods:relatedItem[@type="host"]/mods:part/mods:detail[@type="issue"][normalize-space()]';
 
-    $process['field_extent_first_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:start';
-    $process['field_extent_last_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:end';
+    $process['field_extent_first_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:start[normalize-space()]';
+    $process['field_extent_last_page'][0]['query'] = 'mods:relatedItem/mods:part/mods:extent[@unit="pages"]/mods:end[normalize-space()]';
 
     $process['_use_license_query'][0]['query'] =
-      'mods:accessCondition[@type="use and reproduction" or @type="Use and Reproduction"][@displayLabe="Creative Commons license" or @displayLabel="Creative Commons license"]';
+      'mods:accessCondition[@type="use and reproduction" or @type="Use and Reproduction"][@displayLabe="Creative Commons license" or @displayLabel="Creative Commons license"][normalize-space()]';
 
     $process['field_remote_media_url'] = $process['field_ismn'];
-    $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"]';
+    $process['field_remote_media_url'][0]['query'] = 'mods:identifier[@displayLabel="remote media URL"][normalize-space()]';
 
     $process['field_physical_location'] = $process['field_note_location'];
-    $process['field_physical_location'][0]['query'] = 'mods:location/mods:physicalLocation';
+    $process['field_physical_location'][0]['query'] = 'mods:location/mods:physicalLocation[normalize-space()]';
 
     unset($process['field_note'][5]);
 
