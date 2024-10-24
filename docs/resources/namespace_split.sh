@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FEDORA_DATA="${FEDORA_DATA:-/usr/local/fedora/}";
+FEDORA_DATA="${FEDORA_DATA:-/usr/local/fedora/data}";
 
 if [[ -z "${NAMESPACE}" ]]; then
     echo "Error: NAMESPACE needs to be defined."
