@@ -210,7 +210,8 @@ while the `import` log contains the actual output of the migration run.
 The `01-messages` directory contains `JSON` of each individual migration's
 messages that are retrieved once the migration runner is completed.
 
-> [!TIP] An equivalent Drush command can be run to retrieve the messages per migration as
+> [!TIP]
+> An equivalent Drush command can be run to retrieve the messages per migration as
 > well: `drush mmsg {the name of the migration}`.
 
 The `01-multiprocess-logs` directory contains output for each worker that was
