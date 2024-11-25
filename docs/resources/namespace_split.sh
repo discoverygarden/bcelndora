@@ -1,27 +1,30 @@
 #!/bin/bash
 
-FEDORA_DATA="${FEDORA_DATA:-/usr/local/fedora/data}";
+FEDORA_DATA="${FEDORA_DATA:-/usr/local/fedora/data}"
+EXPORT_DIR="${FEDORA_DATA}/exports"
 
-if [[ -z "${NAMESPACE}" ]]; then
-    echo "Error: NAMESPACE needs to be defined."
+if [[ -z "${NAMESPACES}" ]]; then
+    echo "Error: NAMESPACES needs to be defined, and should be a comma separated list of namespaces."
     exit 1
 fi
 
 if [[ ! -d "${FEDORA_DATA}/objectStore" ]]; then
-    echo "Error: The objectStore directory does not exist at $FEDORA_DATA/objectStore".
-    exit 1;
+    echo "Error: The objectStore directory does not exist at $FEDORA_DATA/objectStore"
+    exit 1
 fi
 
-cd $FEDORA_DATA
+IFS=',' read -r -a namespaces <<< "$NAMESPACES"
 
-mkdir -p "$FEDORA_DATA/$NAMESPACE"
+mkdir -p "$EXPORT_DIR"
 
 cd "${FEDORA_DATA}/objectStore" || exit 1
 
-find . -name "info%3Afedora%2F${NAMESPACE}%3A*" > "$FEDORA_DATA/$NAMESPACE-filelist"
+for NAMESPACE in "${namespaces[@]}"; do
+    find . -name "info%3Afedora%2F${NAMESPACE}%3A*" >> "$EXPORT_DIR/filelist"
+done
 
 cd $FEDORA_DATA
 
 while read -r i; do
-    rsync -R "objectStore/$i" "$NAMESPACE/"
-done < "$FEDORA_DATA/$NAMESPACE-filelist"
+    rsync -R "objectStore/$i" "$EXPORT_DIR/"
+done < "$EXPORT_DIR/filelist"
