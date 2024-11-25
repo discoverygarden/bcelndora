@@ -32,12 +32,16 @@ class DgisOrigFileAlter extends MigrationAlterBase implements MigrationAlterInte
       [
         'plugin' => 'static_map',
         'source' => '@_models',
-        'bypass' => FALSE,
         'map' => [
           'info:fedora/islandora:sp_large_image_cmodel' => 'JP2',
           'info:fedora/islandora:pageCModel' => 'JP2',
           'info:fedora/islandora:newspaperPageCModel' => 'JP2',
         ],
+        'default_value' => '',
+      ],
+      [
+        'plugin' => 'skip_on_empty',
+        'method' => 'process',
       ],
       [
         'plugin' => 'extract',
@@ -55,6 +59,11 @@ class DgisOrigFileAlter extends MigrationAlterBase implements MigrationAlterInte
     ];
 
     $to_insert['_latest_2'] = [
+      [
+        'plugin' => 'skip_on_empty',
+        'source' => '@_source_dsid_2',
+        'method' => 'process',
+      ],
       [
         'plugin' => 'dgi_migrate.subindex',
         'source' => '@_parsed',

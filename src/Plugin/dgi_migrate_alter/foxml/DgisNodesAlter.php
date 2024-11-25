@@ -242,6 +242,8 @@ EOI
       $migration['migration_dependencies']['required'] = [];
     }
     unset($migration['migration_dependencies']['required']['dgis_stub_terms_affiliate']);
+
+    $migration['migration_dependencies']['required'][] = 'bceln_mads_to_term_person';
     $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_culture';
     $migration['migration_dependencies']['required'][] = 'bceln_stub_terms_institution';
 
