@@ -97,8 +97,16 @@ class DgisStubTermsPersonAlter extends MigrationAlterBase implements MigrationAl
       ],
     ];
 
-    unset($process['field_relationship']);
+    // XXX: Ease the matching conditions for untyped names.
+    $untyped_name_match =& $process['_tid_dc_name'];
 
+    $new_untyped = array_diff($untyped_name_match[0]['empty'], [
+      'field_person_preferred_name.given',
+      'field_person_preferred_name.family',
+    ]);
+    $untyped_name_match[0]['empty'] = array_values($new_untyped);
+
+    unset($process['field_relationship']);
     if (!isset($migration['migration_dependencies']['required'])) {
       $migration['migration_dependencies']['required'] = [];
     }
