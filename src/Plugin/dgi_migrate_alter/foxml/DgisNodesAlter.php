@@ -234,6 +234,8 @@ EOI
       ['_rights_statement', 7],
     ];
 
+    $this->addMiradorDisplayHints($process);
+
     foreach ($to_remove as $path) {
       NestedArray::unsetValue($process, $path);
     }
@@ -399,6 +401,40 @@ EOI
         ],
       ],
     ];
+  }
+
+  /**
+   * Add Mirador display hints.
+   *
+   * @param array $process
+   *   The process array to alter.
+   */
+  protected function addMiradorDisplayHints(&$process) {
+    $display_hints = &$process['field_display_hints'];
+    $mirador_hints = [
+      'https://schema.org/Book' => 'https://projectmirador.org',
+      'https://schema.org/PublicationIssue' => 'https://projectmirador.org',
+    ];
+    $existence = [
+      'https://schema.org/Book' => FALSE,
+      'https://schema.org/PublicationIssue' => FALSE,
+    ];
+
+    // Only add hints if they already don't exist.
+    foreach ($display_hints[0]['map'] as $display_hint) {
+      $model = $display_hint[0];
+      if (isset($mirador_hints[$model])) {
+        $existence[$model] = TRUE;
+      }
+    }
+
+    array_filter($existence);
+    foreach (array_keys($existence) as $mirador_hint) {
+      $display_hints[0]['map'][] = [
+        $mirador_hint,
+        [$mirador_hints[$mirador_hint]],
+      ];
+    }
   }
 
 }
