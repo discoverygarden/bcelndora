@@ -16,7 +16,7 @@ fi
 
 IFS=',' read -r -a namespaces <<< "$NAMESPACES"
 
-mkdir -p "$EXPORT_DIR"
+mkdir -p "$EXPORT_DIR/objectStore"
 
 cd "${FEDORA_DATA}/objectStore" || exit 1
 
@@ -27,5 +27,5 @@ done
 cd $FEDORA_DATA
 
 while read -r i; do
-    rsync -R "objectStore/$i" "$EXPORT_DIR/"
+    rsync -R "objectStore/$i" "$EXPORT_DIR/objectStore"
 done < "$EXPORT_DIR/filelist"
