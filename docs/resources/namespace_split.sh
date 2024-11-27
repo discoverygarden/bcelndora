@@ -1,12 +1,13 @@
 #!/bin/bash
 
 FEDORA_DATA="${FEDORA_DATA:-/usr/local/fedora/data}"
-EXPORT_DIR="${FEDORA_DATA}/exports"
 
 if [[ -z "${NAMESPACES}" ]]; then
     echo "Error: NAMESPACES needs to be defined, and should be a comma separated list of namespaces."
     exit 1
 fi
+
+EXPORT_DIR=${EXPORT_DIR:-$FEDORA_DATA/$NAMESPACES}
 
 if [[ ! -d "${FEDORA_DATA}/objectStore" ]]; then
     echo "Error: The objectStore directory does not exist at $FEDORA_DATA/objectStore"
