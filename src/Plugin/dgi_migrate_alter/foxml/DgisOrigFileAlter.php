@@ -40,10 +40,6 @@ class DgisOrigFileAlter extends MigrationAlterBase implements MigrationAlterInte
         'default_value' => '',
       ],
       [
-        'plugin' => 'skip_on_empty',
-        'method' => 'process',
-      ],
-      [
         'plugin' => 'extract',
         'index' => [0],
       ],
