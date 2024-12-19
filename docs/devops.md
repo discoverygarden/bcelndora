@@ -63,7 +63,7 @@ The file tree below show the files which will be used to manage sites:
 #### `update-helm.sh`
 
 This script when provided with a service/helm installation name, helm chart
-reference, and a site/namespace, will upgrade or install it. For example, 
+reference, and a site/namespace, will upgrade or install it. For example,
 running `./scripts/update-helm.sh cantaloupe dgi/cantaloupe dc` will install
 the cantaloupe chart in the dc namespace. If the script detects any changes, it
 will display them to the user with a prompt to apply them.
@@ -75,8 +75,8 @@ script creates a list of services to run against from the `$ns/charts.yaml`
 file. The file contains an object called `charts` where the keys are the
 service/installation name and the values contains a helm chart reference.
 
-For example, running `update-all.sh dc` will install all the services for the dc
-site declared in the file `dc/charts.yaml`
+For example, running `update-all.sh dc` will install all the services for the
+dc site declared in the file `dc/charts.yaml`
 
 ```yaml
 charts:
@@ -101,16 +101,17 @@ The set of charts installed should not have to change across sites.
 
 ### `export-config.sh`
 
-This script will export the config for the provided site and store
-it in a tarball.
+This script will export the config for the provided site and store it in a
+tarball.
 
-For example, running `export-config.sh dc` will export the config to `dc/config`
-and compress it to `dc/config.tar.gz`
+For example, running `export-config.sh dc` will export the config to
+`dc/config` and compress it to `dc/config.tar.gz`
 
 ### `fix-perms.sh`
 
 This is a helper to provide write access to the `microk8s` group so that all
-Kubernetes admins can edit the files. This script needs to be run with root priveleges.
+Kubernetes admins can edit the files. This script needs to be run with root
+priveleges.
 
 ### Configuration
 
@@ -256,10 +257,10 @@ vim foo/shared/affinity.yaml
 Running `update-helm.sh` and `update-all.sh` will deploy the latest release to
 a service. However, some more care is required when updating drupal.
 
-Before updating, drupal configuration should be exported and merged back in. The
-proccess involves checking out the currently deployed tag locally and replacing
-the drupal configs with what is running in production, then creating a pull
-request.
+Before updating, drupal configuration should be exported and merged back in.
+The proccess involves checking out the currently deployed tag locally and
+replacing the drupal configs with what is running in production, then creating
+a pull request.
 
 Example:
 ```bash
@@ -306,8 +307,8 @@ contains the full documentation on how to create a cluster from scratch. Since
 the cluster has already been created this document will explain how to add
 additional nodes to the cluster.
 
-## Local requirements
-Before running the following requirements must be installed.
+## Local requirements Before running the following requirements must be
+installed.
 
  - [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
  - [python boto 3](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html#installation)
