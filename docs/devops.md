@@ -315,8 +315,17 @@ installed.
  - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 Your workstation must also be configured to access the containerprod account
-with read access the required secrets. DGI will provide you with the account
-access.
+with read access the required secrets.
+
+For bceln add the following profile to your aws config.
+```
+[profile bceln-deploy]
+sso_start_url = https://discoverygarden.awsapps.com/start#/
+sso_region = us-east-1
+sso_account_id = 231224489621
+sso_role_name = bceln-deploy
+region = us-east-1
+```
 
 ## Adding the Node with Ansible
 
