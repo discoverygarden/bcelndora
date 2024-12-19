@@ -125,7 +125,7 @@ Below will contain explanations of the required configurations.
 The configurations in this directory are used by multiple services by being
 symlinked.
 
-`affinity.yaml` is required all services that contain compute
+`affinity.yaml` is required by all services that contain compute
 resources(everything other than secrets). It is used to select the correct node
 for a site to run on.
 
@@ -136,9 +136,9 @@ nodeSelector:
   kubernetes.io/hostname: beln-arca-dc.dc.sfu.ca
 ```
 
-`ingress.yaml` is used by the services which require ingress. Currently that
-only contains cantaloupe and drupal. It needs to be updated with the hostname
-of the site.
+`ingress.yaml` is used by the services which require ingress. Currently only
+cantaloupe and drupal. It needs to be updated with the public hostname of the
+site.
 
 ```yaml
 ingress:
@@ -151,7 +151,7 @@ ingress:
 #### Drupal
 
 The drupal directory contains multiple values files. `affinity.yaml` and
-`ingress.yaml` are the described symlinks to the shared configs. 
+`ingress.yaml` are symlinks to the shared configs. 
 
 `base.yaml` contains configuration that should not need to change across sites
 but is specific to the cluster. 
@@ -233,7 +233,7 @@ Ex: `./gen-secrets.sh bceln/siteName`
 
 On the dc server cd to `/opt/helm_values` and copy an existing site's directory
 as a starting point. Then update the sites configuration based on the
-[configuration](### Configuration) section of this document.
+[configuration](#configuration) section of this document.
 
 To install the site run `./scripts/update-all.sh siteName`.
 
@@ -296,7 +296,8 @@ imported.
 
 ## Deploying nodes
 
-We use ansible to deploy microk8s to new nodes. The playbook's repository
+We use ansible to deploy microk8s to new nodes. The [playbook's
+repository](https://github.com/discoverygarden/docker-dgi-proto/tree/main/server-setup)
 contains the full documentation on how to create a cluster from scratch. Since
 the cluster has already been created this document will explain how to add
 additional nodes to the cluster.
@@ -309,12 +310,16 @@ Before running the following requirements must be installed.
  - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 Your workstation must also be configured to access the containerprod account
-with read access the required secrets. DGI will provide you the account access.
+with read access the required secrets. DGI will provide you with the account
+access.
 
 ## Adding the Node with Ansible
 
 First make sure you have added your ssh keys to the bastion and new node, and
 that you ssh you are only prompted for an mfa code.
+
+Clone https://github.com/discoverygarden/docker-dgi-proto and cd into
+`server-setup`
 
 To add the node to the cluster in ansible add the hostname under `[bceln_prod]`
 in `inventory/prod`.
@@ -340,7 +345,8 @@ new node:
 ansible-playbook microk8s.yml -i inventory/prod --diff --ask-become-pass -l new.node.hostname
 ```
 
-Once microk8s has been provisioned, add the node the cluster by running
-`microk8s add-node` on the dc node, and running the generated `microk8s join`
-command on the new node. To verify that the node has been added run `Kubectl
-get nodes` from the dc node.
+Once microk8s has been provisioned add the node the cluster by running:
+1. `microk8s add-node` on the dc node.
+1. Run the generated `microk8s join` command on the new node.
+1. To verify that the node has been added run `Kubectl get nodes` from the dc
+   node.
