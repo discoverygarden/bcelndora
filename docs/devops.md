@@ -2,19 +2,23 @@
 
 ## Introduction
 
-The stack is managed using the following tools, Ansible, Helm, Kubectl, and the
-aws cli. This document will explain how to add new nodes, and intall/upgrade
-sites.
+The stack is managed using the following tools:
+ -  Ansible
+ -  Helm
+ -  Kubectl
+ -  aws cli 
+
+This document will explain how to add new nodes, and install/upgrade sites.
 
 ## Installing/Updating sites
 
 Each site is contained within a Kubernetes namespace, and each service is
-installed via a helm chart. To simplify management shell scripts have been
+installed via a helm chart. To simplify management, shell scripts have been
 created and are stored in the `/opt/helm_values/scripts` directory on the dc
 server. The helm configuration for each site is stored in a directory in
-`/opt/helm_values` with subdirectories for each service.
+`/opt/helm_values` with sub-directories for each service.
 
-The file tree below show what files will be used to manage the sites.
+The file tree below show the files which will be used to manage sites:
 ```
 /opt/helm_values
 ├── dc
@@ -59,9 +63,9 @@ The file tree below show what files will be used to manage the sites.
 #### `update-helm.sh`
 
 This script when provided with a service/helm installation name, helm chart
-reference, and a site/namespace, will upgrade or install it. For example
+reference, and a site/namespace, will upgrade or install it. For example, 
 running `./scripts/update-helm.sh cantaloupe dgi/cantaloupe dc` will install
-the cantaloupe chart in the dc namespace. If the script detects any changes it
+the cantaloupe chart in the dc namespace. If the script detects any changes, it
 will display them to the user with a prompt to apply them.
 
 #### `update-all.sh`
@@ -71,7 +75,7 @@ script creates a list of services to run against from the `$ns/charts.yaml`
 file. The file contains an object called `charts` where the keys are the
 service/installation name and the values contains a helm chart reference.
 
-For example running `update-all.sh dc` will install all the services for the dc
+For example, running `update-all.sh dc` will install all the services for the dc
 site declared in the file `dc/charts.yaml`
 
 ```yaml
@@ -97,16 +101,16 @@ The set of charts installed should not have to change across sites.
 
 ### `export-config.sh`
 
-This script will export the config for the provided site and create and store
+This script will export the config for the provided site and store
 it in a tarball.
 
-For example running `export-config.sh dc` will export the config to `dc/config`
+For example, running `export-config.sh dc` will export the config to `dc/config`
 and compress it to `dc/config.tar.gz`
 
 ### `fix-perms.sh`
 
 This is a helper to provide write access to the `microk8s` group so that all
-Kubernetes admins can edit the files. Needs to be run with root priveleges.
+Kubernetes admins can edit the files. This script needs to be run with root priveleges.
 
 ### Configuration
 
@@ -218,7 +222,7 @@ secretStore:
 #### Secret generation
 
 The site requires secrets to be generated and stored in AWS. To generate the
-secrets use
+secrets, use
 [`gen-secrets.sh`](https://github.com/discoverygarden/helm-charts/blob/main/charts/aws-secrets/gen-secrets.sh)
 in the dgi helm-charts repo.
 
@@ -252,8 +256,8 @@ vim foo/shared/affinity.yaml
 Running `update-helm.sh` and `update-all.sh` will deploy the latest release to
 a service. However, some more care is required when updating drupal.
 
-Before updating drupal configuration should be exported and merged back in. The
-proccess involves cheking out the currently deployed tag locally and replacing
+Before updating, drupal configuration should be exported and merged back in. The
+proccess involves checking out the currently deployed tag locally and replacing
 the drupal configs with what is running in production, then creating a pull
 request.
 
@@ -291,7 +295,7 @@ gh pr create --title="DC reconcile" --body="" --label="patch"
 Once the pull request has been merged and the new image built, the drupal
 installtion can be updated.
 
-When updating drupal a backup of the database will be taken and config will be
+When updating drupal, a backup of the database will be taken and config will be
 imported.
 
 ## Deploying nodes
@@ -315,7 +319,7 @@ access.
 
 ## Adding the Node with Ansible
 
-First make sure you have added your ssh keys to the bastion and new node, and
+First, make sure you have added your ssh keys to the bastion and new node, and
 that you ssh you are only prompted for an mfa code.
 
 Clone https://github.com/discoverygarden/docker-dgi-proto and cd into
