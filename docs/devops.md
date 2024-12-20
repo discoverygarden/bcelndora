@@ -334,6 +334,7 @@ installed.
 
  - [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
  - [python boto 3](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html#installation)
+ - botocore `pip install botocore`
  - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 Your workstation must also be configured to access the containerprod account
@@ -373,6 +374,8 @@ beln-arca-dc.dc.sfu.ca | SUCCESS => {
     "ping": "pong"
 }
 ```
+
+If running ansible from a mac run `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` before running the playbook.
 
 To provision the node with Ansible run replacing the hostname with that of the
 new node:
