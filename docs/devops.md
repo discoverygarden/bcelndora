@@ -543,12 +543,6 @@ secretStore:
   type: ClusterSecretStore
 ```
 
-
-
-
-
-
-
 ### Installation
 
 #### Secret generation
