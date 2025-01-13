@@ -254,6 +254,8 @@ If one part of the `update-all.sh` installation fails, you will need to delete t
 
 `kubectl delete jobs drupal-install-drupal -n [namespace]` (or whichever job failed)
 
+`kubectl rollout restart deployment memcache -n [namespace]`
+
 Then execute the script again.
 
 ## Check which components are working/failing
