@@ -89,7 +89,7 @@ Same PROXY as arca-dc and the others
     - Commit your changes, push to Github, and create a pull request, flagging Alexander Cairns for review.
 5. Set the environment variables (required before running any Ansible commands):
     - `export AWS_PROFILE=bceln-deploy`
-    - `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` 
+    - `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES`
 6. Test the connection:
     - `ansible -i inventory/prod -m ping --become --ask-become-pass 'bceln_prod:&[new host]'` where `[new host]` is something like `beln-arca-twu.dc.sfu.ca`
     - The "BECOME Password" is your user's password on the server.
@@ -367,6 +367,7 @@ The file tree below show the files which will be used to manage sites:
 │   │   ├── ingress.yaml -> ../shared/ingress.yaml
 │   │   ├── saml.yaml
 │   │   └── values.yaml
+|   ├── extras.yaml
 │   ├── memcache
 │   │   └── affinity.yaml -> ../shared/affinity.yaml
 │   ├── postgres
@@ -401,6 +402,9 @@ This script will run `update-helm.sh` against all of a site's services. The
 script creates a list of services to run against from the `$ns/charts.yaml`
 file. The file contains an object called `charts` where the keys are the
 service/installation name and the values contains a helm chart reference.
+
+It will also create kubernetes resources found in the file `$ns/extras.yaml`.
+Any additional resources required by the site can be defined there.
 
 For example, running `update-all.sh dc` will install all the services for the
 dc site declared in the file `dc/charts.yaml`
@@ -451,6 +455,24 @@ Some of the files are symlinks to avoid repeating configuration that is used by
 multiple services. These files are stored in `$ns/shared`
 
 Below will contain explanations of the required configurations.
+
+#### extras.yaml
+
+`$siteName/extras.yaml` is not a helm configuration file but extra resources
+that will be created for the site. Currently it only contains the sites
+namespace. The name of the namespace and the `dgicloud.com/drupal.site` label
+must be updated to match the site name.
+
+Ex:
+```yaml
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    dgicloud.com/drupal.site: oc
+  name: oc
+```
 
 #### Shared
 
@@ -639,6 +661,7 @@ installed.
 
  - [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
  - [python boto 3](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html#installation)
+ - botocore `pip install botocore`
  - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 Your workstation must also be configured to access the containerprod account
@@ -678,6 +701,8 @@ beln-arca-dc.dc.sfu.ca | SUCCESS => {
     "ping": "pong"
 }
 ```
+
+If running ansible from a mac run `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` before running the playbook.
 
 To provision the node with Ansible run replacing the hostname with that of the
 new node:
