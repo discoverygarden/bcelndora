@@ -21,15 +21,17 @@
 
 1. Navigate to the migration logging directory for ease of use.
    `cd $LOG_DIR`
-> [!NOTE] The `$LOG_DIR` variable is in an environment variable that is built
-into the [Drupal container][log-dir] image.
+> [!NOTE] 
+> The `$LOG_DIR` variable is in an environment variable that is built into the
+> [Drupal container][log-dir] image.
 2. Open a `screen`.
 3. Invoke the migration script.
    `bash /opt/www/drupal/web/modules/contrib/dgi_migrate/scripts/migration.sh $LOG_DIR`
 4. Detach from the screen.
 5. Verify migration status.
 `drush ms --group=foxml_to_dgis`
-> [!NOTE] A breakdown of the columns and their meanings can be found within the
+> [!NOTE] 
+> A breakdown of the columns and their meanings can be found within the
 [status and error checking][status-and-error] portion of the 
 > [migration overview][migration-overview] document.
 6. If required go through the [log messages][logging] to dig into any issues
