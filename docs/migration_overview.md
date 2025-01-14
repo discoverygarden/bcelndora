@@ -160,8 +160,8 @@ rectified and the migration re-run later targeting the `skipped` status.
 
 ## Running migrations
 In an effort to be DRY, [existing documentation][dgi-migrate-readme] can be
-referenced directly for `dgi_migrate`. Particulars for the BCELN project that
-may differ and additional context will be added below.
+referenced directly for `dgi_migrate`. A more systematic approach to running the
+migration can be found [included here](migration_invoking.md).
 
 ### Environment configuration
 The migration runner uses a `.env` file to define the environment variables that
