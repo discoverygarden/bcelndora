@@ -17,33 +17,33 @@ Requisition the new machine via the dashboard with the specifications below.
 ### Virtual machine requirements
 
 Basic specs:
-Network: Private
-Purpose: General
+- Network: Private
+- Purpose: General
 
 #### Migration
 
-12 CPU
-36 GB RAM
+- 12 CPU
+- 36 GB RAM
 
 #### Day-to-day operation
 
-4cpu
-12GB Ram
-200gb HD [minimum; depending on storage requirements]
+- 4cpu
+- 12GB Ram
+- 200gb HD [minimum; depending on storage requirements]
 
 ### Connections
 
 Load balancer: arca-bc-lb.its.sfu.ca
 
 NFS share mounts:
-bbysvm-tier1.its.sfu.ca:/colo/arca_be_data/fedoraData
-bbysvm-tier1.ipstorage.sfu.ca:/beln/arca_data
+- bbysvm-tier1.its.sfu.ca:/colo/arca_be_data/fedoraData
+- bbysvm-tier1.ipstorage.sfu.ca:/beln/arca_data
 
 Request that the firewall rules be same as arca-dc, but specify:
 
 Firewall connections open between ALL machines behind the Arca load balancer (in and out):
-TCP 16443,10250,10255,25000,12378,10257,10259,19001
-UDP 4789
+- TCP 16443,10250,10255,25000,12378,10257,10259,19001
+- UDP 4789
 
 External connections over ports: github.com: 22, 80, 443
 
