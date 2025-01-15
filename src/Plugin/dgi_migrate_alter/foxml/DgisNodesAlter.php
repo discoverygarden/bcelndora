@@ -171,7 +171,7 @@ EOI
     ]);
 
     $process['field_hierarchical_geographic_su'][3]['values']['field_state'][0]['query'] = 'mods:state[normalize-space()] | mods:province[normalize-space()]';
-    $process['field_note_paragraph'][0]['query'] = 'mods:note[not(@type="admin" or @displayLabel="Peer Reviewed")][normalize-space()]';
+    $process['field_note_paragraph'][0]['query'] = 'mods:note[not(@type="admin" or @displayLabel="Peer Reviewed" or @displayLabel="keywords")][normalize-space()]';
 
     $process['field_geographic_code'] = $process['field_lcc_classification'];
     $process['field_geographic_code'][0]['query'] = 'mods:subject/mods:geographicCode[normalize-space()]';
