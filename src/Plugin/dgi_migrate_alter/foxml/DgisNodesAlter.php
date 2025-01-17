@@ -193,6 +193,31 @@ EOI
 
     unset($process['field_note'][5]);
 
+    // Title paragraphs should only be generated for things with a "type".
+    $process['field_title'][0]['query'] = 'mods:titleInfo[@type][normalize-space(mods:nonSort | mods:title | mods:subTitle | mods:partNumber | mods:partName)]';
+
+    // Custom title processing logic. Use the defined XPath if it exists.
+    $fedora_label = $process['title'];
+    unset($process['title']);
+
+    $mods_title_info = $process['field_description'];
+    $mods_title_info[0]['query'] = 'mods:titleInfo/mods:title[not(@type)][normalize-space()][1]';
+    $process['_mods_title_info'] = $mods_title_info;
+    $process['_fedora_label'] = $fedora_label;
+    $process['title'] = [
+      [
+        'plugin' => 'null_coalesce',
+        'source' => [
+          '@_mods_title_info',
+          '@_fedora_label',
+        ],
+      ],
+      [
+        'plugin' => 'default_value',
+        'default_value' => 'Untitled',
+      ],
+    ];
+
     $to_remove = [
       ['field_version_identifier'],
       ['field_resource_publication_statu'],
