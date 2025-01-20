@@ -29,7 +29,7 @@ branch="prod-$ns-$tag"
 echo Pushing configs to the branch $branch
 
 if ! git rev-parse --verify "refs/heads/$branch" &>/dev/null; then
-  git branch $branch
+  git branch $branch $tag
 fi
 git switch $branch > /dev/null
 
@@ -46,5 +46,5 @@ if [ -z "$(git status --porcelain config)" ]; then
 fi
 
 git add config
-git commit -m "Auto commit $(data)"
+git commit -m "Auto commit $(date)"
 git push --set-upstream origin $branch
