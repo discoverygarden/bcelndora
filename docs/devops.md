@@ -366,7 +366,7 @@ The file tree below show the files which will be used to manage sites:
 │   │   ├── ingress.yaml -> ../shared/ingress.yaml
 │   │   ├── saml.yaml
 │   │   └── values.yaml
-|   ├── extras.yaml
+│   ├── extras.yaml
 │   ├── memcache
 │   │   └── affinity.yaml -> ../shared/affinity.yaml
 │   ├── postgres
