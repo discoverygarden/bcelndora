@@ -116,7 +116,6 @@ Same PROXY as arca-dc and the others
     - `cp -r dc oc`
 4. Edit the deployment configuration files:
     - `shared` directory: `cd /opt/helm_values/[newsite]/shared`
-        - [QUESTION: "The configurations in this directory are used by multiple services by being symlinked." Does this mean changing it here changes it everywhere? It doesn't look like it does, as the path from `dc` and the path from `oc` show different values.]
         - Edit `affinity.yaml` to set the new site's hostname
             - eg. ```---
                      nodeSelector:
@@ -142,7 +141,7 @@ Same PROXY as arca-dc and the others
             - `image: tag`: Sets the version of the Drupal image that will be deployed
                 - Usually it will be the [latest tag in the bceln-drupal repo](https://github.com/discoverygarden/bceln-drupal/tags) without the v.
         - IF MIGRATING: Do not change `base.yaml` as it's common data across the whole system
-            - IF NOT MIGRATING: Remove the lines relating to Fedora.
+            - IF NOT MIGRATING: Remove the lines relating to Fedora. (Optional if Fedora mount is available to all servers by default.)
         
         - Edit `saml.yaml`: [or don't?]
             - "contains the configuration for SimpleSAMLphp and needs to be configured per site to use saml login. Due to the required AWS permissions the values for the dgi sso will need to be provided by dgi.
