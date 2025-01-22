@@ -113,7 +113,7 @@ Drupal.
 ## Kubernetes Access
 1. Connect to the VPN.
 2. SSH to the node.
-3. List all available sites via: `kubectl config get-contexts`.
+3. List all available namespaces via: `kubectl get namespaces`.
 4. Switch to the desired site via: `kubectl config set-context --current 
 --namespace={site}`.
 5. Get a shell via:
@@ -165,13 +165,17 @@ migration can be found [included here](migration_invoking.md).
 
 ### Environment configuration
 The migration runner uses a `.env` file to define the environment variables that
-are used. When running a migration the [sample file](resources/env.sample) is
-copied into the directory that is to be run from and renamed to `.env`.
+are used. When running a migration the [sample file](resources/env.sample) can be
+copied into the directory that is to be run from and renamed to `.env` to set
+or override environment variables as required.
 
 > [!TIP]
 > Normally the `$LOG_DIR`, `$MIGRATION_GROUP` and `$URI` are modified. The
 > included sample file narrows that to only needing to change the `$LOG_DIR` per
 > site being run for this project.
+>
+> Global overrides have been set in the [Dockerfile][docker-file] for BCELN that
+> bypasses the need for a `.env` file to be present.
 
 > [!CAUTION]
 > The `$LOG_DIR` should be present on a persistent volume to ensure that
@@ -468,6 +472,7 @@ original `objectStore` not being not mounted directly while the
 [bcelndora-migration]: https://github.com/discoverygarden/bcelndora
 [node-migration]: https://github.com/discoverygarden/dgi_migrate/blob/main/modules/dgi_migrate_foxml_standard_mods/migrations/dgis_nodes.yml
 [dgi-migrate-readme]: https://github.com/discoverygarden/dgi_migrate/blob/main/scripts/README.md
+[docker-file]: https://github.com/discoverygarden/bceln-drupal/blob/2ee6002f306f25965b3da6082aef7cb05a8fcd75/Dockerfile#L54-L59
 [import-docs]: https://github.com/discoverygarden/dgi_migrate/tree/main/scripts#import
 [rollback-docs]: https://github.com/discoverygarden/dgi_migrate/tree/main/scripts#rollback
 [big-sets]: https://github.com/discoverygarden/dgi_migrate/tree/main/modules/dgi_migrate_big_set_overrides
