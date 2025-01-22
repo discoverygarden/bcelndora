@@ -111,13 +111,18 @@ Drupal.
 > in the [troubleshooting](#troubleshooting) section.
 
 ## Kubernetes Access
+
 1. Connect to the VPN.
 2. SSH to the node.
-3. List all available namespaces via: `kubectl get namespaces`.
-4. Switch to the desired site via: `kubectl config set-context --current 
+
+### Drupal Container Configuration
+1. List all available namespaces via: `kubectl get namespaces`.
+2. Switch to the desired site via: `kubectl config set-context --current
 --namespace={site}`.
-5. Get a shell via:
+3. Get a shell (if required) via:
    `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
+4. Verify the site is correct via:
+   `echo $DRUSH_OPTIONS_URI`
 
 ## Staging data for ingestion
 The `akubra` filesystem is the source for the migration which the `foxml` source
