@@ -1,6 +1,7 @@
-# Running a migration
+# Staging and running a migration
 
-## Splitting the objects into namespaces.
+## Preflight checks
+### Splitting the objects into namespaces
 
 1. SSH to the `dc` server or any other server that has the Fedora data mounted.
 2. Navigate to the Fedora data directory.
@@ -10,14 +11,27 @@
    `sudo NAMESPACES=foo,bar ./namespace_split.sh`
 5. Detach from the screen.
 
-## Ensure akubra_adapter is configured.
+### Ensure akubra_adapter is configured
 
 1. `echo $FEDORA_OBJECT_PATH`
 2. Ensure that this matches to the split out directory as noted above.
 3. If it does not, edit the [Drupal helm chart][helm-chart]'s `values.yml` for
 `FEDORA_OBJECT_PATH` and redeploy.
 
-## Invoking a migration.
+### Ensure Fedora data is readable
+1. `drush php:eval "var_dump(is_readable('foxml://object/a:pid'))"`
+This will return `TRUE` if the data exists and is readable. Choose an object
+that exists in the data set to compare.
+
+### Ensure the migration config split is enabled and imported
+
+1. `drush config-split:status-override migration active`
+2. `drush config-split:import migration`
+
+### Disable entity_hierarchy rewriting
+1. `drush -r app sset entity_hierarchy_disable_writes 1`
+
+## Invoking a migration
 
 1. Navigate to the migration logging directory for ease of use.
    `cd $LOG_DIR`
