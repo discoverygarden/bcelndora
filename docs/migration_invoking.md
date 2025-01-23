@@ -22,6 +22,11 @@ site being migrated. It can be connected to as needed by
 3. Invoke the namespaces splitting script.<br />
    `sudo NAMESPACES=foo,bar ./namespace_split.sh`
 4. Detach from the screen.
+5. When split is complete, a new directory will be created named after the namespaces specified.
+    - `ls -lah /usr/local/fedora/data` to see the new directory and its permissions.
+6. Change permissions on the new directory:
+    - `sudo chown -R 1006:1006 {new_directory}`
+    - `sudo chmod -R 755 {new_directory}`
 
 ### Ensure akubra_adapter is configured
 
@@ -36,11 +41,12 @@ site being migrated. It can be connected to as needed by
 ### Ensure Fedora data is readable
 
 1. From the [dc server][dc-server] point the
-   [`kubectl` context][drupal-container-config] at the site being migrated.
-2. Ensure the data is readable.<br />
-   `kubectl exec deployments/drupal -- /bin/bash -c "drush php:eval \"var_dump(is_readable('foxml://object/a:pid'))\""`
-   <br />This will return `TRUE` if the data exists and is readable; `FALSE` otherwise.
-   Choose an object that exists in the data set to compare.
+   [`kubectl` context][drupal-container-config] at the site being migrated:
+    `kubectl config set-context --current --namespace={site}`
+2. Ensure the data is readable: 
+   `kubectl exec deployments/drupal -- /bin/bash -c "drush php:eval \"var_dump(is_readable('foxml://object/{a:pid}'))\""`
+   where `a:pid` is an object that exists in the dataset (e.g. `twu:180`).
+   This will return `TRUE` if the data exists and is readable; `FALSE` otherwise.
 
 ### Ensure the migration config split is enabled and imported
 
