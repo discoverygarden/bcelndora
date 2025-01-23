@@ -64,7 +64,10 @@ site being migrated. It can be connected to as needed by
 ## Invoking a migration
 
 1. Shell into the Drupal container: `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
-2. Navigate to the migration logging directory for ease of use.<br />
+2. Create the logging directory: `mkdir /opt/ingest_data/migration`
+3. Make the logging directory writeable:
+   `chmod 775 /opt/ingest_data/migration`
+5. Navigate to the migration logging directory for ease of use.<br />
    `cd $LOG_DIR`
 > [!NOTE]
 > The `$LOG_DIR` variable is in an environment variable that is built into the
