@@ -44,7 +44,7 @@ site being migrated. It can be connected to as needed by
    [`kubectl` context][drupal-container-config] at the site being migrated:
     `kubectl config set-context --current --namespace={site}`
 2. Ensure the data is readable: 
-   `kubectl exec deployments/drupal -- /bin/bash -c "drush php:eval \"var_dump(is_readable('foxml://object/{a:pid}'))\""`
+   `kubectl exec deployments/drupal -- /bin/bash -c "sudo -Eu www-data drush php:eval \"var_dump(is_readable('foxml://object/{a:pid}'))\""`
    where `a:pid` is an object that exists in the dataset (e.g. `twu:180`).
    This will return `TRUE` if the data exists and is readable; `FALSE` otherwise.
 
