@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Allow files to be read by www-data
+umask 022
+
 FEDORA_DATA="${FEDORA_DATA:-/usr/local/fedora/data}"
 
 if [[ -z "${NAMESPACES}" ]]; then
