@@ -50,20 +50,20 @@ site being migrated. It can be connected to as needed by
 
 ### Ensure the migration config split is enabled and imported
 
-1. From the [Drupal container][drupal-server] get a shell.
+1. Shell into the Drupal container: `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
 2. Ensure the migration config split is active.<br />
    `drush config-split:status-override migration active`
 3. Import the config split to ensure it takes effect.<br />
    `drush config-split:import migration`
 
 ### Disable entity_hierarchy rewriting
-1. From the [Drupal container][drupal-server] get a shell.
+1. Shell into the Drupal container: `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
 2. Disable `entity_hierarchy` from writing during the migration.<br />
    `drush -r app sset entity_hierarchy_disable_writes 1`
 
 ## Invoking a migration
 
-1. From the [Drupal container][drupal-server] get a shell.
+1. Shell into the Drupal container: `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
 2. Navigate to the migration logging directory for ease of use.<br />
    `cd $LOG_DIR`
 > [!NOTE]
