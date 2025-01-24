@@ -85,7 +85,7 @@ Enable the `dgi_migrate_regenerate_pathauto_aliases` module and kick off the
 generation.
 ```bash
 drush en dgi_migrate_regenerate_pathauto_aliases
-drush --uri=$DRUSH_OPTIONS_URI dmrpa:empa
+drush --uri=$DRUSH_OPTIONS_URI dmrpa:empa --user=1
 ```
 
 Once it's complete disable the module.
