@@ -76,7 +76,7 @@ Once this is disabled `content_sync`, path aliases, immediate Solr indexing and
 OAI-PMH harvesting will be enabled.
 
 ```
-drush config-split:deactivate migration
+drush --user=1 config-split:deactivate migration
 ```
 
 2. Generate missing path aliases
@@ -84,19 +84,19 @@ drush config-split:deactivate migration
 Enable the `dgi_migrate_regenerate_pathauto_aliases` module and kick off the
 generation.
 ```bash
-drush en dgi_migrate_regenerate_pathauto_aliases
+drush --user=1 en dgi_migrate_regenerate_pathauto_aliases
 drush --uri=$DRUSH_OPTIONS_URI dmrpa:empa --user=1
 ```
 
 Once it's complete disable the module.
 ```bash
-drush pm:uninstall dgi_migrate_regenerate_pathauto_aliases
+drush --user=1 pm:uninstall dgi_migrate_regenerate_pathauto_aliases
 ```
 
 3. Re-index Solr
 
 ```bash
-drush --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index
+drush --user=1 --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index
 ```
 > [!CAUTION]
 > The size of the batch sets may need to be reduced depending on the type of
@@ -105,7 +105,7 @@ drush --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index
 
 4. Rebuild the OAI-PMH cache
 ```bash
-drush --uri=$DRUSH_OPTIONS_URI idr:roai
+drush --user=1 --uri=$DRUSH_OPTIONS_URI idr:roai
 ```
 
 To monitor the progress of the rebuild the queue can be queried to see the
@@ -119,12 +119,12 @@ The `migration` config_split disables the tracking of content changes.
 
 First rebuild the snapshot table.
 ```bash
-drush --uri=$DRUSH_OPTIONS_URI drush cs:s
+drush --user=1 --uri=$DRUSH_OPTIONS_URI cs:s
 ```
 
 Export all the content.
 ```bash
-drush --uri=$DRUSH_OPTIONS_URI content-sync:export --user=1 sync --files=none --entity-types=node
+drush --user=1 --uri=$DRUSH_OPTIONS_URI content-sync:export --user=1 sync --files=none --entity-types=node
 ```
 
 [standard-derivative-examiner]: https://github.com/discoverygarden/dgi_standard_derivative_examiner
