@@ -140,6 +140,18 @@ Same PROXY as arca-dc and the others
             - `FEDORA_OBJECT_PATH`: For migration; points at mounted path of the objectStore for the site. Not necessary if not migrating.
             - `image: tag`: Sets the version of the Drupal image that will be deployed
                 - Usually it will be the [latest tag in the bceln-drupal repo](https://github.com/discoverygarden/bceln-drupal/tags) without the v.
+            - `config_splits`: Overrides the state of config splits. The site's
+              split must be enabled and all other site splits must be disabled.
+              To do so set the site's split to true, and remove all lines
+              enabling other sites splits. The site's split must be created
+              before hand as described
+              [here](https://github.com/discoverygarden/bceln-drupal/blob/main/README.md#adding-sites)
+
+              For example in the dc site:
+              ```yaml
+              config_splits:
+                dc: true
+              ```
         - IF MIGRATING: Do not change `base.yaml` as it's common data across the whole system
             - IF NOT MIGRATING: Remove the lines relating to Fedora. (Optional if Fedora mount is available to all servers by default.)
         
