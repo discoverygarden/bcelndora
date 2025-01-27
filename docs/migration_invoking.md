@@ -1,6 +1,20 @@
 # Staging and running a migration
 
-In the following documentation the following servers are referenced:
+## Kubernetes Access
+
+1. Connect to the VPN.
+2. SSH to the node.
+
+### Drupal Container Configuration
+1. List all available namespaces via: `kubectl get namespaces`.
+2. Switch to the desired site via: `kubectl config set-context --current
+--namespace={site}`.
+3. Get a shell (if required) via:
+   `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
+4. Verify the site is correct via:
+   `echo $DRUSH_OPTIONS_URI`
+
+5. In the following documentation the following servers are referenced:
 
 #### dc server
 Refers to the server that has `kubectl` and access to the cluster. It can be
@@ -82,11 +96,50 @@ site being migrated. It can be connected to as needed by
 > A breakdown of the columns and their meanings can be found within the
 [status and error checking][status-and-error] portion of the
 > [migration overview][migration-overview] document.
-7. If required go through the [log messages][logging] to dig into any issues
-   further.
+7. [Verify][verify] the migration.
 
-[kubernetes-access]: migration_overview.md#kubernetes-access
-[drupal-container-config]: migration_overview.md#drupal-container-configuration
+### Migration verification
+1. Shell into the Drupal container: `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
+2. Check the status of the migration to see how many messages or unprocessed
+objects exist.<br />
+   `drush ms --group=foxml_to_dgis`
+> [!TIP]
+> A breakdown of the columns and their meanings can be found within
+> [status and error checking][status-and-error].
+3. For each migration check the number of unprocessed and failed objects.<br />
+   `drush sql-query "SELECT sourceid1 from migrate_map_{migration name} where destid1 IS NULL and source_row_status IN ('2', '3');"`
+Where `{migration name}` is the name of the migration to be checked, for example
+`dgis_nodes`.
+4. Check each migration's messages for errors.<br />
+   `drush mmsg {migration name}`
+> [!CAUTION]
+> The migrate messages are cleared every time a migration is re-run or rolled
+> back. A copy of the messages is preserved in `JSON` format in the
+> [log directory][log-directory] that can be used alternatively.
+5. Identify the Fedora object PIDs of the objects that failed to migrate.
+```
+drush sql-query "SELECT sourceid1, destid1 FROM migrate_map_dgis_foxml_files WHERE destid1 IN (SELECT sourceid1 FROM migrate_map_{migration_name} WHERE destid1 IS NULL AND source_row_status IN ('2', '3'));"
+```
+6. [Find the locations][foxml-wrapper] of the datastreams and objects on disk
+(if required).
+
+## Updating metadata and re-running a migration
+1. Make any changes required on the Fedora objects that failed to migrate.
+2. Re-run the [namespace split][split] script to ensure the Fedora objects are
+updated with their newly referenced changes.
+3.Shell into the Drupal container: `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
+4. Rollback the objects in the migration that were `failed` or `ignored`.<br />
+```
+bash /opt/www/drupal/web/modules/contrib/dgi_migrate/scripts/rollback.sh $LOG_DIR --statuses=ignored,failed
+```
+5. [Re-run](#invoking-a-migration) the migration.
+
+> [!TIP]
+> More targeted rollback scenarios or handling unexpected exceptions are
+> detailed within [resuming a migration][resuming].
+
+[kubernetes-access]: #kubernetes-access
+[drupal-container-config]: #drupal-container-configuration
 [dc-server]: #dc-server
 [drupal-server]: #drupal-container
 [split]: #splitting-the-objects-into-namespaces
@@ -95,3 +148,9 @@ site being migrated. It can be connected to as needed by
 [migration-overview]: migration_overview.md
 [helm-chart]: devops.md#drupal
 [logging]: migration_overview.md#logging
+[verify]: #migration-verification
+[status-and-error]: migration_overview.md#status-and-error-checking
+[log-directory]: migration_overview.md#logging
+[foxml-wrapper]: migration_overview.md#resolving-foxml-paths
+[migration-errors]: migration_overview.md#expected-parsing-failures
+[resuming]: migration_overview.md#resuming-a-migration

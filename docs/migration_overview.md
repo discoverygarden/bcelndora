@@ -110,20 +110,6 @@ Drupal.
 > This distinction is important for investigative purposes as highlighted
 > in the [troubleshooting](#troubleshooting) section.
 
-## Kubernetes Access
-
-1. Connect to the VPN.
-2. SSH to the node.
-
-### Drupal Container Configuration
-1. List all available namespaces via: `kubectl get namespaces`.
-2. Switch to the desired site via: `kubectl config set-context --current
---namespace={site}`.
-3. Get a shell (if required) via:
-   `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
-4. Verify the site is correct via:
-   `echo $DRUSH_OPTIONS_URI`
-
 ## Staging data for ingestion
 The `akubra` filesystem is the source for the migration which the `foxml` source
 plugin uses the objects themselves, the `objectStore`, as its basis for
@@ -143,8 +129,9 @@ targeted namespace(s) for each site. A separate folder should be created for
 each within the same location as the Fedora data as this is available as a mount
 across all sites.
 
-An [example script](resources/namespace_split.sh) has been included within the
-module of how this can be achieved.
+A [script](resources/namespace_split.sh) has been included within the module of how this can be
+achieved. See [splitting objects into namespaces][splitting] for an example of
+how to run it.
 
 ### File permissions
 > [!CAUTION]
@@ -168,6 +155,37 @@ In an effort to be DRY, [existing documentation][dgi-migrate-readme] can be
 referenced directly for `dgi_migrate`. A more systematic approach to running the
 migration can be found [included here](migration_invoking.md).
 
+### Performance considerations
+When a migration runs it is important to understand that anything that tacks
+itself onto the PHP thread will still be executed. A prime example of this is
+`search_api`'s indexing when set to `Index Immediately` attaches itself onto the
+shutdown handler of a PHP thread. Even when a migration itself is running in a
+batch context this can cause PHP to run out of memory.
+
+To bypass things like the above [`dgi_migrate_big_set_overrides`][big-sets] is
+recommended to be enabled for large ingests as it disables the following:
+* Content Sync
+* Search API Solr indexing
+* OAI-PMH Caching
+* Pathauto creation
+
+[Entity hierarchy writing][entity-hierarchy] should also be disabled.
+
+These are the known culprits that can either cause PHP to run out of memory even
+within a batch context or increases the time for the migrations to be completed.
+
+> [!IMPORTANT]
+> The above are representative of what has been encountered thus far and
+> there could be additional modules to be considered depending on what is added
+> and enabled to the environment.
+
+The overrides currently exist in a separate [`config_split`][config-split] split
+that can be enabled as needed.
+
+> [!IMPORTANT]
+> Once the migration is complete it is important to follow the
+> [cleanup][cleanup] documentation to ensure that the site is ready for use.
+
 ### Environment configuration
 The migration runner uses a `.env` file to define the environment variables that
 are used. When running a migration the [sample file](resources/env.sample) can be
@@ -180,7 +198,10 @@ or override environment variables as required.
 > site being run for this project.
 >
 > Global overrides have been set in the [Dockerfile][docker-file] for BCELN that
-> bypasses the need for a `.env` file to be present.
+> bypasses the need for a `.env` file to be present in the vast majority of 
+> situations. Only if a more targeted update of a migration 
+> [is desired](#widespread-changes) would having the `.env` file present be
+> necessary.
 
 > [!CAUTION]
 > The `$LOG_DIR` should be present on a persistent volume to ensure that
@@ -220,8 +241,14 @@ The `01-messages` directory contains `JSON` of each individual migration's
 messages that are retrieved once the migration runner is completed.
 
 > [!TIP]
+> Not every message will correspond to an error. There are different levels of
+> messages that are logged during the migration process. For example, a
+> informational message will appear if an object is skipped for not having a
+> `MODS` datastream.
+
+> [!TIP]
 > An equivalent Drush command can be run to retrieve the messages per migration as
-> well: `drush mmsg {the name of the migration}`.
+> well: `drush mmsg {migration name}`.
 
 The `01-multiprocess-logs` directory contains output for each worker that was
 invoked per migration during the run.
@@ -229,6 +256,72 @@ invoked per migration during the run.
 ### Rolling back a migration
 If it has been deemed necessary to rollback a migration it can be rolled back
 by following the [rollback documentation][rollback-docs].
+
+### Resuming a migration
+When a migration exits non-gracefully, the migration can be resumed by invoking
+the migration with the original command as denoted
+[above](#invoking-the-migration). The migration will use the existing `map`
+tables to determine where to pick up from where it left off and will not
+re-process any previously processed data.
+
+> [!TIP]
+> The migration that caused the error will possibly need its status reset
+> which can be done by running `drush migrate:reset-status {migration name}`.
+
+### Re-running a migration
+There are a few scenarios that may be encountered that predicate a migration being
+re-run.
+
+#### Ignored or failed entities
+The migration completed but there were entities that were `ignored` or `failed`.
+Development changes to the migration process or metadata updates can be made and
+those deployed to the environment. Once this is complete the migration can be
+invoked again first by rolling back only things that were ignored and failed by
+appending`--statuses=ignored,failed` to the
+[migration rollback command](#rolling-back-a-migration).
+The [migration command](#invoking-the-migration) can then be re-invoked to
+reprocess only those entities.
+
+#### Small set of changes
+The migration completed but there were a small set of entities that need to be
+reprocessed. The migration rollback command can be invoked passing
+[`--idlist`][idlist] and any entity IDs to be reprocessed. Individual migrations
+can also be passed in a similar manner by specifying the migration name.
+
+An example of this would be to rollback only certain source IDs within
+`dgis_nodes`.
+```bash
+bash $DRUPAL_ROOT/modules/contrib/dgi_migrate/scripts/rollback.sh $LOG_DIR --idlist={source_ids} dgis_nodes
+```
+>[!TIP]
+> The `idlist` are referencing the `sourceid1` from the `map` table.
+
+#### Widespread changes
+The migration completed but issues were identified that require an entire
+migration to be run.
+
+An example would be the `node` migration's metadata
+requires an additional field to be mapped or processing changes. In this case
+the single `node` migration can have every entity reprocessed by
+invoking the Drush command directly and passing the `--update` flag.
+
+Within a multithreaded context this requires adjusting the
+[`.env](#environment-configuration)'s to skip the migrations that do not need
+to be re-run to save on execution time.
+
+```bash
+# ===
+# MULTIPROCESS_SKIP_MIGRATIONS: Skip processing the specified migrations.
+# ---
+MULTIPROCESS_SKIP_MIGRATIONS=(islandora_tags dgis_foxml_files store_source_foxml dgis_orig_file dgis_tn_file bceln_person_tn_file bceln_mads_to_term_person dgis_orig_file dgis_orig_media dgis_collection_representatives dgis_tn_media)
+```
+
+This will target only the `dgi_nodes` migration to be run. The migration runner
+can also be invoked with the `--idlist` as [above](#small-set-of-changes) to
+further limit things.
+```bash
+bash $DRUPAL_ROOT/modules/contrib/dgi_migrate/scripts/migration.sh $LOG_DIR --idlist={source_ids} --update
+```
 
 ## Troubleshooting
 
@@ -290,105 +383,12 @@ The column headers are as follows:
 | Total | The total number of entities that are to be processed. |
 | Imported | The number of entities that have been successfully created. This number will not be equivalent to the total as during the run there may be entities that are conditionally created or skipped depending on processing. |
 | Unprocessed | The number of entities that have not yet been processed. |
-| Message Count | The number of messages that have been logged for the migration in its `migrate_message_{migration_name}` table. |
+| Message Count | The number of messages that have been logged for the migration in its `migrate_message_{migration name}` table. |
 
 Stub migrations are unique cases where the migration is using `embedded_data` as
 its source. In all other scenarios the `Total` should be equivalent across the
 board as the `dgis_foxml_files` migration is the source for all the other
 migrations.
-
-### Performance considerations
-When a migration runs it is important to understand that anything that tacks
-itself onto the PHP thread will still be executed. A prime example of this is
-`search_api`'s indexing when set to `Index Immediately` tacks itself onto the
-shutdown handler of a PHP thread. Even when a migration itself is running in a
-batch context this can cause PHP to run out of memory.
-
-To bypass things like the above [`dgi_migrate_big_set_overrides`][big-sets] is
-recommended to be enabled for large ingests as it disables the following:
-* Content Sync
-* Search API Solr indexing
-* OAI-PMH Caching
-* Pathauto creation
-
-These are the known culprits that can either cause PHP to run out of memory even
-within a batch context or increases the time for the migrations to be completed.
-
-> [!IMPORTANT]
-> The above are representative of what has been encountered thus far and
-> there could be additional modules to be considered depending on what is added
-> and enabled to the environment.
-
-The overrides currently exist in a separate [`config_split`][config-split] split
-that can be enabled as needed. Once complete it's important to disable the split
-and ensure that items are re-indexed in Solr and have had their paths created as
-required.
-
-### Resuming a migration
-When a migration exits non-gracefully, the migration can be resumed by invoking
-the migration with the original command as denoted
-[above](#invoking-the-migration). The migration will use the existing `map`
-tables to determine where to pick up from where it left off and will not
-re-process any previously processed data.
-
-> [!TIP]
-> The migration that caused the error will possibly need its status reset
-> which can be done by running `drush migrate:reset-status {migration_name}`.
-
-### Re-running a migration
-There are a few scenarios that may be encountered that predicate a migration being
-re-run.
-
-#### Ignored or failed entities
-The migration completed but there were entities that were `ignored` or `failed`.
-Development changes to the migration process can be made and those deployed to
-the environment. Once this is complete the migration can be invoked again first
-by rolling back only things that were ignored and failed by appending
-`--statuses=ignored,failed` to the
-[migration rollback command](#rolling-back-a-migration).
-The [migration command](#invoking-the-migration) can then be re-invoked to
-reprocess only those entities.
-
-#### Small set of changes
-The migration completed but there were a small set of entities that need to be
-reprocessed. The migration rollback command can be invoked passing
-[`--idlist`][idlist] and any entity IDs to be reprocessed. Individual migrations
-can also be passed in a similar manner by specifying the migration name.
-
-An example of this would be to rollback only certain source IDs within
-`dgis_nodes`.
-```bash
-bash $DRUPAL_ROOT/modules/contrib/dgi_migrate/scripts/rollback.sh $LOG_DIR --idlist={source_ids} dgis_nodes
-```
->[!TIP]
-> The `idlist` are referencing the `sourceid1` from the `map` table.
-
-#### Widespread changes
-The migration completed but issues were identified that require an entire
-migration to be run. 
-
-An example would be the `node` migration's metadata
-requires an additional field to be mapped or processing changes. In this case
-the single `node` migration can have every entity reprocessed by
-invoking the Drush command directly and passing the `--update` flag.
-
-Within a multithreaded context this requires adjusting the
-[`.env](#environment-configuration)'s to skip the migrations that do not need
-to be re-run to save on execution time.
-
-```bash
-# ===
-# MULTIPROCESS_SKIP_MIGRATIONS: Skip processing the specified migrations.
-# ---
-MULTIPROCESS_SKIP_MIGRATIONS=(islandora_tags dgis_foxml_files store_source_foxml dgis_orig_file dgis_tn_file bceln_person_tn_file bceln_mads_to_term_person dgis_orig_file dgis_orig_media dgis_collection_representatives dgis_tn_media)
-```
-
-This will target only the `dgi_nodes` migration to be ran. The migration runner
-can also be invoked with the `--idlist` as [above](#small-set-of-changes) to
-further limit things.
-```bash
-bash $DRUPAL_ROOT/modules/contrib/dgi_migrate/scripts/migration.sh $LOG_DIR --idlist={source_ids} --update
-```
 
 ### Identifying problematic entities
 It's not uncommon for a migration to have entities skipped or fail to import for
@@ -427,8 +427,10 @@ by ({file_entity} is the `sourceid1` from the above query):
 SELECT sourceid1 from migrate_map_dgis_foxml_files where destid1 = {file_entity};
 ```
 
-This yields the original file in `foxml://` stream wrapper form. From here the
-most efficient way to find the path on disk is to leverage the `foxml` module:
+##### Resolving FOXML paths
+
+With a `foxml://` stream wrapper uri the most efficient way to find the path on
+disk is to leverage the `foxml` module:
 ```php
 var_dump(\Drupal::service('foxml.parser.object_lowlevel_storage')->dereference('{thepid}'));
 
@@ -476,11 +478,14 @@ original `objectStore` not being not mounted directly while the
 [dgi-standard-foxml]: https://github.com/discoverygarden/dgi_migrate/tree/main/modules/dgi_migrate_foxml_standard_mods
 [bcelndora-migration]: https://github.com/discoverygarden/bcelndora
 [node-migration]: https://github.com/discoverygarden/dgi_migrate/blob/main/modules/dgi_migrate_foxml_standard_mods/migrations/dgis_nodes.yml
+[splitting]: migration_invoking.md#splitting-the-objects-into-namespaces
 [dgi-migrate-readme]: https://github.com/discoverygarden/dgi_migrate/blob/main/scripts/README.md
 [docker-file]: https://github.com/discoverygarden/bceln-drupal/blob/2ee6002f306f25965b3da6082aef7cb05a8fcd75/Dockerfile#L54-L59
 [import-docs]: https://github.com/discoverygarden/dgi_migrate/tree/main/scripts#import
 [rollback-docs]: https://github.com/discoverygarden/dgi_migrate/tree/main/scripts#rollback
 [big-sets]: https://github.com/discoverygarden/dgi_migrate/tree/main/modules/dgi_migrate_big_set_overrides
+[entity-hierarchy]: migration_invoking.md#disable-entity_hierarchy-rewriting
 [config-split]: https://www.drupal.org/docs/contributed-modules/configuration-split
+[cleanup]: migration_cleanup.md
 [idlist]: https://github.com/discoverygarden/dgi_migrate/blob/970471f7e827ffb6c7177d3ec637dc4743e4dc1e/src/Drush/Commands/MigrateCommands.php#L204
 [migrate-skip-row]: https://git.drupalcode.org/project/drupal/-/blob/10.4.x/core/modules/migrate/src/MigrateSkipRowException.php
