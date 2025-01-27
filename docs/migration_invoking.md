@@ -127,7 +127,7 @@ drush sql-query "SELECT sourceid1, destid1 FROM migrate_map_dgis_foxml_files WHE
 1. Make any changes required on the Fedora objects that failed to migrate.
 2. Re-run the [namespace split][split] script to ensure the Fedora objects are
 updated with their newly referenced changes.
-3.Shell into the Drupal container: `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
+3. Shell into the Drupal container: `kubectl exec --stdin --tty deployments/drupal  -- /bin/bash`
 4. Rollback the objects in the migration that were `failed` or `ignored`.<br />
 ```
 bash /opt/www/drupal/web/modules/contrib/dgi_migrate/scripts/rollback.sh $LOG_DIR --statuses=ignored,failed
