@@ -713,7 +713,7 @@ ansible-playbook microk8s.yml -i inventory/prod --diff --ask-become-pass -l new.
 Once microk8s has been provisioned add the node the cluster by running:
 1. `microk8s add-node` on the dc node.
 1. Run the generated `microk8s join` command on the new node.
-1. **From the DC node** verify that the node has been added by running `Kubectl
+1. **From the DC node** verify that the node has been added by running `kubectl
    get nodes`.
 1. On the **new node** update the kubeconfig with `microk8s config >
    ~/.config/kube`
