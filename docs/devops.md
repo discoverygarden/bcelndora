@@ -66,6 +66,11 @@ Same PROXY as arca-dc and the others
            sso_role_name = bceln-deploy
            region = us-east-1
            ```
+## Create a DNS entry for the new site
+
+In Cloudflare, set up your new site as a `CNAME` for arcabc.ca, pointing at the load balancer's FQDN.
+
+If you are creating a temporary domain, use the pattern `[namespace]-i2`. If creating an entirely new site, do what you need to.
 
 ## Add the node with Ansible
 
@@ -175,7 +180,8 @@ Same PROXY as arca-dc and the others
             - The `AWS_PROFILE` piece identifies which profile is being used when running the script.
 6. Install the site:
     - In `arca-dc`, go back to the `helm_values` directory: `cd /opt/helm_values`
-    - Run the install script: `./scripts/update-all.sh siteName` where `siteName` is [the name of the directory you created???]
+    - Run the install script: `./scripts/update-all.sh siteName` where `siteName` is the new namespace/site (e.g. `twu` or `vcc`).
+    - If after installing Drupal you get an "Unexpected error" at the new domain, uninstall Drupal, restart memcache, and reinstall (see Troubleshooting below).
 
 
 # Upgrading a site
