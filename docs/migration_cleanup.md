@@ -124,7 +124,7 @@ drush --user=1 --uri=$DRUSH_OPTIONS_URI cs:s
 
 Export all the content.
 ```bash
-drush --user=1 --uri=$DRUSH_OPTIONS_URI content-sync:export --user=1 sync --files=none --entity-types=node
+drush --uri=$DRUSH_OPTIONS_URI content-sync:export --user=1 sync --files=none --entity-types=node
 ```
 
 [standard-derivative-examiner]: https://github.com/discoverygarden/dgi_standard_derivative_examiner
