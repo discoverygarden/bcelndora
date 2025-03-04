@@ -90,7 +90,7 @@ drush --uri=$DRUSH_OPTIONS_URI dmrpa:empa --user=1
 
 Once it's complete disable the module.
 ```bash
-drush --user=1 pm:uninstall dgi_migrate_regenerate_pathauto_aliases
+drush pm:uninstall dgi_migrate_regenerate_pathauto_aliases
 ```
 
 3. Re-index Solr
