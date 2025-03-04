@@ -105,7 +105,7 @@ drush --user=1 --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index
 
 4. Rebuild the OAI-PMH cache
 ```bash
-drush --user=1 --uri=$DRUSH_OPTIONS_URI idr:roai
+drush --uri=$DRUSH_OPTIONS_URI idr:roai
 ```
 
 To monitor the progress of the rebuild the queue can be queried to see the
