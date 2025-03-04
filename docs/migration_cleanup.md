@@ -96,7 +96,7 @@ drush --user=1 pm:uninstall dgi_migrate_regenerate_pathauto_aliases
 3. Re-index Solr
 
 ```bash
-drush --user=1 --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index
+drush --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index
 ```
 > [!CAUTION]
 > The size of the batch sets may need to be reduced depending on the type of
