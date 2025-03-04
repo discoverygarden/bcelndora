@@ -76,7 +76,7 @@ Once this is disabled `content_sync`, path aliases, immediate Solr indexing and
 OAI-PMH harvesting will be enabled.
 
 ```
-drush --user=1 config-split:deactivate migration
+drush config-split:deactivate migration
 ```
 
 2. Generate missing path aliases
