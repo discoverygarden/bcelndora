@@ -84,7 +84,7 @@ drush --user=1 config-split:deactivate migration
 Enable the `dgi_migrate_regenerate_pathauto_aliases` module and kick off the
 generation.
 ```bash
-drush --user=1 en dgi_migrate_regenerate_pathauto_aliases
+drush en dgi_migrate_regenerate_pathauto_aliases
 drush --uri=$DRUSH_OPTIONS_URI dmrpa:empa --user=1
 ```
 
