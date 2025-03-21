@@ -243,6 +243,25 @@ installtion can be updated.
 When updating drupal, a backup of the database will be taken and config will be
 imported.
 
+# Changing a domain/URL
+
+To change a site's URL:
+
+1. Change the DNS configuration.
+2. Update `/opt/helm_values/[namespace]/shared/ingress.yaml`:
+    - Change the "host" value to the new URL
+    - Add a new line: `scretName: [namespace]-ssl
+    - Example:
+     ```
+      - host: capu.arcabc.ca
+      tls:
+        issuer: letsencrypt-prod
+        secretName: capu-ssl
+    ```
+3. Run `./scripts/update-all.sh [namespace]`
+    - If you don't want to fully update Drupal, choose `s` for when the Drupal update question arises.
+4. Wait. It will take some time for the new certificates to be generated.
+
 # Troubleshooting
 
 ## Check what's running
