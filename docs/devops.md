@@ -250,7 +250,7 @@ To change a site's URL:
 1. Change the DNS configuration.
 2. Update `/opt/helm_values/[namespace]/shared/ingress.yaml`:
     - Change the "host" value to the new URL
-    - Add a new line: `scretName: [namespace]-ssl
+    - Add a new line: `secretName: [namespace]-ssl
     - Example:
      ```
       - host: capu.arcabc.ca
@@ -260,7 +260,8 @@ To change a site's URL:
     ```
 3. Run `./scripts/update-all.sh [namespace]`
     - If you don't want to fully update Drupal, choose `s` for when the Drupal update question arises.
-4. Wait. It will take some time for the new certificates to be generated.
+4. Reindex Solr
+5. Wait. It will take some time for the new certificates to be generated.
 
 # Troubleshooting
 
