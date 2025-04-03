@@ -590,7 +590,7 @@ additionalEnvVars:
     value: drush
   # Must be updated per site
   - name: FEDORA_OBJECT_PATH
-    value: /data/fedora-data/dc/objectStore
+    value: /data/fedora-data/{namespace}/objectStore
 image:
   pullSecret: regcred
   repository: 231224489621.dkr.ecr.us-east-1.amazonaws.com/drupal-bceln
