@@ -288,11 +288,21 @@ To view which context you're in:
 
 If one part of the `update-all.sh` installation fails, you will need to delete the job and start it again.
 
+Look for failed pods: `kubectl get pods -n $namespace`
+
+Kill them `kubectl delete pod/drupal-whatever-pod -n $namespace`
+
+Similarly find jobs: `kubectl get jobs -n $namespace`
+
+Then:
+
 `helm uninstall drupal -n [namespace]` (or whichever job failed)
 
 `kubectl delete jobs drupal-install-drupal -n [namespace]` (or whichever job failed)
 
 `kubectl rollout restart deployment memcache -n [namespace]`
+
+Check PVCs: `kubectl get pvc -n $namespace` and look for any in `terminating`
 
 Then execute the script again.
 
