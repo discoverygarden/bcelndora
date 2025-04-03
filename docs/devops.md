@@ -103,7 +103,7 @@ Same PROXY as arca-dc and the others
 10. Shell into the new server, and paste the `microk8s join` command from the previous step.
     - If there's a timeout error, there is probably a firewall issue between the servers; contact SFU to deal with it.
 11. On the `arca-dc` server, confirm the node has been added with `kubectl get nodes`.
-12. If there is an error on the new server, `sudo su` and run `microk8s config > ~/.config/kube`.
+12. If there is an error on the new server, run `microk8s config > ~/.config/kube`.
 
 
 ## Install the new site
