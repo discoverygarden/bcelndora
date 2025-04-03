@@ -86,9 +86,9 @@ If you are creating a temporary domain, use the pattern `[namespace]-i2`. If cre
         ```
     - Copy your key to the new server. eg for the `arca-oc` server, `ssh-copy-id -i ~/.ssh/id_rsa.pub arca-oc`
 2. **On your local machine**, clone `docker-dgi-proto`:
-    - `git clone https://github.com/discoverygarden/docker-dgi-proto.git`
-3. Enter the `server-setup` directory:
-    - `cd docker-dgi-proto/server-setup`
+    - `git clone https://github.com/discoverygarden/k8s-server-setup.git`
+3. Enter the `k8s-server-setup` directory:
+    - `cd k8s-server-setup`
 4. Edit the `inventory/prod` file: `nano inventory/prod`
     - Add the hostname of your new node under the `bceln-prod` header.
     - Commit your changes, push to Github, and create a pull request, flagging Alexander Cairns for review.
