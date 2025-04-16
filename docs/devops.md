@@ -202,41 +202,10 @@ If you are creating a temporary domain, use the pattern `[namespace]-i2`. If cre
 Running `update-helm.sh` and `update-all.sh` will deploy the latest release to
 a service. However, some more care is required when updating drupal.
 
-Before updating, drupal configuration should be exported and merged back in.
-The proccess involves checking out the currently deployed tag locally and
-replacing the drupal configs with what is running in production, then creating
-a pull request.
-
-Example:
-```bash
-ssh beln-arca-dc.dc.sfu.ca
-cd /opt/helm_values
-# export the configs
-./scripts/export-config.sh dc
-# get the currently deployed tag
-./scripts/get-tag.sh dc
-exit
-
-# cd to where the repo exists locally
-cd bceln-drupal
-# checkout the tag that is currently deployed into a prod reconcile branch
-git checkout -b dc-reconcile vTagFromGetTag
-# Delete existing config to get a clean diff
-rm -rf config
-
-# Get exported configs from the server and extract them locally.
-scp beln-arca-dc.dc.sfu.ca:/opt/helm_values/dc/config.tar.gz .
-tar -xf config.tar.gz
-rm config.tar.gz
-
-# Commit and push
-git add config
-git commit -m 'DC reconcile'
-git push --set-upstream origin dc-reconcile
-
-# Create the pull request, can also be done from the GitHub website
-gh pr create --title="DC reconcile" --body="" --label="patch"
-```
+Before updating, drupal configuration should be exported and merged back in. To
+do so run the `./scripts/export-config.sh SITEN_NAME` from `/opt/helm_values`
+on the dc server. Then create a pull request in github from the resulting
+branch.
 
 Once the pull request has been merged and the new image built, the drupal
 installtion can be updated.
