@@ -202,44 +202,23 @@ If you are creating a temporary domain, use the pattern `[namespace]-i2`. If cre
 Running `update-helm.sh` and `update-all.sh` will deploy the latest release to
 a service. However, some more care is required when updating drupal.
 
-Before updating, drupal configuration should be exported and merged back in.
-The proccess involves checking out the currently deployed tag locally and
-replacing the drupal configs with what is running in production, then creating
-a pull request.
+Before updating, drupal configuration should be exported and merged back in. 
 
-Example:
-```bash
-ssh beln-arca-dc.dc.sfu.ca
-cd /opt/helm_values
-# export the configs
-./scripts/export-config.sh dc
-# get the currently deployed tag
-./scripts/get-tag.sh dc
-exit
+## Export and merge configuration
 
-# cd to where the repo exists locally
-cd bceln-drupal
-# checkout the tag that is currently deployed into a prod reconcile branch
-git checkout -b dc-reconcile vTagFromGetTag
-# Delete existing config to get a clean diff
-rm -rf config
+In the DC server, at `/opt/helm_values`, run `./scripts/export-config.sh SITE_NAME`.
 
-# Get exported configs from the server and extract them locally.
-scp beln-arca-dc.dc.sfu.ca:/opt/helm_values/dc/config.tar.gz .
-tar -xf config.tar.gz
-rm config.tar.gz
+A new branch will be created and pushed to Github. 
 
-# Commit and push
-git add config
-git commit -m 'DC reconcile'
-git push --set-upstream origin dc-reconcile
+Create a pull request in Github from the new branch, with the `patch` label. (At some point, this process should be integrated into the export script; after that, it will only be necessary to review and merge the PRs.)
 
-# Create the pull request, can also be done from the GitHub website
-gh pr create --title="DC reconcile" --body="" --label="patch"
-```
+Review changed files in case of anything odd, particularly changes to the non-site-specific configs.
 
-Once the pull request has been merged and the new image built, the drupal
-installtion can be updated.
+Merge the pull request. This will create a new tag.
+
+## Update Drupal
+
+At `/opt/helm_values/[SITE]/drupal/values.yaml`, update the tag to the latest one (which you just created after merging the PR). Then run `./scripts/update-all.sh [SITE]`.
 
 When updating drupal, a backup of the database will be taken and config will be
 imported.
@@ -248,8 +227,9 @@ imported.
 
 To change a site's URL:
 
-1. Change the DNS configuration.
-2. Update `/opt/helm_values/[namespace]/shared/ingress.yaml`:
+1. Export and merge site configs, as described above.
+2. Change the DNS configuration.
+3. Update `/opt/helm_values/[namespace]/shared/ingress.yaml`:
     - Change the "host" value to the new URL
     - Add a new line: `secretName: [namespace]-ssl
     - Example:
@@ -259,10 +239,15 @@ To change a site's URL:
         issuer: letsencrypt-prod
         secretName: capu-ssl
     ```
-3. Run `./scripts/update-all.sh [namespace]`
+4. Run `./scripts/update-all.sh [namespace]`
     - If you don't want to fully update Drupal, choose `s` for when the Drupal update question arises.
-4. Reindex Solr
-5. Wait. It will take some time for the new certificates to be generated.
+5. Reindex Solr:
+    * At `/admin/config/search/search-api/index/default_solr_index/`, click "Queue all items for reindexing".
+    * Shell into the server, and run
+      ```bash
+drush --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index
+```   
+6. Wait. It will take some time for the new certificates to be generated.
 
 # Troubleshooting
 
