@@ -210,7 +210,7 @@ In the DC server, at `/opt/helm_values`, run `./scripts/export-config.sh SITE_NA
 
 A new branch will be created and pushed to Github. 
 
-Create a pull request in Github from the new branch, with the `patch` label. (At some point, this process should be integrated into the export script; after that, it will only be necessary to review and merge the PRs.)
+A pull request will be created automatically. Your terminal will provide a link for you to review.
 
 Review changed files in case of anything odd, particularly changes to the non-site-specific configs.
 
