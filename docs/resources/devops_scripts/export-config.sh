@@ -13,6 +13,11 @@ check_github() {
 
 check_github || exit 1
 
+if ! [ -d $ns ]; then
+  echo The site $ns does not exist
+  exit 1
+fi
+
 cd $ns
 
 if ! [ -d bceln-drupal ]; then
@@ -42,9 +47,11 @@ kubectl -n $ns cp $pod_name:config config
 
 if [ -z "$(git status --porcelain config)" ]; then
   echo No changes to commit
-  exit 
+  exit
 fi
 
 git add config
 git commit -m "Auto commit $(date)"
 git push --set-upstream origin $branch
+
+gh pr create --title="$ns reconcile" --body="" --label="patch"
