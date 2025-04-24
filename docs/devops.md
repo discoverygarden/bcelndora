@@ -210,6 +210,8 @@ In the DC server, at `/opt/helm_values`, run `./scripts/export-config.sh SITE_NA
 
 A new branch will be created and pushed to Github. 
 
+A pull request will be created automatically. Your terminal will provide a link for you to review.
+
 Review changed files in case of anything odd, particularly changes to the non-site-specific configs.
 
 Merge the pull request. This will create a new tag.
