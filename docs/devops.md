@@ -244,9 +244,7 @@ To change a site's URL:
 5. Reindex Solr:
     * At `/admin/config/search/search-api/index/default_solr_index/`, click "Queue all items for reindexing".
     * Shell into the server, and run
-      ```bash
-drush --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index
-```   
+      ```drush --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index ```   
 6. Wait. It will take some time for the new certificates to be generated.
 
 # Troubleshooting
