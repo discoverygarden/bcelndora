@@ -213,8 +213,20 @@ A new branch will be created and pushed to Github.
 A pull request will be created automatically. Your terminal will provide a link for you to review.
 
 Review changed files in case of anything odd, particularly changes to the non-site-specific configs.
+    - We want: file changes at `/config/splits/[siteName]`. We **do not want** changes at `/config/sync/`.
+        - If there are undesired changes (e.g. file deletion), remove them from the PR:
+            - In your local clone:
+                - `git fetch --all`
+                - `git pull origin main`
+                - `git checkout [branch created with the PR]`
+                - `git checkout main [/path/to/altered-or-missing/file]`
+                - `git commit` and `git push`
+                - `git push [branch-name]`
+            - Your pull request should be updated and the bad changes removed. Check to make sure.    
 
 Merge the pull request. This will create a new tag.
+
+**Check the Actions tab before proceeding:** Make sure that the Action to complete building the new Drupal image has completed.
 
 ## Update Drupal
 
@@ -229,7 +241,8 @@ To change a site's URL:
 
 1. Export and merge site configs, as described above.
 2. Change the DNS configuration.
-3. Update `/opt/helm_values/[namespace]/shared/ingress.yaml`:
+3. Update `/opt/helm_values/[namespace]/drupal/values.yaml` with the new tag
+4. Update `/opt/helm_values/[namespace]/shared/ingress.yaml`:
     - Change the "host" value to the new URL
     - Add a new line: `secretName: [namespace]-ssl
     - Example:
@@ -239,13 +252,13 @@ To change a site's URL:
         issuer: letsencrypt-prod
         secretName: capu-ssl
     ```
-4. Run `./scripts/update-all.sh [namespace]`
+5. Run `./scripts/update-all.sh [namespace]`
     - If you don't want to fully update Drupal, choose `s` for when the Drupal update question arises.
-5. Reindex Solr:
+6. Reindex Solr:
     * At `/admin/config/search/search-api/index/default_solr_index/`, click "Queue all items for reindexing".
     * Shell into the server, and run
       ```drush --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index ```   
-6. Wait. It will take some time for the new certificates to be generated.
+7. Wait. It will take some time for the new certificates to be generated.
 
 # Troubleshooting
 
