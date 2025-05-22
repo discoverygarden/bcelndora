@@ -146,12 +146,24 @@ If you are creating a temporary domain, use the pattern `[namespace]-i2`. If cre
             - `FEDORA_OBJECT_PATH`: For migration; points at mounted path of the objectStore for the site. Not necessary if not migrating.
             - `image: tag`: Sets the version of the Drupal image that will be deployed
                 - Usually it will be the [latest tag in the bceln-drupal repo](https://github.com/discoverygarden/bceln-drupal/tags) without the v.
-            - `config_splits`: Overrides the state of config splits. The site's
+            - `config_splits`:
+            -Create a split. For example with creating a split for Douglas College using the sitename dc.
+
+              ```git checkout -b add-dc
+              ddev full-install
+              ddev create-split dc
+              git add config/sync/config_split.config_split.dc.yml
+              git commit -m 'add dc site split'
+              git push --set-upstream origin add-dc
+              
+              # If you have `gh` installed you can create the pull request from the cli. Otherwise manage the pr in the browser.
+              gh pr create --title 'Add dc split' --body '' --labels patch
+              gh pr merge```
+            - Overrides the state of config splits. The site's
               split must be enabled and all other site splits must be disabled.
               To do so set the site's split to true, and remove all lines
               enabling other sites splits. The site's split must be created
-              before hand as described
-              [here](https://github.com/discoverygarden/bceln-drupal/blob/main/README.md#adding-sites)
+              before hand
 
               For example in the dc site:
               ```yaml
