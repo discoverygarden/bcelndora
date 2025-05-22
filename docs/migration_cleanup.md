@@ -119,7 +119,7 @@ The `migration` config_split disables the tracking of content changes.
 
 First rebuild the snapshot table.
 ```bash
-drush --uri=$DRUSH_OPTIONS_URI drush cs:s
+drush --uri=$DRUSH_OPTIONS_URI cs:s -u 1
 ```
 
 Export all the content.
