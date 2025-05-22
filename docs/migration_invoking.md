@@ -36,13 +36,13 @@ site being migrated. It can be connected to as needed by
 3. Invoke the namespaces splitting script.<br />
    `sudo NAMESPACES=foo,bar ./namespace_split.sh`
     - Note: Directory names are limited to a certain number of characters. If splitting a long list of namespaces, you may need to do this in multiple stages, creating different directories.
-5. Detach from the screen.
-6. When split is complete, a new directory will be created named after the namespaces specified.
+4. Detach from the screen.
+5. When split is complete, a new directory will be created named after the namespaces specified.
     - `ls -lah /usr/local/fedora/data` to see the new directory and its permissions.
-7. Change permissions on the new directory:
+6. Change permissions on the new directory:
     - `sudo chown -R 1006:1006 {new_directory}`
     - `sudo chmod -R 755 {new_directory}`
-8. To merge multiple directories into one, use `rsync`. Where your final directory is `DESTINATION_C`: 
+7. To merge multiple directories into one, use `rsync`. Where your final directory is `DESTINATION_C`: 
     - `rsync -aP --no-perms  /ORIGINAL_A/* /DESTINATION_C/`
     - `rsync -aP --no-perms  /ORIGINAL_B/* /DESTINATION_C/`
 
