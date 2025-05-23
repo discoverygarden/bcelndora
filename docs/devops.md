@@ -118,16 +118,18 @@ Done in your local DDEV environment.
 
 For example with creating a split for Douglas College using the sitename dc:
 
-              ```git checkout -b add-dc
-              ddev full-install
-              ddev create-split dc
-              git add config/sync/config_split.config_split.dc.yml
-              git commit -m 'add dc site split'
-              git push --set-upstream origin add-dc
-              
-              # If you have `gh` installed you can create the pull request from the cli. Otherwise manage the pr in the browser.
-              gh pr create --title 'Add dc split' --body '' --labels patch
-              gh pr merge```
+```bash
+git checkout -b add-dc
+ddev full-install
+ddev create-split dc
+git add config/sync/config_split.config_split.dc.yml
+git commit -m 'add dc site split'
+git push --set-upstream origin add-dc
+
+# If you have `gh` installed you can create the pull request from the cli. Otherwise manage the pr in the browser.
+gh pr create --title 'Add dc split' --body '' --labels patch
+gh pr merge
+```
 
 ## Install the new site
 
