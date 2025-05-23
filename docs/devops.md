@@ -110,6 +110,24 @@ If you are creating a temporary domain, use the pattern `[namespace]-i2`. If cre
 11. On the `arca-dc` server, confirm the node has been added with `kubectl get nodes`.
 12. If there is an error on the new server, run `microk8s config > ~/.config/kube`.
 
+## Create a split
+
+Create a config split for the new site, so its configuration will be separate from the core config.
+
+Done in your local DDEV environment.
+
+For example with creating a split for Douglas College using the sitename dc:
+
+              ```git checkout -b add-dc
+              ddev full-install
+              ddev create-split dc
+              git add config/sync/config_split.config_split.dc.yml
+              git commit -m 'add dc site split'
+              git push --set-upstream origin add-dc
+              
+              # If you have `gh` installed you can create the pull request from the cli. Otherwise manage the pr in the browser.
+              gh pr create --title 'Add dc split' --body '' --labels patch
+              gh pr merge```
 
 ## Install the new site
 
@@ -147,23 +165,11 @@ If you are creating a temporary domain, use the pattern `[namespace]-i2`. If cre
             - `image: tag`: Sets the version of the Drupal image that will be deployed
                 - Usually it will be the [latest tag in the bceln-drupal repo](https://github.com/discoverygarden/bceln-drupal/tags) without the v.
             - `config_splits`:
-            -Create a split. For example with creating a split for Douglas College using the sitename dc.
-
-              ```git checkout -b add-dc
-              ddev full-install
-              ddev create-split dc
-              git add config/sync/config_split.config_split.dc.yml
-              git commit -m 'add dc site split'
-              git push --set-upstream origin add-dc
-              
-              # If you have `gh` installed you can create the pull request from the cli. Otherwise manage the pr in the browser.
-              gh pr create --title 'Add dc split' --body '' --labels patch
-              gh pr merge```
-            - Overrides the state of config splits. The site's
+                - Overrides the state of config splits. The site's
               split must be enabled and all other site splits must be disabled.
               To do so set the site's split to true, and remove all lines
               enabling other sites splits. The site's split must be created
-              before hand
+              beforehand
 
               For example in the dc site:
               ```yaml
