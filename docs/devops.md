@@ -105,6 +105,7 @@ If you are creating a temporary domain, use the pattern `[namespace]-i2`. If cre
 9. Shell into the `arca-dc` server, and add the node to the cluster:
     - `microk8s add-node`
     - Copy the `microk8s join` command it generates.
+    - Use the `--worker` flag unless you specifically need the node to be a master node. New nodes should be workers by default.
 10. Shell into the new server, and paste the `microk8s join` command from the previous step.
     - If there's a timeout error, there is probably a firewall issue between the servers; contact SFU to deal with it.
 11. On the `arca-dc` server, confirm the node has been added with `kubectl get nodes`.
