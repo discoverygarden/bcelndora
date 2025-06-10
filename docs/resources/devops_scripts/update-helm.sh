@@ -30,9 +30,10 @@ fi
 rm $err_file
 
 echo Updates to $installation in $namespace are available.
-read -p "Apply Updates (y/n)?" choice
+read -p "Apply Updates (y/n/s(no-hooks))?" choice
 case "$choice" in 
   y|Y ) helm upgrade --install --timeout=1h $installation $chart -n $namespace "${value_files[@]/#/--values=}";;
+  s|S ) helm upgrade --install --no-hooks --timeout=1h $installation $chart -n $namespace "${value_files[@]/#/--values=}";; 
   n|N ) ;;
   * ) echo "invalid"; exit 1;;
 esac
