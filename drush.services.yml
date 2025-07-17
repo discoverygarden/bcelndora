@@ -4,6 +4,5 @@ services:
     class: \Drupal\bcelndora\Drush\Commands\RemoveHandleValues
     arguments:
       - '@entity_type.manager'
-      - '@messenger'
     tags:
       - name: drush.command
