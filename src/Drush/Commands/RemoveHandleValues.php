@@ -23,6 +23,9 @@ class RemoveHandleValues extends DrushCommands {
     parent::__construct();
   }
 
+  /**
+   * Command to remove handles.
+   */
   #[CLI\Command(name: 'bcelndora:remove-handle-values')]
   #[CLI\Option(name: 'dry-run', description: 'Simulate the command without making any changes.')]
   #[CLI\Option(name: 'only-if-value', description: 'Only process nodes where the handle matches this string exactly.')]
@@ -69,6 +72,9 @@ class RemoveHandleValues extends DrushCommands {
     drush_backend_batch_process();
   }
 
+  /**
+   * Batch processing for handle removal.
+   */
   public static function processBatch(array $options, array &$context): void {
     $messenger = \Drupal::messenger();
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
@@ -124,7 +130,8 @@ class RemoveHandleValues extends DrushCommands {
         if ($options['logging']) {
           $messenger->addMessage(t('[DRY-RUN] Would clear handle on node @nid. Current value: "@current".', $log_context));
         }
-      } else {
+      }
+      else {
         $node->set('field_handle', NULL);
         $node->save();
         if ($options['logging']) {
@@ -138,11 +145,15 @@ class RemoveHandleValues extends DrushCommands {
 
     if ($context['sandbox']['progress'] < $context['sandbox']['max']) {
       $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
-    } else {
+    }
+    else {
       $context['finished'] = 1;
     }
   }
 
+  /**
+   * Batch finished.
+   */
   public static function batchFinished($success, $results, $operations): void {
     $logger = \Drupal::logger(self::LOGGER_CHANNEL);
     $messenger = \Drupal::messenger();
@@ -164,4 +175,5 @@ class RemoveHandleValues extends DrushCommands {
       $logger->error($message);
     }
   }
+
 }
