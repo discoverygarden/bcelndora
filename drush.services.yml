@@ -1,0 +1,9 @@
+---
+services:
+  bcelndora.remove_handle_values:
+    class: \Drupal\bcelndora\Drush\Commands\RemoveHandleValues
+    arguments:
+      - '@entity_type.manager'
+      - '@messenger'
+    tags:
+      - name: drush.command
