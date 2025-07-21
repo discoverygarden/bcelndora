@@ -4,6 +4,7 @@ namespace Drupal\bcelndora\Drush\Commands;
 
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\node\NodeInterface;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -48,7 +49,8 @@ class RemoveHandleValues extends DrushCommands {
       $query->condition('field_handle', $options['only-if-value']);
     }
 
-    $count = $query->count()->execute();
+    $nids = $query->sort('nid')->execute();
+    $count = count($nids);
 
     if ($count === 0) {
       $this->io()->writeln('No matching nodes found.');
@@ -60,95 +62,78 @@ class RemoveHandleValues extends DrushCommands {
       $this->io()->warning('In dry run state.');
     }
 
+    $nid_chunks = array_chunk($nids, self::BATCH_SIZE);
+
     $batch_builder = new BatchBuilder();
     $batch_builder
       ->setTitle('Clearing field_handle values')
       ->setInitMessage('Starting handle clearing process...')
       ->setErrorMessage('An error occurred during processing.')
-      ->setFinishCallback([static::class, 'batchFinished'])
-      ->addOperation([static::class, 'processBatch'], [$options]);
+      ->setFinishCallback([static::class, 'batchFinished']);
+
+    foreach ($nid_chunks as $nid_chunk) {
+      $batch_builder->addOperation([static::class, 'processBatch'], [$nid_chunk, $options]);
+    }
 
     batch_set($batch_builder->toArray());
     drush_backend_batch_process();
   }
 
+
+
   /**
    * Batch processing for handle removal.
    */
-  public static function processBatch(array $options, array &$context): void {
+  public static function processBatch(array $nids_to_process, array $options, array &$context): void {
     $messenger = \Drupal::messenger();
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+    $logger = \Drupal::logger(self::LOGGER_CHANNEL);
 
-    if (empty($context['sandbox'])) {
-      $count_query = $node_storage->getQuery()
-        ->condition('type', 'islandora_object')
-        ->accessCheck(FALSE)
-        ->exists('field_handle');
-
-      if (!empty($options['only-if-value'])) {
-        $count_query->condition('field_handle', $options['only-if-value']);
-      }
-
-      $context['sandbox']['progress'] = 0;
-      $context['sandbox']['max'] = $count_query->count()->execute();
+    if (empty($context['results'])) {
       $context['results'] = [
         'processed' => 0,
         'changed' => 0,
-        'skipped_value' => 0,
-        'skipped_empty' => 0,
         'dry_run' => $options['dry-run'],
       ];
-    }
-
-    $paged_query = $node_storage->getQuery()
-      ->condition('type', 'islandora_object')
-      ->accessCheck(FALSE)
-      ->exists('field_handle')
-      ->sort('nid')
-      ->range($context['sandbox']['progress'], self::BATCH_SIZE);
-
-    if (!empty($options['only-if-value'])) {
-      $paged_query->condition('field_handle', $options['only-if-value']);
-    }
-
-    $nids_to_process = $paged_query->execute();
-
-    if (empty($nids_to_process)) {
-      $context['finished'] = 1;
-      return;
     }
 
     $nodes = $node_storage->loadMultiple($nids_to_process);
 
     foreach ($nodes as $node) {
-      $nid = $node->id();
+      if (!$node instanceof NodeInterface || !$node->hasField('field_handle')) {
+        continue;
+      }
+      
       $current_value = $node->get('field_handle')->value;
-      $log_context = ['@nid' => $nid, '@current' => $current_value];
+      $log_context = ['@nid' => $node->id(), '@current' => $current_value];
 
-      $context['results']['changed']++;
       if ($options['dry-run']) {
-        if ($options['logging']) {
-          $messenger->addMessage(t('[DRY-RUN] Would clear handle on node @nid. Current value: "@current".', $log_context));
-        }
+        $message = t('[DRY-RUN] Would clear handle on node @nid. Current value: "@current".', $log_context);
       }
       else {
-        $node->set('field_handle', NULL);
-        $node->save();
-        if ($options['logging']) {
-          $messenger->addMessage(t('Cleared handle on node @nid. Old value was: "@current".', $log_context));
+        try {
+          $node->set('field_handle', NULL);
+          $node->save();
+          $message = t('Cleared handle on node @nid. Old value was: "@current".', $log_context);
         }
+        catch (\Exception $e) {
+          $error_message = t('Failed to save node @nid. Error: @error', ['@nid' => $node->id(), '@error' => $e->getMessage()]);
+          $logger->error($error_message);
+          if ($options['logging']) {
+            $messenger->addError($error_message);
+          }
+          continue;
+        }
+      }
+      
+      $context['results']['changed']++;
+      if ($options['logging']) {
+        $messenger->addMessage($message);
+        $logger->info($message);
       }
     }
 
-    $context['sandbox']['progress'] += count($nids_to_process);
     $context['results']['processed'] += count($nids_to_process);
-
-    if ($context['sandbox']['progress'] < $context['sandbox']['max']) {
-      $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
-    }
-    else {
-      $context['finished'] = 1;
-    }
   }
 
   /**
@@ -161,10 +146,10 @@ class RemoveHandleValues extends DrushCommands {
 
     if ($success) {
       $message = sprintf(
-        'Batch complete%s. Processed: %d. Handles Cleared/To Clear: %d.',
+        'Batch complete%s. Processed: %d. Handles cleared/to be cleared: %d.',
         $dry_run_notice,
-        $results['processed'],
-        $results['changed']
+        $results['processed'] ?? 0,
+        $results['changed'] ?? 0
       );
       $messenger->addStatus($message);
       $logger->notice($message);
