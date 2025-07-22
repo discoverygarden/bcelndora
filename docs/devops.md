@@ -759,3 +759,38 @@ Once microk8s has been provisioned add the node the cluster by running:
    get nodes`.
 1. On the **new node** update the kubeconfig with `microk8s config >
    ~/.config/kube`
+
+### Updating Memory Limits
+
+To update the memory limits for a service, you need to modify the relevant Helm values file for that service within your site's directory in `/opt/helm_values/[site]/[service]/values.yaml`.
+
+1. Open the values file for the service you want to update (e.g. `/opt/helm_values/dc/drupal/values.yaml`).
+2. Locate or add the `resources` section. For example:
+
+    ```yaml
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+    ```
+
+   - `limits.memory` sets the maximum amount of memory the container can use.
+   - `requests.memory` sets the amount of memory Kubernetes will reserve for the container.
+
+   For more details, see the [Kubernetes documentation on Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+3. Save your changes.
+4. Apply the updated configuration by running:
+
+    ```bash
+    ./scripts/update-helm.sh [service] dgi/[service] [site]
+    ```
+
+   Or, to update all services for the site:
+
+    ```bash
+    ./scripts/update-all.sh [site]
+    ```
+
+**Note:** Adjust the memory values (`2Gi`, `1Gi`, etc.) as needed for your workload. Repeat these steps for each service that requires updated
