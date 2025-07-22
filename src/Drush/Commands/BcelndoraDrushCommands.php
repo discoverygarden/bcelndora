@@ -6,13 +6,15 @@ use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Command for BCELN to remove field_handle values.
  */
-class RemoveHandleValues extends DrushCommands {
+final class BcelndoraDrushCommands extends DrushCommands {
+  use AutowireTrait;
 
   private const BATCH_SIZE = 100;
   private const LOGGER_CHANNEL = 'bcelndora';
@@ -79,8 +81,6 @@ class RemoveHandleValues extends DrushCommands {
     drush_backend_batch_process();
   }
 
-
-
   /**
    * Batch processing for handle removal.
    */
@@ -103,7 +103,7 @@ class RemoveHandleValues extends DrushCommands {
       if (!$node instanceof NodeInterface || !$node->hasField('field_handle')) {
         continue;
       }
-      
+
       $current_value = $node->get('field_handle')->value;
       $log_context = ['@nid' => $node->id(), '@current' => $current_value];
 
@@ -125,7 +125,7 @@ class RemoveHandleValues extends DrushCommands {
           continue;
         }
       }
-      
+
       $context['results']['changed']++;
       if ($options['logging']) {
         $messenger->addMessage($message);
