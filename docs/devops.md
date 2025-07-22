@@ -794,3 +794,29 @@ To update the memory limits for a service, you need to modify the relevant Helm 
     ```
 
 **Note:** Adjust the memory values (`2Gi`, `1Gi`, etc.) as needed for your workload. Repeat these steps for each service that requires updated
+
+### Checking Current Resource Settings
+
+To check the current resource requests and limits for your services in Kubernetes, use the following commands:
+
+- **List all pods and their resource settings in a namespace:**
+
+    ```bash
+    kubectl get pod -n [namespace] -o json | jq '.items[].spec.containers[] | {name: .name, resources: .resources}'
+    ```
+
+    Replace `[namespace]` with your site/namespace name. This will show the resource requests and limits for each container in all pods.
+
+- **Check a specific deployment's resource settings:**
+
+    ```bash
+    kubectl get deployment [deployment-name] -n [namespace] -o yaml | grep -A10 'resources:'
+    ```
+
+- **Describe a specific pod for detailed resource info:**
+
+    ```bash
+    kubectl describe pod [pod-name] -n [namespace]
+    ```
+
+Look for the `Limits` and `Requests` sections in the output to see the current memory
