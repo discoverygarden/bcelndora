@@ -45,7 +45,7 @@ pod_name=$(kubectl get pods -n $ns -l component=drupal -o jsonpath='{.items[0].m
 kubectl -n $ns exec $pod_name -- drush cex --yes
 kubectl -n $ns cp $pod_name:config config
 
-split_dir="config/splits/$ns"
+split_dir="config/splits/sites/$ns"
 
 if [ ! -d "$split_dir" ]; then
   echo "Split directory $split_dir does not exist. Nothing to commit."
