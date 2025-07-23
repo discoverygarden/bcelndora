@@ -793,7 +793,19 @@ To update the memory limits for a service, you need to modify the relevant Helm 
     ./scripts/update-all.sh [site]
     ```
 
-**Note:** Adjust the memory values (`2Gi`, `1Gi`, etc.) as needed for your workload. Repeat these steps for each service that requires updated
+**Note:** Adjust the memory values (`2Gi`, `1Gi`, etc.) as needed for your workload. Repeat these steps for each service that requires updated memory limits.
+
+Default memory limits are set in the Helm charts for each deployment. These are the current default values:
+
+- Activemq: `500Mi`
+- Alpaca: `1Gi`
+- Cantaloupe: `1.5Gi`
+- Clamav: `2Gi`
+- Crayfish: `2Gi`
+- Drupal: `1Gi`
+- Memcache: `250Mi`
+- Postgres: `250Mi`
+- Solr: `1Gi`
 
 ### Checking Current Resource Settings
 
@@ -819,4 +831,8 @@ To check the current resource requests and limits for your services in Kubernete
     kubectl describe pod [pod-name] -n [namespace]
     ```
 
-Look for the `Limits` and `Requests` sections in the output to see the current memory
+- **To test an adjustment temporarily:**  
+    Edit the deployment directly in the cluster (changes will be lost on the next Helm update):
+
+    ```bash
+    kubectl edit deployments.apps drupal -n [namespace]
