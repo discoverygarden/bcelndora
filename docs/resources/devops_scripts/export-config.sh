@@ -45,13 +45,26 @@ pod_name=$(kubectl get pods -n $ns -l component=drupal -o jsonpath='{.items[0].m
 kubectl -n $ns exec $pod_name -- drush cex --yes
 kubectl -n $ns cp $pod_name:config config
 
-if [ -z "$(git status --porcelain config)" ]; then
-  echo No changes to commit
-  exit
+split_dir="config/splits/$ns"
+
+if [ ! -d "$split_dir" ]; then
+  echo "Split directory $split_dir does not exist. Nothing to commit."
+  exit 0
 fi
 
-git add config
-git commit -m "Auto commit $(date)"
+if [ -z "$(git status --porcelain "$split_dir")" ]; then
+  echo "No changes to commit in $split_dir"
+  exit 0
+fi
+
+git add "$split_dir"/*
+
+if git diff --cached --quiet -- "$split_dir"; then
+  echo "No staged changes in $split_dir to commit."
+  exit 0
+fi
+
+git commit -m "Auto commit $(date) for $ns split"
 git push --set-upstream origin $branch
 
 gh pr create --title="$ns reconcile" --body="" --label="patch"
