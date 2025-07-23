@@ -795,7 +795,7 @@ To update the memory limits for a service, you need to modify the relevant Helm 
 
 **Note:** Adjust the memory values (`2Gi`, `1Gi`, etc.) as needed for your workload. Repeat these steps for each service that requires updated memory limits.
 
-Default memory limits are set in the Helm charts for each deployment. These are the current default values:
+Default memory limits are set in the [Helm charts](https://github.com/discoverygarden/helm-charts/blob/main/charts) for each deployment. These are the current default values:
 
 - Activemq: `500Mi`
 - Alpaca: `1Gi`
@@ -836,3 +836,4 @@ To check the current resource requests and limits for your services in Kubernete
 
     ```bash
     kubectl edit deployments.apps drupal -n [namespace]
+```
