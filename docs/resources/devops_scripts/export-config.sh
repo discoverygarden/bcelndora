@@ -57,7 +57,7 @@ if [ -z "$(git status --porcelain "$split_dir")" ]; then
   exit 0
 fi
 
-git add "$split_dir"/*
+git add "$split_dir"
 
 if git diff --cached --quiet -- "$split_dir"; then
   echo "No staged changes in $split_dir to commit."
