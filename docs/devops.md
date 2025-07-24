@@ -261,8 +261,9 @@ To change a site's URL:
 
 1. Export and merge site configs, as described above.
 2. Change the DNS configuration.
-3. Update `/opt/helm_values/[namespace]/drupal/values.yaml` with the new tag
-4. Update `/opt/helm_values/[namespace]/shared/ingress.yaml`:
+3. Update the old Islandora server's SSL certificates, e.g.: `certbot --apache -d arcabc.ca -d athabascau.arcabc.ca -d bchdp.arcabc.ca -d bcrdh.ca -d www.bcrdh.ca -d irbu.arcabc.ca -d kpu.arcabc.ca -d twu.arcabc.ca -d ufv.arcabc.ca -d vpl.arcabc.ca`, deleting any that have been removed.
+4. Update `/opt/helm_values/[namespace]/drupal/values.yaml` with the new tag
+5. Update `/opt/helm_values/[namespace]/shared/ingress.yaml`:
     - Change the "host" value to the new URL
     - Add a new line: `secretName: [namespace]-ssl
     - Example:
@@ -272,13 +273,13 @@ To change a site's URL:
         issuer: letsencrypt-prod
         secretName: capu-ssl
     ```
-5. Run `./scripts/update-all.sh [namespace]`
+6. Run `./scripts/update-all.sh [namespace]`
     - If you don't want to fully update Drupal, choose `s` for when the Drupal update question arises.
-6. Reindex Solr:
+7. Reindex Solr:
     * At `/admin/config/search/search-api/index/default_solr_index/`, click "Queue all items for reindexing".
     * Shell into the server, and run
       ```drush --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index ```   
-7. Wait. It will take some time for the new certificates to be generated.
+8. Wait. It will take some time for the new certificates to be generated.
 
 # Troubleshooting
 
