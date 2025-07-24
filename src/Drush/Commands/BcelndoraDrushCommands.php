@@ -118,7 +118,7 @@ final class BcelndoraDrushCommands extends DrushCommands {
         }
         catch (\Exception $e) {
           $error_message = t('Failed to save node @nid. Error: @error', [
-            '@nid' => $node->id(), 
+            '@nid' => $node->id(),
             '@error' => $e->getMessage(),
           ]);
           $logger->error($error_message);
