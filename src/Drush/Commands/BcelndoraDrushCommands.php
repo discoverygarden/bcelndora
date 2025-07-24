@@ -117,7 +117,10 @@ final class BcelndoraDrushCommands extends DrushCommands {
           $message = t('Cleared handle on node @nid. Old value was: "@current".', $log_context);
         }
         catch (\Exception $e) {
-          $error_message = t('Failed to save node @nid. Error: @error', ['@nid' => $node->id(), '@error' => $e->getMessage()]);
+          $error_message = t('Failed to save node @nid. Error: @error', [
+            '@nid' => $node->id(), 
+            '@error' => $e->getMessage(),
+          ]);
           $logger->error($error_message);
           if ($options['logging']) {
             $messenger->addError($error_message);
