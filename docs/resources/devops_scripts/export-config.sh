@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 ns=${1?"A namespace is required"}
 
