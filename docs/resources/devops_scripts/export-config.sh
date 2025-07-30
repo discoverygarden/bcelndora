@@ -2,8 +2,8 @@
 
 ns=${1?"A namespace is required"}
 
-cronjob_name="config-export"
-job_name="manual-config-export-$(date +%s)"
+cronjob_name="bceln-drupal--config-export-cron"
+job_name="${ns}-config-export-$(date +%s)"
 
 echo "Creating a manual Job from CronJob '$cronjob_name' in namespace '$ns'..."
 kubectl create job --from=cronjob/$cronjob_name $job_name -n $ns
