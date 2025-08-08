@@ -28,7 +28,7 @@ This guide explains how to configure SimpleSAMLphp for a Drupal Helm deployment,
 3. **Get the AWS SAML Metadata:**
    - dgi will provide the metadata XML for your SimpleSAMLphp config.
 
-### B. Helm Configuration (**BCELN responsibility**)
+### B. Helm Configuration (**dgi responsibility**)
 
 Add an entry under `simplesaml.authSources` for AWS IAM (example: `dgi`):
 
@@ -49,9 +49,9 @@ simplesaml:
 ```
 
 
-- **entityId**: The AWS IAM SAML application’s entity ID (provided by dgi).
-- **metadata**: Paste the AWS SAML metadata XML here (provided by dgi).
-- **signing.secret**: Reference to a Kubernetes secret containing your SP’s certificate and key (BCELN responsibility).
+- **entityId**: The AWS IAM SAML application’s entity ID.
+- **metadata**: Paste the AWS SAML metadata XML here.
+- **signing.secret**: Reference to a Kubernetes secret containing your SP’s certificate and key
 
 ---
 
@@ -74,14 +74,14 @@ simplesaml:
 
 ### C. Helm Configuration (**BCELN responsibility**)
 
-Add a new entry under `simplesaml.authSources` for your IdP (example: `bu`):
+Add a new entry under `simplesaml.authSources` for your IdP (example: `dc`):
 
 
 ```yaml
 simplesaml:
   authSources:
-    bu:
-      entityId: https://shib.bu.edu/idp/shibboleth
+    dc:
+      entityId: <YOUR_IDP_ENTITY_ID>
       metadata: |
         <EntityDescriptor ...>...</EntityDescriptor>
       signing:
@@ -105,20 +105,12 @@ simplesaml:
   authSources:
     multi:
       sources:
-        bu:
-          displayText: Login for Boston University
+        bceln:
+          displayText: Login for BCELN
         dgi:
           displayText: Login for dgi staff
       type: multiauth:MultiAuth
 ```
-
----
-
-
-## 4. Certificates
-
-- Store your SP’s certificate and key in a Kubernetes secret (e.g., `simplesaml-cert`). (BCELN responsibility)
-- Reference the secret in each `signing.secret.secretName`.
 
 ---
 
