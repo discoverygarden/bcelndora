@@ -3,7 +3,7 @@ set -euo pipefail
 
 ns=${1?"A namespace is required"}
 
-cronjob_name="bceln-drupal--config-export-cron"
+cronjob_name="bceln-drupal-config-export-cron"
 job_name="${ns}-config-export-$(date +%s)"
 
 # Check if a job with the same name already exists in the namespace
