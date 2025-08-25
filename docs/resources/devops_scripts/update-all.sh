@@ -26,7 +26,9 @@ helm repo update dgi
 
 for installation in $(yq < $charts_file  '.charts | keys[]'); do
   chart=$(yq < $charts_file ".charts[\"$installation\"].chart")
-  if ! $SCRIPTS_DIR/update-helm.sh $installation $chart $namespace; then
+  $SCRIPTS_DIR/update-helm.sh $installation $chart $namespace
+  update_status=$?
+  if [ "$update_status" -ne 0 ]; then
     echo Failed to update $installation in $namespace
     read -p "Continue with updates (y/n)?" choice
     case "$choice" in 
