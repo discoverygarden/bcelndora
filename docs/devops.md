@@ -497,11 +497,9 @@ The set of charts installed should not have to change across sites.
 
 ### `export-config.sh`
 
-This script will export the config for the provided site and store it in a
-tarball.
-
-For example, running `export-config.sh dc` will export the config to
-`dc/config` and compress it to `dc/config.tar.gz`
+This script creates a kubernetes job. The same job runs as a nightly cron. Use `kubectl get jobs`
+to find the job name that contains config-export then run `kubectl logs job/[job-name]` to
+view the output. The job will export the configuration from drupal and commit it. 
 
 ### `fix-perms.sh`
 
