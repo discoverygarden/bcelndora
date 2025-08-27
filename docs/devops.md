@@ -773,10 +773,17 @@ To update the memory limits for a service, you need to modify the relevant Helm 
         memory: 2Gi
       requests:
         memory: 1Gi
+    # drupal chart accepts values for php settings as well. Note these are not in the resources section, but at the root level. 
+    php:
+      memoryLimit: 2G
+    phpCli:
+      memoryLimit: 4G
     ```
 
    - `limits.memory` sets the maximum amount of memory the container can use.
    - `requests.memory` sets the amount of memory Kubernetes will reserve for the container.
+   - `php.memoryLimit` sets the memory limit for PHP processes.
+   - `phpCli.memoryLimit` sets the memory limit for PHP CLI processes. This values will be the same as `php.memoryLimit` unless overridden
 
    For more details, see the [Kubernetes documentation on Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
