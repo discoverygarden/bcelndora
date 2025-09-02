@@ -17,10 +17,25 @@ fi
 echo "Creating a manual Job from CronJob '$cronjob_name' in namespace '$ns'..."
 kubectl create job --from=cronjob/$cronjob_name $job_name -n $ns
 
-echo "Waiting for Job '$job_name' to complete..."
-kubectl wait --for=condition=complete --timeout=600s job/$job_name -n $ns
+echo "Waiting for Job '$job_name' to complete or fail..."
 
-job_status=$(kubectl get job $job_name -n $ns -o jsonpath='{.status.succeeded}')
+# Wait for either completion or failure
+for i in {1..60}; do
+  job_status=$(kubectl get job $job_name -n $ns -o jsonpath='{.status.conditions[*].type}' 2>/dev/null || echo "")
+  if [[ "$job_status" == *"Complete"* ]]; then
+    break
+  elif [[ "$job_status" == *"Failed"* ]]; then
+    echo "Job failed."
+    kubectl describe job $job_name -n $ns
+    kubectl logs -n "$ns" -l job-name=$job_name || true
+    kubectl delete job "$job_name" -n "$ns" --wait=false
+    exit 1
+  fi
+  sleep 10
+done
+
+# Final check for completion
+job_status=$(kubectl get job $job_name -n $ns -o jsonpath='{.status.succeeded}' 2>/dev/null || echo "")
 
 if [[ "$job_status" == "1" ]]; then
   pod_name=$(kubectl get pods -n $ns --selector=job-name=$job_name -o jsonpath='{.items[0].metadata.name}')
@@ -29,7 +44,7 @@ if [[ "$job_status" == "1" ]]; then
   kubectl delete job "$job_name" -n "$ns" --wait=false
   exit 0
 else
-  echo "Job failed or did not complete successfully."
+  echo "Job did not complete successfully (timeout or unknown error)."
   kubectl describe job $job_name -n $ns
-  exit 1
-fi
+  kubectl logs -n "$ns" -l job-name=$job_name || true
+  kubectl delete job "$job_name" -n "$ns" --wait=
