@@ -17,7 +17,7 @@ fi
 echo "Creating a manual Job from CronJob '$cronjob_name' in namespace '$ns'..."
 kubectl create job --from=cronjob/$cronjob_name $job_name -n $ns
 
-echo "Waiting for Job '$job_name' to complete or fail..."
+echo "Waiting for Job '$job_name' to complete"
 
 # Wait for either completion or failure
 for i in {1..60}; do
@@ -26,9 +26,7 @@ for i in {1..60}; do
     break
   elif [[ "$job_status" == *"Failed"* ]]; then
     echo "Job failed."
-    kubectl describe job $job_name -n $ns
     kubectl logs -n "$ns" -l job-name=$job_name || true
-    kubectl delete job "$job_name" -n "$ns" --wait=false
     exit 1
   fi
   sleep 10
@@ -45,6 +43,5 @@ if [[ "$job_status" == "1" ]]; then
   exit 0
 else
   echo "Job did not complete successfully (timeout or unknown error)."
-  kubectl describe job $job_name -n $ns
   kubectl logs -n "$ns" -l job-name=$job_name || true
-  kubectl delete job "$job_name" -n "$ns" --wait=
+fi
