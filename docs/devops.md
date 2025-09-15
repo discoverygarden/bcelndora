@@ -672,22 +672,80 @@ a service. However, some more care is required when updating drupal.
 
 Before updating drupal configuration should be exported and merged back in.
 
-Before running the script sure you have [ssh agent
-forwarding](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/using-ssh-agent-forwarding)
-enabled for the dc server, and that your ssh key you use for GitHub is
-accessible. The config export script will verify github access before running.
-
 1. From the `/opt/helm_values` directory run `./scripts/export-config.sh
    [site]` ex `./scripts/export-config.sh oc`. To export and push the configs
-   to GitHub.
-1. On the bceln-drupal repository open a pull request from the created branch
-   and add a `patch` label.
-
-Once the pull request has been merged and the new image built, the drupal
-installtion can be updated.
+   to GitHub. The script will export configs using a kubernetes job and 
+   create a pull request. This process also runs nightly as a cron. The
+   resultant PR should be reviewed and merged before proceeding with the
+   update.
+2. If reviewing and merging multiple PRs, review and merge as needed prior
+   continuing.
+3. Once all PR's are merged, create a new tag for the repo (from a local copy of the repo)
+    i) `git fetch --all`
+    ii) `git checkout main`
+    # create a tag that is one patch version higher than the latest tag. eg if the latest tag is v1.2.3, create v1.2.4
+    iii) `git tag -a vX.Y.Z -m 'tagging vX.Y.Z'`
+    iv) `git push origin vX.Y.Z`
+4. Update the drupal image tag in `/opt/helm_values/[site]/drupal/values.yaml` to the new tag created in the previous step.
+5. Run `./scripts/update-all.sh [site]` to update drupal.
 
 When updating drupal, a backup of the database will be taken and config will be
 imported.
+
+## Rollback and database restore
+
+Use these procedures to revert a Helm release and restore Postgres from backups. No S3/bucket steps are required.
+
+### A) Roll back an update (automatic DB restore via hook)
+
+1) Put the site into maintenance/no-writes
+- Option 1: scale Drupal to 0
+  - `kubectl scale deploy/drupal -n [namespace] --replicas=0`
+
+2) Roll back the Helm release (the post-rollback hook restores the DB automatically)
+- `helm history drupal -n [namespace]`
+- `helm rollback drupal [REVISION] -n [namespace] --wait`
+- If you need to do a manual DB restore instead, first apply the restore deployment: `kubectl apply -n [namespace] -f restore.yaml`, then follow section B.
+
+3) Bring the app back and clear caches
+- `kubectl scale deploy/drupal -n [namespace] --replicas=1`
+
+### B) Manual restore from backup (update or nightly)
+
+Use this if you need to restore manually instead of relying on the hook.
+
+Prerequisites
+- Apply a temporary restore deployment that mounts the backups volume: `kubectl apply -n [namespace] -f restore.yaml`
+- Exec into the deployment: `kubectl exec -it -n [namespace] deploy/db-restore -- /bin/sh`
+
+Option 1 — Restore from an update-time backup
+- BACKUP_ID identifies the update backup to use.
+```
+BACKUP_FILE="/backups/postgres/$BACKUP_ID/drupal.backup.sql.gz"
+if [ ! -f $BACKUP_FILE ]; then
+  echo Missing backup file
+  exit 1
+fi
+
+dropdb drupal
+createdb drupal
+zcat "$BACKUP_FILE" | psql -d "$PGDATABASE"
+```
+
+Option 2 — Restore from a nightly backup
+- Choose the desired nightly file (kept ~7 days) using the timestamp in the filename.
+```
+BACKUP_FILE="/backups/postgres/daily/${PGDATABASE}.YYYY-MM-DD-HH-MM-SS.sql.gz"
+
+dropdb drupal
+createdb drupal
+zcat "$BACKUP_FILE" | psql -d "$PGDATABASE"
+```
+
+Cleanup and recovery
+- Exit the shell: `exit`
+- Delete the temporary restore deployment: `kubectl delete deploy/db-restore -n [namespace]`
+- Bring the app back and clear caches (same as step A.3)
 
 ## Deploying nodes
 
