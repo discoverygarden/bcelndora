@@ -759,3 +759,88 @@ Once microk8s has been provisioned add the node the cluster by running:
    get nodes`.
 1. On the **new node** update the kubeconfig with `microk8s config >
    ~/.config/kube`
+
+### Updating Memory Limits
+
+To update the memory limits for a service, you need to modify the relevant Helm values file for that service within your site's directory in `/opt/helm_values/[site]/[service]/values.yaml`.
+
+1. Open the values file for the service you want to update (e.g. `/opt/helm_values/dc/drupal/values.yaml`).
+2. Locate or add the `resources` section. For example:
+
+    ```yaml
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+    # drupal chart accepts values for php settings as well. Note these are not in the resources section, but at the root level. 
+    php:
+      memoryLimit: 2G
+    phpCli:
+      memoryLimit: 4G
+    ```
+
+   - `limits.memory` sets the maximum amount of memory the container can use.
+   - `requests.memory` sets the amount of memory Kubernetes will reserve for the container.
+   - `php.memoryLimit` sets the memory limit for PHP processes.
+   - `phpCli.memoryLimit` sets the memory limit for PHP CLI processes. This values will be the same as `php.memoryLimit` unless overridden
+
+   For more details, see the [Kubernetes documentation on Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+3. Save your changes.
+4. Apply the updated configuration by running:
+
+    ```bash
+    ./scripts/update-helm.sh [service] dgi/[service] [site]
+    ```
+
+   Or, to update all services for the site:
+
+    ```bash
+    ./scripts/update-all.sh [site]
+    ```
+
+**Note:** Adjust the memory values (`2Gi`, `1Gi`, etc.) as needed for your workload. Repeat these steps for each service that requires updated memory limits.
+
+Default memory limits are set in the [Helm charts](https://github.com/discoverygarden/helm-charts/blob/main/charts) for each deployment. These are the current default values:
+
+- Activemq: `500Mi`
+- Alpaca: `1Gi`
+- Cantaloupe: `1.5Gi`
+- Clamav: `2Gi`
+- Crayfish: `2Gi`
+- Drupal: `1Gi`
+- Memcache: `250Mi`
+- Postgres: `250Mi`
+- Solr: `1Gi`
+
+### Checking Current Resource Settings
+
+To check the current resource requests and limits for your services in Kubernetes, use the following commands:
+
+- **List all pods and their resource settings in a namespace:**
+
+    ```bash
+    kubectl get pod -n [namespace] -o json | jq '.items[].spec.containers[] | {name: .name, resources: .resources}'
+    ```
+
+    Replace `[namespace]` with your site/namespace name. This will show the resource requests and limits for each container in all pods.
+
+- **Check a specific deployment's resource settings:**
+
+    ```bash
+    kubectl get deployment [deployment-name] -n [namespace] -o yaml | grep -A10 'resources:'
+    ```
+
+- **Describe a specific pod for detailed resource info:**
+
+    ```bash
+    kubectl describe pod [pod-name] -n [namespace]
+    ```
+
+- **To test an adjustment temporarily:**  
+    Edit the deployment directly in the cluster (changes will be lost on the next Helm update):
+
+    ```bash
+    kubectl edit deployments.apps drupal -n [namespace]
+```
