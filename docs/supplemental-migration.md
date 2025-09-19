@@ -17,44 +17,44 @@ This represents my understanding of the instructions provided in ticket #21481. 
     - Truncate the map tables:
         ```
         truncate migrate_map_dgis_foxml_files; 
-truncate migrate_map_dgis_stub_terms_generic; 
-truncate migrate_map_bceln_person_tn_file; 
-truncate migrate_map_bceln_person_tn_media; 
-truncate migrate_map_bceln_mads_to_term_person; 
-truncate migrate_map_bceln_stub_terms_institution; 
-truncate migrate_map_bceln_stub_terms_culture; 
-truncate migrate_map_dgis_stub_nodes; 
-truncate migrate_map_dgis_stub_terms_person; 
-truncate migrate_map_dgis_stub_terms_corporate_body; 
-truncate migrate_map_dgis_stub_terms_affiliate; 
-truncate migrate_map_dgis_nodes; 
-truncate migrate_map_store_source_foxml; 
-truncate migrate_map_dgis_orig_file; 
-truncate migrate_map_dgis_orig_media; 
-truncate migrate_map_dgis_collection_representatives; 
-truncate migrate_map_dgis_tn_file; 
-truncate migrate_map_dgis_tn_media; 
+        truncate migrate_map_dgis_stub_terms_generic; 
+        truncate migrate_map_bceln_person_tn_file; 
+        truncate migrate_map_bceln_person_tn_media; 
+        truncate migrate_map_bceln_mads_to_term_person; 
+        truncate migrate_map_bceln_stub_terms_institution; 
+        truncate migrate_map_bceln_stub_terms_culture; 
+        truncate migrate_map_dgis_stub_nodes; 
+        truncate migrate_map_dgis_stub_terms_person; 
+        truncate migrate_map_dgis_stub_terms_corporate_body; 
+        truncate migrate_map_dgis_stub_terms_affiliate; 
+        truncate migrate_map_dgis_nodes; 
+        truncate migrate_map_store_source_foxml; 
+        truncate migrate_map_dgis_orig_file; 
+        truncate migrate_map_dgis_orig_media; 
+        truncate migrate_map_dgis_collection_representatives; 
+        truncate migrate_map_dgis_tn_file; 
+        truncate migrate_map_dgis_tn_media; 
         ```
     - Truncate the message tables:
         ```
         truncate migrate_message_dgis_foxml_files; 
-truncate migrate_message_dgis_stub_terms_generic; 
-truncate migrate_message_bceln_person_tn_file; 
-truncate migrate_message_bceln_person_tn_media; 
-truncate migrate_message_bceln_mads_to_term_person; 
-truncate migrate_message_bceln_stub_terms_institution; 
-truncate migrate_message_bceln_stub_terms_culture; 
-truncate migrate_message_dgis_stub_nodes; 
-truncate migrate_message_dgis_stub_terms_person; 
-truncate migrate_message_dgis_stub_terms_corporate_body; 
-truncate migrate_message_dgis_stub_terms_affiliate; 
-truncate migrate_message_dgis_nodes; 
-truncate migrate_message_store_source_foxml; 
-truncate migrate_message_dgis_orig_file; 
-truncate migrate_message_dgis_orig_media; 
-truncate migrate_message_dgis_collection_representatives; 
-truncate migrate_message_dgis_tn_file; 
-truncate migrate_message_dgis_tn_media;
+        truncate migrate_message_dgis_stub_terms_generic; 
+        truncate migrate_message_bceln_person_tn_file; 
+        truncate migrate_message_bceln_person_tn_media; 
+        truncate migrate_message_bceln_mads_to_term_person; 
+        truncate migrate_message_bceln_stub_terms_institution; 
+        truncate migrate_message_bceln_stub_terms_culture; 
+        truncate migrate_message_dgis_stub_nodes; 
+        truncate migrate_message_dgis_stub_terms_person; 
+        truncate migrate_message_dgis_stub_terms_corporate_body; 
+        truncate migrate_message_dgis_stub_terms_affiliate; 
+        truncate migrate_message_dgis_nodes; 
+        truncate migrate_message_store_source_foxml; 
+        truncate migrate_message_dgis_orig_file; 
+        truncate migrate_message_dgis_orig_media; 
+        truncate migrate_message_dgis_collection_representatives; 
+        truncate migrate_message_dgis_tn_file; 
+        truncate migrate_message_dgis_tn_media;
         ```
 
 ## Set up the migration in the node
