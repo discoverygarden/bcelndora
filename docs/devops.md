@@ -234,20 +234,20 @@ A new branch will be created and pushed to Github.
 A pull request will be created automatically. Your terminal will provide a link for you to review.
 
 Review changed files in case of anything odd, particularly changes to the non-site-specific configs.
-  - We want: file changes at `/config/splits/[siteName]`. We **do not want** changes at `/config/sync/`.
-  - If there are undesired changes (e.g. file deletion), remove them from the PR:
-    - In your local clone:
-      - `git fetch --all`
-      - `git pull origin main`
-      - `git checkout [branch created with the PR]`
-      - `git checkout main [/path/to/altered-or-missing/file]`
-      - `git commit` and `git push`
-      - `git push [branch-name]`
-    - Your pull request should be updated and the bad changes removed. Check to make sure.
-    - Merge the pull request.
-  - Create a tag that is one patch version higher than the latest tag. eg if the latest tag is v1.2.3, create v1.2.4
-    - `git tag -a vX.Y.Z -m 'tagging vX.Y.Z'`
-    - `git push origin vX.Y.Z`
+- We want: file changes at `/config/splits/[siteName]`. We **do not want** changes at `/config/sync/`.
+- If there are undesired changes (e.g. file deletion), remove them from the PR:
+  - In your local clone:
+    - `git fetch --all`
+    - `git pull origin main`
+    - `git checkout [branch created with the PR]`
+    - `git checkout main -- [path/to/altered-or-missing/file]`
+    - `git commit`
+    - `git push origin [branch-name]`
+  - Your pull request should be updated and the bad changes removed. Check to make sure.
+  - Merge the pull request.
+- Create a tag that is one patch version higher than the latest tag. eg if the latest tag is v1.2.3, create v1.2.4
+  - `git tag -a vX.Y.Z -m 'tagging vX.Y.Z'`
+  - `git push origin vX.Y.Z`
 
 ## Update Drupal
 
