@@ -44,6 +44,8 @@ if [[ "$job_status" == "1" ]]; then
     kubectl delete job "$job_name" -n "$ns" --wait=false
     exit 0
 else
-    echo "Job did not complete successfully (timeout or unknown error)."
-    kubectl logs -n "$ns" -l job-name=$job_name || true
-fi
+    else
+        echo "Job did not complete successfully (timeout or unknown error)."
+        kubectl logs -n "$ns" -l job-name=$job_name || true
+        exit 1
+    fi
