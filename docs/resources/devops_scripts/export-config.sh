@@ -6,11 +6,13 @@ ns=${1?"A namespace is required"}
 cronjob_name="bceln-drupal-config-export-cron"
 job_name="${ns}-config-export-$(date +%s)"
 
-# Check if a job with the same name already exists in the namespace
-if kubectl get job "$job_name" -n "$ns" &>/dev/null; then
-  echo "A job named '$job_name' already exists in namespace '$ns'. Remove existing job before running this script."
-  echo "You can remove it with: kubectl delete job $job_name -n $ns"
-  echo "Exiting..."
+# Check if the CronJob exists and is enabled (suspend=false)
+cronjob_status=$(kubectl get cronjob "$cronjob_name" -n "$ns" -o jsonpath='{.spec.suspend}' 2>/dev/null || echo "notfound")
+if [[ "$cronjob_status" == "notfound" ]]; then
+  echo "CronJob '$cronjob_name' does not exist in namespace '$ns'."
+  exit 1
+elif [[ "$cronjob_status" == "true" ]]; then
+  echo "CronJob '$cronjob_name' is currently suspended (disabled) in namespace '$ns'."
   exit 1
 fi
 
