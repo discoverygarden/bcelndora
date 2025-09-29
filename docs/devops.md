@@ -686,6 +686,10 @@ Before updating drupal configuration should be exported and merged back in.
     # create a tag that is one patch version higher than the latest tag. eg if the latest tag is v1.2.3, create v1.2.4
     iii) `git tag -a vX.Y.Z -m 'tagging vX.Y.Z'`
     iv) `git push origin vX.Y.Z`
+4. Run the github workflow action to build and push the new drupal image.
+    - Go to the actions tab of the [bceln-drupal repo](https://github.com/discoverygarden/bceln-drupal/actions)
+    - Select the workflow called "Build and push"
+    - Select "Run workflow" and input the new tag created in the previous step.
 4. Update the drupal image tag in `/opt/helm_values/[site]/drupal/values.yaml` to the new tag created in the previous step.
 5. Run `./scripts/update-all.sh [site]` to update drupal.
 
