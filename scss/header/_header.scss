@@ -1,0 +1,18 @@
+/**
+* Styling overrides for the header.
+*/
+
+body.front-page,
+%front-page-view-scaffolding {
+
+  // Remove the front page header background gradient when using the
+  // 'Solid front page header background' theme settings. This setting
+  // adds a class to the body tag (front--header-solid).
+  &.front--header-solid {
+    header#navbar {
+      &:before {
+        background-image: none;
+      }
+    }
+  }
+}
