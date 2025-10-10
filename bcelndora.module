@@ -24,6 +24,10 @@ function bcelndora_theme_suggestions_alter(array &$suggestions, array $variables
       }
     }
   }
+
+  if ($hook === 'pager') {
+    $suggestions[] = 'pager__bceln_pager'; // Creates pager--my-specific-pager.html.twig
+  }
 }
 
 /**
@@ -34,6 +38,10 @@ function bcelndora_theme($existing, $type, $theme, $path) {
     'views_view__taxonomy_term__person' => [
       'template' => 'views-view--taxonomy-term--person',
       'base hook' => 'views_view',
+    ],
+    'pager' => [ // Or 'views_mini_pager' for Views pagers
+      'template' => 'pager--bceln-pager', // Name of your twig file without .html.twig
+      'base hook' => 'pager',
     ],
   ];
 }
