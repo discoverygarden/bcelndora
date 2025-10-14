@@ -41,7 +41,7 @@ function bcelndora_theme($existing, $type, $theme, $path) {
     ],
     // Add the 'first page' & 'last page' links to the pager,
     // overriding the dgi_i8_base theme.
-    'pager' => [
+    'pager__bceln_pager' => [
       'template' => 'pager--bceln-pager',
       'base hook' => 'pager',
     ],
