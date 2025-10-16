@@ -24,6 +24,10 @@ function bcelndora_theme_suggestions_alter(array &$suggestions, array $variables
       }
     }
   }
+
+  if ($hook === 'pager') {
+    $suggestions[] = 'pager__bceln_pager';
+  }
 }
 
 /**
@@ -34,6 +38,12 @@ function bcelndora_theme($existing, $type, $theme, $path) {
     'views_view__taxonomy_term__person' => [
       'template' => 'views-view--taxonomy-term--person',
       'base hook' => 'views_view',
+    ],
+    // Add the 'first page' & 'last page' links to the pager,
+    // overriding the dgi_i8_base theme.
+    'pager__bceln_pager' => [
+      'template' => 'pager--bceln-pager',
+      'base hook' => 'pager',
     ],
   ];
 }
