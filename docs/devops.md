@@ -105,6 +105,7 @@ If you are creating a temporary domain, use the pattern `[namespace]-i2`. If cre
 9. Shell into the `arca-dc` server, and add the node to the cluster:
     - `microk8s add-node`
     - Copy the `microk8s join` command it generates.
+    - Use the `--worker` flag unless you specifically need the node to be a master node. New nodes should be workers by default.
 10. Shell into the new server, and paste the `microk8s join` command from the previous step.
     - If there's a timeout error, there is probably a firewall issue between the servers; contact SFU to deal with it.
 11. On the `arca-dc` server, confirm the node has been added with `kubectl get nodes`.
@@ -233,20 +234,20 @@ A new branch will be created and pushed to Github.
 A pull request will be created automatically. Your terminal will provide a link for you to review.
 
 Review changed files in case of anything odd, particularly changes to the non-site-specific configs.
-    - We want: file changes at `/config/splits/[siteName]`. We **do not want** changes at `/config/sync/`.
-        - If there are undesired changes (e.g. file deletion), remove them from the PR:
-            - In your local clone:
-                - `git fetch --all`
-                - `git pull origin main`
-                - `git checkout [branch created with the PR]`
-                - `git checkout main [/path/to/altered-or-missing/file]`
-                - `git commit` and `git push`
-                - `git push [branch-name]`
-            - Your pull request should be updated and the bad changes removed. Check to make sure.    
-
-Merge the pull request. This will create a new tag.
-
-**Check the Actions tab before proceeding:** Make sure that the Action to complete building the new Drupal image has completed.
+- We want: file changes at `/config/splits/[siteName]`. We **do not want** changes at `/config/sync/`.
+- If there are undesired changes (e.g. file deletion), remove them from the PR:
+  - In your local clone:
+    - `git fetch --all`
+    - `git pull origin main`
+    - `git checkout [branch created with the PR]`
+    - `git checkout main -- [path/to/altered-or-missing/file]`
+    - `git commit`
+    - `git push origin [branch-name]`
+  - Your pull request should be updated and the bad changes removed. Check to make sure.
+  - Merge the pull request.
+- Create a tag that is one patch version higher than the latest tag. eg if the latest tag is v1.2.3, create v1.2.4
+  - `git tag -a vX.Y.Z -m 'tagging vX.Y.Z'`
+  - `git push origin vX.Y.Z`
 
 ## Update Drupal
 
@@ -277,8 +278,7 @@ To change a site's URL:
     - If you don't want to fully update Drupal, choose `s` for when the Drupal update question arises.
 7. Reindex Solr:
     * At `/admin/config/search/search-api/index/default_solr_index/`, click "Queue all items for reindexing".
-    * Shell into the server, and run
-      ```drush --uri=$DRUSH_OPTIONS_URI search-api:index default_solr_index ```   
+    * Run `./scripts/index-solr.sh [namespace]`
 8. Wait. It will take some time for the new certificates to be generated.
 
 # Troubleshooting
@@ -497,11 +497,9 @@ The set of charts installed should not have to change across sites.
 
 ### `export-config.sh`
 
-This script will export the config for the provided site and store it in a
-tarball.
-
-For example, running `export-config.sh dc` will export the config to
-`dc/config` and compress it to `dc/config.tar.gz`
+This script creates a kubernetes job. The same job runs as a nightly cron. Use `kubectl get jobs`
+to find the job name that contains config-export then run `kubectl logs job/[job-name]` to
+view the output. The job will export the configuration from drupal and commit it. 
 
 ### `fix-perms.sh`
 
@@ -673,22 +671,84 @@ a service. However, some more care is required when updating drupal.
 
 Before updating drupal configuration should be exported and merged back in.
 
-Before running the script sure you have [ssh agent
-forwarding](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/using-ssh-agent-forwarding)
-enabled for the dc server, and that your ssh key you use for GitHub is
-accessible. The config export script will verify github access before running.
-
 1. From the `/opt/helm_values` directory run `./scripts/export-config.sh
    [site]` ex `./scripts/export-config.sh oc`. To export and push the configs
-   to GitHub.
-1. On the bceln-drupal repository open a pull request from the created branch
-   and add a `patch` label.
-
-Once the pull request has been merged and the new image built, the drupal
-installtion can be updated.
+   to GitHub. The script will export configs using a kubernetes job and 
+   create a pull request. This process also runs nightly as a cron. The
+   resultant PR should be reviewed and merged before proceeding with the
+   update.
+2. If reviewing and merging multiple PRs, review and merge as needed prior
+   continuing.
+3. Once all PR's are merged, create a new tag for the repo (from a local copy of the repo)
+    i) `git fetch --all`
+    ii) `git checkout main`
+    # create a tag that is one patch version higher than the latest tag. eg if the latest tag is v1.2.3, create v1.2.4
+    iii) `git tag -a vX.Y.Z -m 'tagging vX.Y.Z'`
+    iv) `git push origin vX.Y.Z`
+4. Run the github workflow action to build and push the new drupal image.
+    - Go to the actions tab of the [bceln-drupal repo](https://github.com/discoverygarden/bceln-drupal/actions)
+    - Select the workflow called "Build and push"
+    - Select "Run workflow" and input the new tag created in the previous step.
+4. Update the drupal image tag in `/opt/helm_values/[site]/drupal/values.yaml` to the new tag created in the previous step.
+5. Run `./scripts/update-all.sh [site]` to update drupal.
 
 When updating drupal, a backup of the database will be taken and config will be
 imported.
+
+## Rollback and database restore
+
+Use these procedures to revert a Helm release and restore Postgres from backups. No S3/bucket steps are required.
+
+### A) Roll back an update (automatic DB restore via hook)
+
+1) Put the site into maintenance/no-writes
+- Option 1: scale Drupal to 0
+  - `kubectl scale deploy/drupal -n [namespace] --replicas=0`
+
+2) Roll back the Helm release (the post-rollback hook restores the DB automatically)
+- `helm history drupal -n [namespace]`
+- `helm rollback drupal [REVISION] -n [namespace] --wait`
+- If you need to do a manual DB restore instead, first apply the restore deployment: `kubectl apply -n [namespace] -f restore.yaml`, then follow section B.
+
+3) Bring the app back and clear caches
+- `kubectl scale deploy/drupal -n [namespace] --replicas=1`
+
+### B) Manual restore from backup (update or nightly)
+
+Use this if you need to restore manually instead of relying on the hook.
+
+Prerequisites
+- Apply a temporary restore deployment that mounts the backups volume: `kubectl apply -n [namespace] -f restore.yaml`
+- Exec into the deployment: `kubectl exec -it -n [namespace] deploy/db-restore -- /bin/sh`
+
+Option 1 — Restore from an update-time backup
+- BACKUP_ID identifies the update backup to use.
+```
+BACKUP_FILE="/backups/postgres/$BACKUP_ID/drupal.backup.sql.gz"
+if [ ! -f $BACKUP_FILE ]; then
+  echo Missing backup file
+  exit 1
+fi
+
+dropdb drupal
+createdb drupal
+zcat "$BACKUP_FILE" | psql -d "$PGDATABASE"
+```
+
+Option 2 — Restore from a nightly backup
+- Choose the desired nightly file (kept ~7 days) using the timestamp in the filename.
+```
+BACKUP_FILE="/backups/postgres/daily/${PGDATABASE}.YYYY-MM-DD-HH-MM-SS.sql.gz"
+
+dropdb drupal
+createdb drupal
+zcat "$BACKUP_FILE" | psql -d "$PGDATABASE"
+```
+
+Cleanup and recovery
+- Exit the shell: `exit`
+- Delete the temporary restore deployment: `kubectl delete deploy/db-restore -n [namespace]`
+- Bring the app back and clear caches (same as step A.3)
 
 ## Deploying nodes
 
@@ -760,3 +820,88 @@ Once microk8s has been provisioned add the node the cluster by running:
    get nodes`.
 1. On the **new node** update the kubeconfig with `microk8s config >
    ~/.config/kube`
+
+### Updating Memory Limits
+
+To update the memory limits for a service, you need to modify the relevant Helm values file for that service within your site's directory in `/opt/helm_values/[site]/[service]/values.yaml`.
+
+1. Open the values file for the service you want to update (e.g. `/opt/helm_values/dc/drupal/values.yaml`).
+2. Locate or add the `resources` section. For example:
+
+    ```yaml
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+    # drupal chart accepts values for php settings as well. Note these are not in the resources section, but at the root level. 
+    php:
+      memoryLimit: 2G
+    phpCli:
+      memoryLimit: 4G
+    ```
+
+   - `limits.memory` sets the maximum amount of memory the container can use.
+   - `requests.memory` sets the amount of memory Kubernetes will reserve for the container.
+   - `php.memoryLimit` sets the memory limit for PHP processes.
+   - `phpCli.memoryLimit` sets the memory limit for PHP CLI processes. This values will be the same as `php.memoryLimit` unless overridden
+
+   For more details, see the [Kubernetes documentation on Resource Management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+3. Save your changes.
+4. Apply the updated configuration by running:
+
+    ```bash
+    ./scripts/update-helm.sh [service] dgi/[service] [site]
+    ```
+
+   Or, to update all services for the site:
+
+    ```bash
+    ./scripts/update-all.sh [site]
+    ```
+
+**Note:** Adjust the memory values (`2Gi`, `1Gi`, etc.) as needed for your workload. Repeat these steps for each service that requires updated memory limits.
+
+Default memory limits are set in the [Helm charts](https://github.com/discoverygarden/helm-charts/blob/main/charts) for each deployment. These are the current default values:
+
+- Activemq: `500Mi`
+- Alpaca: `1Gi`
+- Cantaloupe: `1.5Gi`
+- Clamav: `2Gi`
+- Crayfish: `2Gi`
+- Drupal: `1Gi`
+- Memcache: `250Mi`
+- Postgres: `250Mi`
+- Solr: `1Gi`
+
+### Checking Current Resource Settings
+
+To check the current resource requests and limits for your services in Kubernetes, use the following commands:
+
+- **List all pods and their resource settings in a namespace:**
+
+    ```bash
+    kubectl get pod -n [namespace] -o json | jq '.items[].spec.containers[] | {name: .name, resources: .resources}'
+    ```
+
+    Replace `[namespace]` with your site/namespace name. This will show the resource requests and limits for each container in all pods.
+
+- **Check a specific deployment's resource settings:**
+
+    ```bash
+    kubectl get deployment [deployment-name] -n [namespace] -o yaml | grep -A10 'resources:'
+    ```
+
+- **Describe a specific pod for detailed resource info:**
+
+    ```bash
+    kubectl describe pod [pod-name] -n [namespace]
+    ```
+
+- **To test an adjustment temporarily:**  
+    Edit the deployment directly in the cluster (changes will be lost on the next Helm update):
+
+    ```bash
+    kubectl edit deployments.apps drupal -n [namespace]
+```
