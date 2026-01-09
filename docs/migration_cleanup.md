@@ -10,13 +10,13 @@ ensure the system is ready for production use.
 To monitor the queue you can use the following command where `kubectl` is
 installed.
 ```bash
-kubectl exec --stdin --tty deployments/activemq -- bin/activemq query -QQueue=islandora* --view Name,QueueSize
+kubectl exec -n [namespace] deployments/activemq --   env JAVA_OPTS="" ACTIVEMQ_OPTS="" bin/activemq query -QQueue=islandora* --view Name,QueueSize
 ```
 This will show the remaining items on all of the Islandora derivative queues.
 
 Example output:
 ```bash
-kubectl exec --stdin --tty deployments/activemq -- bin/activemq query -QQueue=islandora* --view Name,QueueSize
+kubectl exec -n au deployments/activemq --   env JAVA_OPTS="" ACTIVEMQ_OPTS="" bin/activemq query -QQueue=islandora* --view Name,QueueSize
 ...
 Name = islandora-connector-hypercube
 QueueSize = 123
