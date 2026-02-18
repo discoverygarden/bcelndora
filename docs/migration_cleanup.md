@@ -35,7 +35,7 @@ are no longer relevant.
 
 Where `kubectl` is installed
 ```bash
-kubectl exec --stdin --tty deployments/activemq -- bin/activemq purge $QUEUE_NAME
+kubectl exec -n [namespace] deployments/activemq -- env JAVA_OPTS="" ACTIVEMQ_OPTS="" bin/activemq purge islandora-connector-hypercube
 ```
 
 Where `$QUEUE_NAME` is replaced by the queue looking to be purged, this is
