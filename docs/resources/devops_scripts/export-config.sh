@@ -4,7 +4,6 @@ set -euo pipefail
 ns=${1?"A namespace is required"}
 
 workflow_template_name="drupal-export-config"
-cronjob_name="bceln-drupal-config-export-cron"
 
 # Check if the Argo WorkflowTemplate exists (post-migration clusters)
 wf_exists=$(kubectl get workflowtemplate "$workflow_template_name" -n "$ns" --ignore-not-found -o name 2>/dev/null || echo "")
@@ -50,12 +49,17 @@ fi
 # Fall back to CronJob-based approach for clusters not yet migrated
 job_name="${ns}-config-export-$(date +%s)"
 
-# Check if the CronJob exists and is enabled (suspend=false)
-cronjob_status=$(kubectl get cronjob "$cronjob_name" -n "$ns" -o jsonpath='{.spec.suspend}' 2>/dev/null || echo "notfound")
-if [[ "$cronjob_status" == "notfound" ]]; then
-  echo "Neither WorkflowTemplate '$workflow_template_name' nor CronJob '$cronjob_name' found in namespace '$ns'."
+# Detect the config export CronJob by pattern
+cronjob_name=$(kubectl get cronjob -n "$ns" -o name 2>/dev/null | grep "config-export-cron" | head -1 | sed 's|.*/||')
+
+if [[ -z "$cronjob_name" ]]; then
+  echo "Neither WorkflowTemplate '$workflow_template_name' nor a config-export CronJob found in namespace '$ns'."
   exit 1
-elif [[ "$cronjob_status" == "true" ]]; then
+fi
+
+# Check CronJob is not suspended
+cronjob_status=$(kubectl get cronjob "$cronjob_name" -n "$ns" -o jsonpath='{.spec.suspend}' 2>/dev/null || echo "notfound")
+if [[ "$cronjob_status" == "true" ]]; then
   echo "CronJob '$cronjob_name' is currently suspended (disabled) in namespace '$ns'."
   exit 1
 fi
