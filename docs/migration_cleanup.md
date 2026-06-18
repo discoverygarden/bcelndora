@@ -10,7 +10,7 @@ ensure the system is ready for production use.
 To monitor the queue you can use the following command where `kubectl` is
 installed.
 ```bash
-kubectl exec -n [namespace] deployments/activemq --   env JAVA_OPTS="" ACTIVEMQ_OPTS="" bin/activemq query -QQueue=islandora* --view Name,QueueSize
+kubectl exec -n [namespace] deployments/activemq -- env JAVA_OPTS="" ACTIVEMQ_OPTS="" bin/activemq query -QQueue=islandora* --view Name,QueueSize
 ```
 This will show the remaining items on all of the Islandora derivative queues.
 
@@ -35,7 +35,7 @@ are no longer relevant.
 
 Where `kubectl` is installed
 ```bash
-kubectl exec --stdin --tty deployments/activemq -- bin/activemq purge $QUEUE_NAME
+kubectl exec -n [namespace] deployments/activemq -- env JAVA_OPTS="" ACTIVEMQ_OPTS="" bin/activemq purge islandora-connector-hypercube
 ```
 
 Where `$QUEUE_NAME` is replaced by the queue looking to be purged, this is
